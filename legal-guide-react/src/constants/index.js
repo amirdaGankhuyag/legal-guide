@@ -6,22 +6,17 @@ export const navigation = [
   },
   {
     id: "1",
-    title: "Бидний тухай",
+    title: "Хуулийн фирмүүд",
     url: "#about",
   },
   {
     id: "2",
-    title: "Блог",
-    url: "#blog",
+    title: "Хуульчид",
+    url: "#lawyers",
   },
   {
     id: "3",
-    title: "Үйлчилгээ",
-    url: "#services",
-  },
-  {
-    id: "4",
-    title: "Холбоо барих",
-    url: "#contact",
+    title: "Мэдээлэл",
+    url: "#info",
   },
 ];
