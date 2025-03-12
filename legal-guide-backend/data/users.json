@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "66f52ab47d31663b3f912ac7",
+    "name": "Амирда",
+    "email": "admin@gmail.com",
+    "role": "admin",
+    "password": "1234"
+  },
+  {
+    "_id": "66f53f3e040633452ab3ac5c",
+    "name": "Болдоо",
+    "email": "user@gmail.com",
+    "role": "user",
+    "password": "1234"
+  }
+]
