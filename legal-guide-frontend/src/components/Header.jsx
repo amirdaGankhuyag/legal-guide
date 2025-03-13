@@ -36,7 +36,7 @@ const Header = () => {
       }`}
     >
       <div className="flex items-center px-5 lg:px-7.5 xl:px-10 max-lg:py-4">
-        <a className="block w-[12rem] xl:mr-8" href="#hero">
+        <a className="block w-[12rem] xl:mr-8" href="/">
           <img src={legalguide} width={190} height={40} alt="LegalGudie" />
         </a>
         <nav
@@ -66,12 +66,12 @@ const Header = () => {
         </nav>
 
         <a
-          href="#signup"
+          href="/signup"
           className="button hidden mr-8 text-neutral-100/50 transition-colors hover:text-neutral-100 lg:block"
         >
           Бүртгүүлэх
         </a>
-        <Button className="max-sm:hidden sm:hidden lg:flex " href="#login">
+        <Button className="max-sm:hidden sm:hidden lg:flex " href="/login">
           Нэвтрэх
         </Button>
 

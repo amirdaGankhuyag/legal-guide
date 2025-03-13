@@ -2,21 +2,21 @@ export const navigation = [
   {
     id: "0",
     title: "Нүүр",
-    url: "#hero",
+    url: "/",
   },
   {
     id: "1",
     title: "Хуулийн фирмүүд",
-    url: "#about",
+    url: "/firms",
   },
   {
     id: "2",
     title: "Хуульчид",
-    url: "#lawyers",
+    url: "/lawyers",
   },
   {
     id: "3",
     title: "Мэдээлэл",
-    url: "#info",
+    url: "/info",
   },
 ];
