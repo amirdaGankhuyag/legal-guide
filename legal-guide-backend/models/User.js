@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
+/** mongoose user schema */
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -35,10 +38,43 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
+/** Нууц үгийг хэйшлэх */ 
 UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) next(); // Нууц үг өөрчлөгдөөгүй бол дараагийн middleware-рүү шилжих
 
-    const salt = await bcrypt.genSalt(12);
-    this.password = await bcrypt.hash(this.password, salt);
+  const salt = await bcrypt.genSalt(12);
+  this.password = await bcrypt.hash(this.password, salt);
 });
+
+/** JWT token үүсгэх */  
+UserSchema.methods.getJsonWebToken = function () {
+  const token = jwt.sign(
+    { id: this._id, role: this.role },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_EXPIRES_IN, // JWT token-ийн хугацаа дуусах хэмжээ
+    }
+  );
+  return token;
+};
+
+/** Нууц үгийг шалгах */ 
+UserSchema.methods.checkPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
+/** Нууц үг сэргээх token үүсгэх */ 
+UserSchema.methods.generatePasswordChangeToken = function () {
+  const resetToken = crypto.randomBytes(20).toString("hex"); // 20 тэмдэгттэй санамсаргүй тоо үүсгэх
+
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex"); // "sha256" алгоритмаар token-ийг encrypt хийсэн
+
+  this.resetPasswordExpire = Date.now() + 5 * 60 * 1000; // password шинэчлэх хүсэл илгээснээс 5 минутын дараа token хүчингүй болно
+
+  return resetToken;
+};
 
 module.exports = mongoose.model("User", UserSchema);

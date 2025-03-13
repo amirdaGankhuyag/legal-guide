@@ -1,3 +1,4 @@
+/** алдааг барих зохиомол middleware */
 const errorHandler = (err, req, res, next) => {
   console.log(err.stack.red.underline);
 

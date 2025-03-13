@@ -1,3 +1,4 @@
+/** console дээр log хэвлэх middleware */
 const logger = (req, res, next) => {
   console.log("---------------COOKIES: ", req.cookies);
   console.log(
