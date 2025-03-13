@@ -107,6 +107,6 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     token: jwt,
-    user: user,
+    user,
   });
 });
