@@ -3,6 +3,8 @@ const dotenv = require("dotenv");
 // morgan logger-ийг файл руу гаргах
 const rfs = require("rotating-file-stream");
 const path = require("path");
+const passportAuth = require("./utils/auth");
+const session = require("express-session");
 
 const morgan = require("morgan");
 const colors = require("colors");
@@ -50,7 +52,13 @@ const corsOptions = {
   credentials: true,
 };
 
+
+
 app.use(cors(corsOptions));
+app.use(session({ secret: process.env.EXPRESS_SESSION, resave: true, saveUninitialized: true }));
+app.use(passportAuth.initialize());
+app.use(passportAuth.session());
+
 // Body parser
 app.use(express.json());
 // router-үүдийг ашиглана

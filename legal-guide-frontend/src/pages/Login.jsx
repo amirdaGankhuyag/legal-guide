@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "../utils/axios";
+import { googleicon } from "../assets";
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState("");
@@ -30,37 +31,42 @@ const Login = ({ onLogin }) => {
       });
   };
 
+  const handleClickGoogle = () => {
+    setLoading(true);
+    setError(null);
+    window.location.href = "http://localhost:5000/api/v1/users/google";
+    setLoading(false);
+    console.log("Google нэвтрэх");
+  };
+
   return (
-    <div className="flex items-center justify-center bg-gray-100 min-h-screen">
-      <div className="bg-white p-8 rounded-2xl shadow-lg">
-        <h1 className="text-2xl font-semibold text-center text-gray-700">
-          Нэвтрэх
-        </h1>
+    <div className="flex items-center justify-center bg-gray-200 min-h-screen">
+      <div className="bg-gray-100 p-6 rounded-lg shadow-xl w-90">
+        <h1 className="text-xl font-bold text-center text-gray-800">Нэвтрэх</h1>
         {error && (
           <div className="bg-red-500 text-white text-sm p-3 rounded-md mt-3 animate-fade-in">
             {error}
           </div>
         )}
         <div className="mt-5">
-          <label className="block text-gray-600 text-sm mb-1">Имэйл</label>
           <input
-            placeholder="Имэйл хаягаа оруулна уу"
+            placeholder="Имэйл"
             type="email"
             name="email"
-            className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full p-2 border bg-white h-9 border-gray-400 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
             onChange={handleType}
           />
         </div>
         <div className="mt-3">
-          <label className="block text-gray-600 text-sm mb-1">Нууц үг</label>
           <input
-            placeholder="Нууц үгээ оруулна уу"
+            placeholder="Нууц үг"
             type="password"
             name="password"
-            className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full p-2 border rounded-md bg-white h-9 border-gray-400 focus:ring-2 focus:ring-blue-500 outline-none"
             onChange={handleType}
           />
         </div>
+
         <button
           type="submit"
           onClick={handleClick}
@@ -69,6 +75,26 @@ const Login = ({ onLogin }) => {
         >
           {loading ? "Түр хүлээнэ үү..." : "Нэвтрэх"}
         </button>
+        <button
+          type="submit"
+          onClick={handleClickGoogle}
+          disabled={loading}
+          className="w-full mt-5 bg-gray-900 text-white py-2 rounded-lg hover:bg-black transition disabled:bg-gray-400 flex items-center justify-center gap-3"
+        >
+          {loading ? (
+            "Түр хүлээнэ үү..."
+          ) : (
+            <>
+              <img src={googleicon} alt="Google Icon" className="w-5 h-5" />
+              Google хаягаар нэвтрэх
+            </>
+          )}
+        </button>
+        <div className="mt-3 text-center">
+          <a href="/signup" className="text-blue-500">
+            Бүртгүүлэх
+          </a>
+        </div>
       </div>
     </div>
   );

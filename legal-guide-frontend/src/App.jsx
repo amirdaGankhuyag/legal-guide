@@ -1,18 +1,18 @@
 import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Login from "./pages/Login";
 import Header from "./components/Header";
+import Success from "./components/Success";
 import ButtonGradient from "./assets/svg/ButtonGradient";
 
 const App = () => {
-  const [token, setToken] = useState(null);
+  const navigate = useNavigate();
 
   const handleLogin = (token) => {
-    setToken(token);
     localStorage.setItem("token", token);
-    console.log("logged in", token);
+    navigate("/");
   };
 
   return (
@@ -23,6 +23,7 @@ const App = () => {
           <Route path="login" element={<Login onLogin={handleLogin} />} />
           <Route path="/" element={<Home />} />
           <Route path="about" element={<About />} />
+          <Route path="success" element={<Success />} />
         </Routes>
       </div>
       <ButtonGradient />

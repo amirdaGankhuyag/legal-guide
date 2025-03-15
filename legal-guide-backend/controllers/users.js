@@ -3,8 +3,32 @@ const MyError = require("../utils/myError");
 const asyncHandler = require("../middlewares/asyncHandler");
 const sendEmail = require("../utils/email");
 const crypto = require("crypto");
+const passportAuth = require("../utils/auth");
 
-/**  Хэрэглэгч шинээр бүртгүүлэх */ 
+exports.googleAuth = passportAuth.authenticate("google", {
+  scope: ["profile", "email"],
+});
+
+// Handles Google callback
+exports.googleAuthCallback = passportAuth.authenticate("google", {
+  successRedirect: "/api/v1/users/google/success",
+  failureRedirect: "/api/v1/users/google/failure",
+});
+
+// Success route (returns user info)
+exports.googleAuthSuccess = asyncHandler(async (req, res, next) => {
+  const token = await req.user;
+  res.redirect("http://localhost:5173/success?token=" + token);
+});
+
+// Failure route
+exports.googleAuthFailure = asyncHandler(async (req, res, next) => {
+  res
+    .status(401)
+    .json({ success: false, message: "Google нэвтрэхэд алдаа гарлаа." });
+});
+
+/**  Хэрэглэгч шинээр бүртгүүлэх */
 exports.register = asyncHandler(async (req, res, next) => {
   const user = await User.create(req.body);
   const jwt = user.getJsonWebToken();

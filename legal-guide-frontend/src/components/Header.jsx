@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { disablePageScroll, enablePageScroll } from "scroll-lock";
 
 import { navigation } from "../constants";
@@ -10,6 +10,7 @@ import { HamburgerMenu } from "./design/Header";
 
 const Header = () => {
   const pathname = useLocation();
+  const navigate = useNavigate();
   const [openNavigation, setOpenNavigation] = useState(false);
 
   const toggleNavigation = () => {
@@ -27,6 +28,11 @@ const Header = () => {
 
     enablePageScroll();
     setOpenNavigation(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
   };
 
   return (
@@ -65,23 +71,29 @@ const Header = () => {
           <HamburgerMenu />
         </nav>
 
-        <a
-          href="/signup"
-          className="button hidden mr-8 text-neutral-100/50 transition-colors hover:text-neutral-100 lg:block"
-        >
-          Бүртгүүлэх
-        </a>
-        <Button className="max-sm:hidden sm:hidden lg:flex " href="/login">
-          Нэвтрэх
-        </Button>
+        {localStorage.getItem("token") ? (
+          <Button onClick={handleLogout}>Гарах</Button>
+        ) : (
+          <>
+            <a
+              href="/signup"
+              className="button hidden mr-8 text-neutral-100/50 transition-colors hover:text-neutral-100 lg:block"
+            >
+              Бүртгүүлэх
+            </a>
+            <Button className="max-sm:hidden sm:hidden lg:flex " href="/login">
+              Нэвтрэх
+            </Button>
 
-        <Button
-          className="ml-auto lg:hidden"
-          px="px-3"
-          onClick={toggleNavigation}
-        >
-          <MenuSvg openNavigation={openNavigation} />
-        </Button>
+            <Button
+              className="ml-auto lg:hidden"
+              px="px-3"
+              onClick={toggleNavigation}
+            >
+              <MenuSvg openNavigation={openNavigation} />
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );
