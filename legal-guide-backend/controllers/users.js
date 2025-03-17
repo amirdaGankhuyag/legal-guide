@@ -5,23 +5,18 @@ const sendEmail = require("../utils/email");
 const crypto = require("crypto");
 const passportAuth = require("../utils/auth");
 
+/** Google асcount ашиглан нэвтрэх */
 exports.googleAuth = passportAuth.authenticate("google", {
   scope: ["profile", "email"],
 });
-
-// Handles Google callback
 exports.googleAuthCallback = passportAuth.authenticate("google", {
   successRedirect: "/api/v1/users/google/success",
   failureRedirect: "/api/v1/users/google/failure",
 });
-
-// Success route (returns user info)
 exports.googleAuthSuccess = asyncHandler(async (req, res, next) => {
   const token = await req.user;
   res.redirect("http://localhost:5173/success?token=" + token);
 });
-
-// Failure route
 exports.googleAuthFailure = asyncHandler(async (req, res, next) => {
   res
     .status(401)
@@ -56,12 +51,38 @@ exports.login = asyncHandler(async (req, res, next) => {
 
   const token = user.getJsonWebToken();
 
-  res.status(200).json({
+  const cookieOption = {
+    expires: new Date(
+      Date.now() + process.env.COOKIE_EXPIRE_DAYS * 24 * 60 * 60 * 1000 // COOKIE_EXPIRE_DAYS хоногийн дараа expire хийнэ
+    ),
+    httpOnly: true, // client талаас document.cookie гэж cookie-д хандаж чадахгүй
+  };
+
+  res.status(200).cookie("legal-guide-token", token, cookieOption).json({
     // cookie-г үүсгэж байна
     success: true,
     token,
     user,
   });
+});
+
+/** Хэрэглэгч системээс гарах */
+exports.logout = asyncHandler(async (req, res, next) => {
+  const cookieOption = {
+    expires: new Date(
+      Date.now() - process.env.COOKIE_EXPIRE_DAYS * 24 * 60 * 60 * 1000 // cookie-г server талаас устгаж байна
+    ),
+    httpOnly: true,
+  };
+
+  res
+    .status(200)
+    .cookie("legal-guide-token", null, cookieOption)
+    .cookie("connect.sid", null, cookieOption)
+    .json({
+      success: true,
+      data: "Хэрэглэгч системээс гарлаа!",
+    });
 });
 
 /** Нууц үг сэргээх */

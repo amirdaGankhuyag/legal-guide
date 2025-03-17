@@ -7,6 +7,7 @@ import { legalguide } from "../assets";
 import Button from "./Button";
 import MenuSvg from "../assets/svg/MenuSvg";
 import { HamburgerMenu } from "./design/Header";
+import axios from "../utils/axios";
 
 const Header = () => {
   const pathname = useLocation();
@@ -32,6 +33,12 @@ const Header = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    axios
+      .get("users/logout")
+      .then((result) => {})
+      .catch((error) => {
+        console.log(error);
+      });
     navigate("/login");
   };
 
@@ -72,7 +79,12 @@ const Header = () => {
         </nav>
 
         {localStorage.getItem("token") ? (
-          <Button onClick={handleLogout}>Гарах</Button>
+          <Button
+            onClick={handleLogout}
+            className="max-sm:hidden sm:hidden lg:flex"
+          >
+            Гарах
+          </Button>
         ) : (
           <>
             <a
@@ -81,7 +93,7 @@ const Header = () => {
             >
               Бүртгүүлэх
             </a>
-            <Button className="max-sm:hidden sm:hidden lg:flex " href="/login">
+            <Button className="max-sm:hidden sm:hidden lg:flex" href="/login">
               Нэвтрэх
             </Button>
 
