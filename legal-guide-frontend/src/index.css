@@ -1,22 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700;&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700;&display=swap");
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-    --font-code: "Source Code Pro", monospace;
-    --color-1: #AC6AFF;
-    --color-stroke-1: #26242C;
+  --font-code: "Source Code Pro", monospace;
+  --color-1: #ac6aff;
+  --color-stroke-1: #26242c;
 }
 
 @layer components {
-    .button {
-        @apply font-code text-xs font-bold uppercase tracking-wider;
-    }
+  .button {
+    @apply font-code text-xs font-bold tracking-wider uppercase;
+  }
+  .container {
+    @apply mx-auto max-w-[77.5rem] px-5 md:px-10 lg:px-15 xl:max-w-[87.5rem];
+  }
+  .h1 {
+    @apply text-[2.5rem] leading-[3.25rem] font-semibold md:text-[2.75rem] md:leading-[3.75rem] lg:text-[3.25rem] lg:leading-[4.0625rem] xl:text-[3.75rem] xl:leading-[4.5rem];
+  }
 }
 
 @layer utilities {
-    .text-color {
-        @apply font-code;
-    }
+  .text-color {
+    @apply font-code;
+  }
 }

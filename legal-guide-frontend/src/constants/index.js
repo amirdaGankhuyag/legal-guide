@@ -19,4 +19,22 @@ export const navigation = [
     title: "Мэдээлэл",
     url: "/info",
   },
+  {
+    id: "4",
+    title: "Бүртгүүлэх",
+    url: "/signup",
+    onlyMobile: true,
+  },
+  {
+    id: "5",
+    title: "Нэвтрэх",
+    url: "/login",
+    onlyMobile: true,
+  },
+  {
+    id: "6",
+    title: "Гарах",
+    url: "/login",
+    onlyMobile: true,
+  },
 ];

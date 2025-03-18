@@ -52,13 +52,13 @@ const Signup = ({ onSignup }) => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-200 min-h-screen">
-      <div className="bg-gray-100 p-6 rounded-lg shadow-xl w-90">
-        <h1 className="text-xl font-bold text-center text-gray-800">
+    <div className="flex min-h-screen items-center justify-center bg-gray-200">
+      <div className="w-90 rounded-lg bg-gray-100 p-6 shadow-xl">
+        <h1 className="text-center text-xl font-bold text-gray-800">
           Бүртгүүлэх
         </h1>
         {error && (
-          <div className="bg-red-500 text-white text-sm p-3 rounded-md mt-3 animate-fade-in">
+          <div className="animate-fade-in mt-3 rounded-md bg-red-500 p-3 text-sm text-white">
             {error}
           </div>
         )}
@@ -67,7 +67,7 @@ const Signup = ({ onSignup }) => {
             name="name"
             type="text"
             placeholder="Нэр"
-            className="w-full p-2 border border-gray-300 rounded-md"
+            className="w-full rounded-md border border-gray-300 p-2"
             onChange={handleType}
             onKeyDown={handleEnterKey}
           />
@@ -77,7 +77,7 @@ const Signup = ({ onSignup }) => {
             name="email"
             type="email"
             placeholder="Имэйл"
-            className="w-full p-2 border border-gray-300 rounded-md"
+            className="w-full rounded-md border border-gray-300 p-2"
             onChange={handleType}
             onKeyDown={handleEnterKey}
           />
@@ -87,7 +87,7 @@ const Signup = ({ onSignup }) => {
             name="password"
             type="password"
             placeholder="Нууц үг"
-            className="w-full p-2 border border-gray-300 rounded-md"
+            className="w-full rounded-md border border-gray-300 p-2"
             onChange={handleType}
             onKeyDown={handleEnterKey}
           />
@@ -97,14 +97,14 @@ const Signup = ({ onSignup }) => {
             name="passRepeat"
             type="password"
             placeholder="Нууц үг давтах"
-            className="w-full p-2 border border-gray-300 rounded-md"
+            className="w-full rounded-md border border-gray-300 p-2"
             onChange={handleType}
             onKeyDown={handleEnterKey}
           />
         </div>
         <button
           type="submit"
-          className="w-full mt-5 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition disabled:bg-gray-400"
+          className="mt-5 w-full rounded-lg bg-blue-500 py-2 text-white transition hover:bg-blue-600 disabled:bg-gray-400"
           onClick={handleClick}
           disabled={!isFormValid || loading}
         >
@@ -112,7 +112,7 @@ const Signup = ({ onSignup }) => {
         </button>
         <button
           type="submit"
-          className="w-full mt-5 bg-gray-900 text-white py-2 rounded-lg hover:bg-black transition flex items-center justify-center gap-3"
+          className="mt-5 flex w-full items-center justify-center gap-3 rounded-lg bg-gray-900 py-2 text-white transition hover:bg-black"
           onClick={handleClickGoogle}
           disabled={googleLoading}
         >
@@ -120,7 +120,7 @@ const Signup = ({ onSignup }) => {
             "Түр хүлээнэ үү..."
           ) : (
             <>
-              <img src={googleicon} alt="Google Icon" className="w-5 h-5" />
+              <img src={googleicon} alt="Google Icon" className="h-5 w-5" />
               Google хаягаар бүртгүүлэх
             </>
           )}

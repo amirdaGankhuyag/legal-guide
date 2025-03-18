@@ -42,6 +42,14 @@ const Header = () => {
     navigate("/login");
   };
 
+  const filteredNavigation = navigation.filter((item) => {
+    if (localStorage.getItem("token")) {
+      return item.id !== "4" && item.id !== "5";
+    } else {
+      return item.id !== "6";
+    }
+  });
+
   return (
     <div
       className={`fixed top-0 left-0 w-full z-50 border-b border-neutral-600 lg:bg-neutral-800/90 lg:backdrop-blur-sm ${
@@ -58,11 +66,11 @@ const Header = () => {
           } fixed top-[5rem] left-0 right-0 bottom-0 bg-neutral-800 lg:static lg:flex lg:mx-auto lg:bg-transparent`}
         >
           <div className="relative z-2 flex flex-col items-center justify-center m-auto lg:flex-row">
-            {navigation.map((item) => (
+            {filteredNavigation.map((item) => (
               <a
                 key={item.id}
                 href={item.url}
-                onClick={handleClick}
+                onClick={item.id === "6" ? handleLogout : handleClick}
                 className={`block relative font-code text-2xl uppercase text-neutral-100 transition-colors hover:text-purple-700 ${
                   item.onlyMobile ? "lg:hidden" : ""
                 } px-6 py-6 md:py-8 lg:-mr-0.25 lg:text-xs lg:font-semibold ${
@@ -96,16 +104,15 @@ const Header = () => {
             <Button className="max-sm:hidden sm:hidden lg:flex" href="/login">
               Нэвтрэх
             </Button>
-
-            <Button
-              className="ml-auto lg:hidden"
-              px="px-3"
-              onClick={toggleNavigation}
-            >
-              <MenuSvg openNavigation={openNavigation} />
-            </Button>
           </>
         )}
+        <Button
+          className="ml-auto lg:hidden"
+          px="px-3"
+          onClick={toggleNavigation}
+        >
+          <MenuSvg openNavigation={openNavigation} />
+        </Button>
       </div>
     </div>
   );
