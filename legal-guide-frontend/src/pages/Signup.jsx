@@ -1,13 +1,14 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 import axios from "../utils/axios";
 import { googleicon } from "../assets";
+import { toast } from "react-toastify";
 
 const Signup = ({ onSignup }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passRepeat, setPassRepeat] = useState("");
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
@@ -17,19 +18,17 @@ const Signup = ({ onSignup }) => {
     if (name === "email") setEmail(value);
     if (name === "password") setPassword(value);
     if (name === "passRepeat") setPassRepeat(value);
-    setError(null);
   };
 
   const handleClick = () => {
     setLoading(true);
-    setError(null);
     axios
       .post("users/register", { name, email, password })
       .then((result) => {
         onSignup(result.data.token);
       })
       .catch((error) => {
-        setError(error.response?.data?.error);
+        toast.error(error.response?.data?.error);
       })
       .finally(() => {
         setLoading(false);
@@ -38,7 +37,6 @@ const Signup = ({ onSignup }) => {
 
   const handleClickGoogle = () => {
     setGoogleLoading(true);
-    setError(null);
     window.location.href = "http://localhost:5000/api/v1/users/google";
     setGoogleLoading(false);
   };
@@ -57,11 +55,6 @@ const Signup = ({ onSignup }) => {
         <h1 className="text-center text-xl font-bold text-gray-800">
           Бүртгүүлэх
         </h1>
-        {error && (
-          <div className="animate-fade-in mt-3 rounded-md bg-red-500 p-3 text-sm text-white">
-            {error}
-          </div>
-        )}
         <div className="mt-5">
           <input
             name="name"

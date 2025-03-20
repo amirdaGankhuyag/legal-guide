@@ -1,11 +1,11 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 import axios from "../utils/axios";
 import { googleicon } from "../assets";
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
@@ -13,19 +13,17 @@ const Login = ({ onLogin }) => {
     const { name, value } = e.target;
     if (name === "email") setEmail(value);
     if (name === "password") setPassword(value);
-    setError(null);
   };
 
   const handleClick = () => {
     setLoading(true);
-    setError(null);
     axios
       .post("users/login", { email, password })
       .then((result) => {
         onLogin(result.data.token);
       })
       .catch((error) => {
-        setError(error.response?.data?.error);
+        toast.error(error.response?.data?.error);
       })
       .finally(() => {
         setLoading(false);
@@ -34,7 +32,6 @@ const Login = ({ onLogin }) => {
 
   const handleClickGoogle = () => {
     setGoogleLoading(true);
-    setError(null);
     window.location.href = "http://localhost:5000/api/v1/users/google";
     setGoogleLoading(false);
   };
@@ -51,11 +48,6 @@ const Login = ({ onLogin }) => {
     <div className="flex min-h-screen items-center justify-center bg-gray-200">
       <div className="w-90 rounded-lg bg-gray-100 p-6 shadow-xl">
         <h1 className="text-center text-xl font-bold text-gray-800">Нэвтрэх</h1>
-        {error && (
-          <div className="animate-fade-in mt-3 rounded-md bg-red-500 p-3 text-sm text-white">
-            {error}
-          </div>
-        )}
         <div className="mt-5">
           <input
             name="email"

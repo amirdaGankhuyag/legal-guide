@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Login from "./pages/Login";
@@ -20,6 +20,16 @@ const App = () => {
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={1500}
+        limit={3}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnHover={false}
+        theme="dark"
+      />
       <div className="overflow-hidden pt-[4.75rem] lg:pt-[5.25rem]">
         <Header />
         <Routes>
