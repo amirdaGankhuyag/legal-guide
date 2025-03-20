@@ -2,7 +2,6 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "../utils/axios";
 import { googleicon } from "../assets";
-import { toast } from "react-toastify";
 
 const Signup = ({ onSignup }) => {
   const [name, setName] = useState("");
