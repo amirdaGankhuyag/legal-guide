@@ -3,6 +3,7 @@ const fs = require("fs");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const User = require("./models/User");
+const Firm = require("./models/Firm");
 
 dotenv.config({ path: "./config/config.env" });
 
@@ -12,10 +13,15 @@ const users = JSON.parse(
   fs.readFileSync(__dirname + "/data/users.json", "utf8")
 ); // json гарна
 
+const firms = JSON.parse(
+  fs.readFileSync(__dirname + "/data/firms.json", "utf8")
+); // json гарна
+
 // categories дотроос унщаад DB-рүү импортлоно.
 const importData = async () => {
   try {
     await User.create(users);
+    await Firm.create(firms);
     console.log("Өгөгдлийг импортлолоо!".green.inverse);
   } catch (err) {
     console.log(`${err}`.red.inverse); //red.inverse => өнгө
@@ -26,6 +32,7 @@ const importData = async () => {
 const deleteData = async () => {
   try {
     await User.deleteMany();
+    await Firm.deleteMany();
     console.log("Бүх өгөгдлийг устгалаа!".red.inverse);
   } catch (err) {
     console.log(`${err}`.red.inverse); //red.inverse => өнгө

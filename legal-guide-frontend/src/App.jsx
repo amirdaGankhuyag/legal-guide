@@ -1,9 +1,11 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import Home from "./pages/Home";
-import About from "./pages/About";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Home from "./pages/Home";
+import Info from "./pages/Info";
+import Lawyers from "./pages/Lawyers";
+import Firms from "./pages/Firms";
 import Header from "./components/Header";
 import Success from "./components/Success";
 import ButtonGradient from "./assets/svg/ButtonGradient";
@@ -36,7 +38,9 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="login" element={<Login onLogin={handleLogin} />} />
           <Route path="signup" element={<Signup onSignup={handleLogin} />} />
-          <Route path="about" element={<About />} />
+          <Route path="info" element={<Info />} />
+          <Route path="lawyers" element={<Lawyers />} />
+          <Route path="firms" element={<Firms />} />
           <Route path="success" element={<Success />} />
         </Routes>
       </div>
