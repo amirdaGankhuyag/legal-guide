@@ -1,7 +1,22 @@
 [
   {
-    "name": "Алтаргана",
-    "photo": "",
-    "address": "СБД 23-р хороо, 1-р хороолол, 1-1"
+    "_id": "67ea3bc8afe6e049de3ccbfa",
+    "name": "Elite Legal Services",
+    "photo": "elite-legal.jpg",
+    "address": "Sukhbaatar District, Ulaanbaatar, Mongolia",
+    "location": {
+      "latitude": 47.9185,
+      "longitude": 106.9176
+    }
+  },
+  {
+    "_id": "67ea3bc8afe6e049de3ccbfc",
+    "name": "Elite Legal Firm",
+    "photo": "elite-legal.jpg",
+    "address": "Sukhbaatar District, Ulaanbaatar, Mongolia",
+    "location": {
+      "latitude": 47.9238654,
+      "longitude": 106.9212336
+    }
   }
 ]

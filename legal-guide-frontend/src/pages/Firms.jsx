@@ -1,13 +1,19 @@
 import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import leaflet from "leaflet";
-import { myLocation } from "../assets";
+import { myLocation, firmLocation } from "../assets";
+import { useQuery } from "@tanstack/react-query";
+import axios from "../utils/axios";
+import Spinner from "../components/spinner";
 import Button from "../components/Button";
 
 const Firms = () => {
   const [userLocation, setUserLocation] = useState(null);
+  const [sortedFirms, setSortedFirms] = useState([]);
   const [view, setView] = useState("map");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition(
@@ -23,11 +29,54 @@ const Firms = () => {
       {
         enableHighAccuracy: true, // GPS-ийг ашиглахыг зөвшөөрнө.
         maximumAge: 0, // Хадгалагдсан байршлыг ашиглахыг зөвшөөрөхгүй.
-        timeout: 2000, // Хугацаа хэтэрсэн тохиолдолд алдаа гарна.
+        timeout: 5000, // Хугацаа хэтэрсэн тохиолдолд алдаа гарна.
       },
     );
     return () => navigator.geolocation.clearWatch(watchId);
   }, []);
+
+  const { data: firmsData = [], isLoading } = useQuery({
+    queryKey: ["firms", userLocation],
+    queryFn: async ({ queryKey }) => {
+      const userLocation = queryKey[1];
+      if (!userLocation) return [];
+
+      const { latitude, longitude } = userLocation;
+      const response = await axios.get("firms", {
+        params: {
+          latMin: latitude - 0.1,
+          latMax: latitude + 0.1,
+          lonMin: longitude - 0.1,
+          lonMax: longitude + 0.1,
+        },
+      });
+      return response.data.data;
+    },
+    enabled: !!userLocation,
+    staleTime: 1000 * 60 * 5, // 5 минут
+    cacheTime: 1000 * 60 * 30, // 30 минут
+  });
+
+  useEffect(() => {
+    if (userLocation && firmsData.length > 0) {
+      const firmsWithDistance = firmsData.map((firm) => {
+        const distance = calculateDistance(
+          userLocation.latitude,
+          userLocation.longitude,
+          firm.location.latitude,
+          firm.location.longitude,
+        );
+        return {
+          ...firm,
+          distance,
+        };
+      });
+      const sortedFirms = firmsWithDistance.sort(
+        (a, b) => a.distance - b.distance,
+      );
+      setSortedFirms(sortedFirms);
+    }
+  }, [userLocation, firmsData]);
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     if (
@@ -37,7 +86,7 @@ const Firms = () => {
       lon2 === undefined
     ) {
       console.warn(
-        "Хоорондын зайн тооцоолох координатууд буруу байна",
+        "Хоорондын зай тооцоолох координатууд буруу байна",
         lat1,
         lon1,
         lat2,
@@ -66,15 +115,30 @@ const Firms = () => {
     shadowSize: [30, 30],
   });
 
+  const firmIcon = leaflet.icon({
+    iconUrl: firmLocation,
+    iconSize: [25, 25],
+    iconAnchor: [12, 25],
+    popupAnchor: [1, -34],
+    shadowSize: [30, 30],
+  });
+
   const renderMapView = () => {
+    if (isLoading) return <Spinner />;
     return (
-      <>
+      <div className="mb-3 flex flex-col items-center justify-center">
         {userLocation && (
           <MapContainer
             center={[userLocation.latitude, userLocation.longitude]}
-            zoom={14}
-            style={{ height: "400px", width: "100%" }}
-            scrollWheelZoom={true}
+            zoom={15}
+            style={{
+              height: "520px",
+              width: "90%",
+              borderRadius: "5px",
+              boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
+              border: "1px solid #ccc",
+            }}
+            scrollWheelZoom={false}
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -86,26 +150,72 @@ const Firms = () => {
             >
               <Popup>Таны байршил</Popup>
             </Marker>
+            {sortedFirms.map((firm) => (
+              <Marker
+                key={firm._id}
+                position={[firm.location.latitude, firm.location.longitude]}
+                icon={firmIcon}
+                // eventHandlers={{
+                //   click: () => {
+                //     console.log("Marker clicked", firm.name);
+                //   },
+                // }}
+              >
+                <Popup>
+                  <div>
+                    <p>{firm.name}</p>
+                    <a href={`/firms/${firm._id}`}>Дэлгэрэнгүй</a>
+                  </div>
+                </Popup>
+              </Marker>
+            ))}
           </MapContainer>
         )}
-      </>
+      </div>
     );
   };
 
   const renderListView = () => {
+    if (isLoading) return <Spinner />;
     return (
-      <>
-        <div>List view</div>
-      </>
+      <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {sortedFirms.map((firm) => (
+          <Link to={`/firms/${firm._id}`} key={firm._id}>
+            <li className="overflow-hidden rounded-lg bg-white shadow-md transition-transform hover:scale-105">
+              <img
+                src={firm.photo || "/default-firm.jpg"}
+                alt={firm.name}
+                className="h-40 w-full object-cover"
+              />
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {firm.name}
+                </h3>
+                <p className="text-gray-600">{firm.address}</p>
+                <p className="font-medium text-blue-600">
+                  Зай: {firm.distance.toFixed(2)} км
+                </p>
+              </div>
+            </li>
+          </Link>
+        ))}
+        {sortedFirms.length === 0 && (
+          <li className="text-center text-gray-500">
+            Хуулийн фирмүүд олдсонгүй
+          </li>
+        )}
+      </ul>
     );
   };
 
   return (
     <div>
-      <h3 className="mb-4 text-2xl font-bold">Тантай ойрхон хуулийн фирмүүд</h3>
+      <h3 className="mb-4 ml-2 text-2xl font-bold">
+        Тантай ойрхон хуулийн фирмүүд
+      </h3>
       {userLocation ? (
         <>
-          <div>
+          <div className="mb-4 ml-2 flex gap-2">
             <Button onClick={() => setView("list")} black>
               Жагсаалтаар харах
             </Button>
@@ -116,7 +226,7 @@ const Firms = () => {
           {view === "list" ? renderListView() : renderMapView()}
         </>
       ) : (
-        <div>Байршлыг ачааллаж байна...</div>
+        <Spinner />
       )}
     </div>
   );

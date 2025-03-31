@@ -1,6 +1,7 @@
 // seed - DB-ийн анхны утга болон өгөгдлүүдийг хадгалдаг үндэс гэсэн утгатай
 const fs = require("fs");
 const mongoose = require("mongoose");
+const colors = require("colors"); 
 const dotenv = require("dotenv");
 const User = require("./models/User");
 const Firm = require("./models/Firm");
@@ -22,7 +23,7 @@ const importData = async () => {
   try {
     await User.create(users);
     await Firm.create(firms);
-    console.log("Өгөгдлийг импортлолоо!".green.inverse);
+    console.log("Өгөгдлийг импортлолоо!".green.inverse); //green.inverse => өнгө
   } catch (err) {
     console.log(`${err}`.red.inverse); //red.inverse => өнгө
   }
