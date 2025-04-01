@@ -5,6 +5,8 @@ import "leaflet/dist/leaflet.css";
 import leaflet from "leaflet";
 import { myLocation, firmLocation } from "../assets";
 import { useQuery } from "@tanstack/react-query";
+import firebase from "../utils/firebase"; 
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import axios from "../utils/axios";
 import Spinner from "../components/spinner";
 import Button from "../components/Button";
@@ -14,6 +16,7 @@ const Firms = () => {
   const [sortedFirms, setSortedFirms] = useState([]);
   const [view, setView] = useState("map");
   const navigate = useNavigate();
+  const storage = getStorage(firebase);
 
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition(
@@ -50,7 +53,18 @@ const Firms = () => {
           lonMax: longitude + 0.1,
         },
       });
-      return response.data.data;
+      const firms = response.data.data;
+      const firmsWithPhotos = await Promise.all(
+        firms.map(async (firm) => {
+          if (firm.photo) {
+            const photoRef = ref(storage, firm.photo);
+            const url = await getDownloadURL(photoRef);
+            return { ...firm, photo: url };
+          }
+          return firm;
+        }),
+      );
+      return firmsWithPhotos;
     },
     enabled: !!userLocation,
     staleTime: 1000 * 60 * 5, // 5 минут
