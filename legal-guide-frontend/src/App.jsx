@@ -6,6 +6,7 @@ import Signup from "./pages/Signup";
 import Home from "./pages/Home";
 import Info from "./pages/Info";
 import Lawyers from "./pages/Lawyers";
+import LawyerDetails from "./pages/LawyerDetails";
 import Firms from "./pages/Firms";
 import FirmDetails from "./pages/FirmDetails";
 import Header from "./components/Header";
@@ -44,6 +45,7 @@ const App = () => {
           <Route path="signup" element={<Signup onSignup={handleLogin} />} />
           <Route path="info" element={<Info />} />
           <Route path="lawyers" element={<Lawyers />} />
+          <Route path="lawyers/:id" element={<LawyerDetails />} />
           <Route path="firms" element={<Firms />} />
           <Route path="firms/:id" element={<FirmDetails />} />
           <Route path="success" element={<Success />} />

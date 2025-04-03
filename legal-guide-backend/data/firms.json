@@ -1,18 +1,18 @@
 [
   {
     "_id": "67ea3bc8afe6e049de3ccbfa",
-    "name": "Elite Legal Services",
-    "photo": "elite-legal.jpg",
-    "address": "Sukhbaatar District, Ulaanbaatar, Mongolia",
+    "name": "'Алтаргана' хууль зүйн товчоо",
+    "photo": "altargana.jpg",
+    "address": "Peace Avenue, SBD - 1 khoroo, Ulaanbaatar 14210",
     "location": {
-      "latitude": 47.9185,
-      "longitude": 106.9176
+      "latitude": 47.91736,
+      "longitude": 106.92380
     }
   },
   {
     "_id": "67ea3bc8afe6e049de3ccbfc",
     "name": "Elite Legal Firm",
-    "photo": "elite-legal.jpg",
+    "photo": "elite-legal.png",
     "address": "Sukhbaatar District, Ulaanbaatar, Mongolia",
     "location": {
       "latitude": 47.9238654,

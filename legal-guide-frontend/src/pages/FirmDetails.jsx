@@ -28,7 +28,7 @@ const FirmDetails = () => {
   return (
     <div>
       {firm ? (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center font-code">
           <h1 className="text-2xl font-bold">{firm.name}</h1>
           {photoUrl && (
             <img src={photoUrl} alt={firm.name} className="h-auto w-1/2" />

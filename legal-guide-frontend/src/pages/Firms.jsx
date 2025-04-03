@@ -191,18 +191,20 @@ const Firms = () => {
   const renderListView = () => {
     if (isLoading) return <Spinner />;
     return (
-      <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 font-code">
         {sortedFirms.map((firm) => (
           <Link to={`/firms/${firm._id}`} key={firm._id}>
             <li className="overflow-hidden rounded-md bg-white shadow-md transition-transform hover:scale-105">
               <img
                 src={firm.photo || "/default-firm.jpg"}
                 alt={firm.name}
+                loading="lazy" // // Native lazy loading
                 className="h-40 w-full"
               />
               <div className="p-2">
                 <h3 className="text-md font-semibold text-gray-800">
-                  {firm.name}{" - "}
+                  {firm.name}
+                  {" - "}
                   <span className="font-medium text-blue-600">
                     {firm.distance.toFixed(2)} км
                   </span>
@@ -213,7 +215,7 @@ const Firms = () => {
           </Link>
         ))}
         {sortedFirms.length === 0 && (
-          <li className="text-center text-gray-500">
+          <li className="text-center text-gray-500 font-code">
             Хуулийн фирмүүд олдсонгүй
           </li>
         )}
@@ -223,7 +225,7 @@ const Firms = () => {
 
   return (
     <div className="bg-gray-100 px-4 py-2">
-      <h3 className="mb-4 ml-2 text-2xl font-bold">
+      <h3 className="mb-4 ml-2 text-2xl font-bold font-code">
         Тантай ойрхон хуулийн фирмүүд
       </h3>
       {userLocation ? (

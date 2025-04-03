@@ -16,6 +16,7 @@ const errorHandler = require("./middlewares/error");
 // router-үүд оруулж ирэх
 const usersRoutes = require("./routes/users");
 const firmsRoutes = require("./routes/firms");
+const lawyersRoutes = require("./routes/lawyers");
 // Database
 const connectDB = require("./config/db");
 
@@ -69,6 +70,7 @@ app.use(logger);
 app.use(morgan("combined", { stream: accessLogStream }));
 app.use("/api/v1/users", usersRoutes);
 app.use("/api/v1/firms", firmsRoutes);
+app.use("/api/v1/lawyers", lawyersRoutes);
 app.use(errorHandler);
 
 const server = app.listen(

@@ -1,10 +1,11 @@
 // seed - DB-ийн анхны утга болон өгөгдлүүдийг хадгалдаг үндэс гэсэн утгатай
 const fs = require("fs");
 const mongoose = require("mongoose");
-const colors = require("colors"); 
+const colors = require("colors");
 const dotenv = require("dotenv");
 const User = require("./models/User");
 const Firm = require("./models/Firm");
+const Lawyer = require("./models/Lawyer");
 
 dotenv.config({ path: "./config/config.env" });
 
@@ -16,13 +17,18 @@ const users = JSON.parse(
 
 const firms = JSON.parse(
   fs.readFileSync(__dirname + "/data/firms.json", "utf8")
-); // json гарна
+);
+
+const lawyers = JSON.parse(
+  fs.readFileSync(__dirname + "/data/lawyers.json", "utf8")
+);
 
 // categories дотроос унщаад DB-рүү импортлоно.
 const importData = async () => {
   try {
     await User.create(users);
     await Firm.create(firms);
+    await Lawyer.create(lawyers);
     console.log("Өгөгдлийг импортлолоо!".green.inverse); //green.inverse => өнгө
   } catch (err) {
     console.log(`${err}`.red.inverse); //red.inverse => өнгө
@@ -34,6 +40,7 @@ const deleteData = async () => {
   try {
     await User.deleteMany();
     await Firm.deleteMany();
+    await Lawyer.deleteMany();
     console.log("Бүх өгөгдлийг устгалаа!".red.inverse);
   } catch (err) {
     console.log(`${err}`.red.inverse); //red.inverse => өнгө
