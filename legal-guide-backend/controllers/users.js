@@ -18,9 +18,7 @@ exports.googleAuthSuccess = asyncHandler(async (req, res, next) => {
   res.redirect("http://localhost:5173/success?token=" + token);
 });
 exports.googleAuthFailure = asyncHandler(async (req, res, next) => {
-  res
-    .status(401)
-    .json({ success: false, message: "Google нэвтрэхэд алдаа гарлаа." });
+  throw new MyError("Google нэвтрэхэд алдаа гарлаа.", 401);
 });
 
 /**  Хэрэглэгч шинээр бүртгүүлэх */

@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Info from "./pages/Info";
 import Lawyers from "./pages/Lawyers";
 import Firms from "./pages/Firms";
+import FirmDetails from "./pages/FirmDetails";
 import Header from "./components/Header";
 import Success from "./components/Success";
 import ButtonGradient from "./assets/svg/ButtonGradient";
@@ -44,6 +45,7 @@ const App = () => {
           <Route path="info" element={<Info />} />
           <Route path="lawyers" element={<Lawyers />} />
           <Route path="firms" element={<Firms />} />
+          <Route path="firms/:id" element={<FirmDetails />} />
           <Route path="success" element={<Success />} />
         </Routes>
       </div>

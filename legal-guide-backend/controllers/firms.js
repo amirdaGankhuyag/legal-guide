@@ -2,16 +2,12 @@ const Firm = require("../models/Firm");
 const MyError = require("../utils/myError");
 const asyncHandler = require("../middlewares/asyncHandler");
 
-//api/v1/firms
+/** Ойролцоох фирмүүдийн мэдээллийг авах */
 exports.getFirms = asyncHandler(async (req, res, next) => {
-  console.log(req.query);
   const { latMin, latMax, lonMin, lonMax } = req.query;
 
   if (!latMin || !latMax || !lonMin || !lonMax) {
-    return res.status(400).json({
-      success: false,
-      message: "Invalid location parameters",
-    });
+    throw new MyError("Байршлын хязгаарлалтууд алдаатай", 400);
   }
 
   const query = {
@@ -28,5 +24,31 @@ exports.getFirms = asyncHandler(async (req, res, next) => {
     success: true,
     count: firms.length,
     data: firms,
+  });
+});
+
+/** Хуулийн фирм шинээр үүсгэх */
+exports.createFirm = asyncHandler(async (req, res, next) => {
+  const firm = await Firm.create(req.body);
+
+  res.status(201).json({
+    success: true,
+    data: firm,
+  });
+});
+
+/** Заагдсан нэг хуулийн фирмийн мэдээллийг авах */
+exports.getFirm = asyncHandler(async (req, res, next) => {
+  const firm = await Firm.findById(req.params.id);
+
+  if (!firm)
+    throw new MyError(
+      req.params.id + "ID-тай хуулийн фирм байхгүй байна!",
+      404
+    );
+
+  res.status(200).json({
+    success: true,
+    data: firm,
   });
 });

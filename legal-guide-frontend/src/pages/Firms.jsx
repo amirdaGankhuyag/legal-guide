@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import leaflet from "leaflet";
 import { myLocation, firmLocation } from "../assets";
 import { useQuery } from "@tanstack/react-query";
-import firebase from "../utils/firebase"; 
+import firebase from "../utils/firebase";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import axios from "../utils/axios";
 import Spinner from "../components/spinner";
@@ -14,29 +14,8 @@ import Button from "../components/Button";
 const Firms = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [sortedFirms, setSortedFirms] = useState([]);
-  const [view, setView] = useState("map");
-  const navigate = useNavigate();
+  const [view, setView] = useState("list");
   const storage = getStorage(firebase);
-
-  useEffect(() => {
-    const watchId = navigator.geolocation.watchPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setUserLocation({ latitude, longitude });
-        console.log(latitude, longitude);
-      },
-      (error) => {
-        console.error("Байршлыг авахад алдаа гарлаа", error);
-        setUserLocation({ latitude: 47.918834, longitude: 106.917601 });
-      },
-      {
-        enableHighAccuracy: true, // GPS-ийг ашиглахыг зөвшөөрнө.
-        maximumAge: 0, // Хадгалагдсан байршлыг ашиглахыг зөвшөөрөхгүй.
-        timeout: 5000, // Хугацаа хэтэрсэн тохиолдолд алдаа гарна.
-      },
-    );
-    return () => navigator.geolocation.clearWatch(watchId);
-  }, []);
 
   const { data: firmsData = [], isLoading } = useQuery({
     queryKey: ["firms", userLocation],
@@ -70,6 +49,26 @@ const Firms = () => {
     staleTime: 1000 * 60 * 5, // 5 минут
     cacheTime: 1000 * 60 * 30, // 30 минут
   });
+
+  useEffect(() => {
+    const watchId = navigator.geolocation.watchPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setUserLocation({ latitude, longitude });
+        console.log(latitude, longitude);
+      },
+      (error) => {
+        console.error("Байршлыг авахад алдаа гарлаа", error);
+        setUserLocation({ latitude: 47.918834, longitude: 106.917601 });
+      },
+      {
+        enableHighAccuracy: true, // Байршлыг өндөр нарийвлалтай авна.
+        maximumAge: 1000 * 60 * 1, // Хадгалагдсан байршлыг 1 минутын турш ашиглана.
+        timeout: 1000 * 5, // 5 секундын турш байршлын мэдээллийг авахыг оролдоно.
+      },
+    );
+    return () => navigator.geolocation.clearWatch(watchId);
+  }, []);
 
   useEffect(() => {
     if (userLocation && firmsData.length > 0) {
@@ -146,8 +145,8 @@ const Firms = () => {
             center={[userLocation.latitude, userLocation.longitude]}
             zoom={15}
             style={{
-              height: "520px",
-              width: "90%",
+              height: "510px",
+              width: "95%",
               borderRadius: "5px",
               boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
               border: "1px solid #ccc",
@@ -192,23 +191,23 @@ const Firms = () => {
   const renderListView = () => {
     if (isLoading) return <Spinner />;
     return (
-      <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {sortedFirms.map((firm) => (
           <Link to={`/firms/${firm._id}`} key={firm._id}>
-            <li className="overflow-hidden rounded-lg bg-white shadow-md transition-transform hover:scale-105">
+            <li className="overflow-hidden rounded-md bg-white shadow-md transition-transform hover:scale-105">
               <img
                 src={firm.photo || "/default-firm.jpg"}
                 alt={firm.name}
-                className="h-40 w-full object-cover"
+                className="h-40 w-full"
               />
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-800">
-                  {firm.name}
+              <div className="p-2">
+                <h3 className="text-md font-semibold text-gray-800">
+                  {firm.name}{" - "}
+                  <span className="font-medium text-blue-600">
+                    {firm.distance.toFixed(2)} км
+                  </span>
                 </h3>
-                <p className="text-gray-600">{firm.address}</p>
-                <p className="font-medium text-blue-600">
-                  Зай: {firm.distance.toFixed(2)} км
-                </p>
+                <p className="text-sm text-gray-600">{firm.address}</p>
               </div>
             </li>
           </Link>
@@ -223,13 +222,13 @@ const Firms = () => {
   };
 
   return (
-    <div>
+    <div className="bg-gray-100 px-4 py-2">
       <h3 className="mb-4 ml-2 text-2xl font-bold">
         Тантай ойрхон хуулийн фирмүүд
       </h3>
       {userLocation ? (
         <>
-          <div className="mb-4 ml-2 flex gap-2">
+          <div className="mb-4 ml-2 flex gap-5">
             <Button onClick={() => setView("list")} black>
               Жагсаалтаар харах
             </Button>
