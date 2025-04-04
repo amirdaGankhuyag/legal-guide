@@ -1,15 +1,35 @@
 const mongoose = require("mongoose");
 
 const LawyerSchema = new mongoose.Schema({
-  name: {
+  lastName: {
+    type: String,
+    required: [true, "Хуульчийн овгийг оруулна уу"],
+    trim: true,
+    maxLength: [70, "Хуульчийн нэрийн урт дээд тал нь 70 байна!"],
+  },
+  firstName: {
     type: String,
     required: [true, "Хуульчийн нэрийг оруулна уу"],
     trim: true,
-    maxLength: [70, "Хуульчийн нэрийн урт дээд тал нь 70 байна!"],
+    maxLength: [70, "Хуульчийн овгийн урт дээд тал нь 70 байна!"],
   },
   photo: {
     type: String,
     default: "no-photo.jpg",
+  },
+  phone: {
+    type: String,
+    required: [true, "Утасны дугаарыг оруулна уу"],
+  },
+  email: {
+    type: String,
+    required: [true, "И-мэйл хаягийг оруулна уу"],
+    unique: true,
+    lowercase: true,
+  },
+  workAddress: {
+    type: String,
+    required: [true, "Ажлын хаягийг оруулна уу"],
   },
   createdAt: {
     type: Date,

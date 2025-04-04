@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "../utils/axios";
 import firebase from "../utils/firebase";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
-import Spinner from "../components/spinner";
+import Spinner from "../components/Spinner";
 
 const FirmDetails = () => {
   const { id } = useParams();
@@ -28,10 +28,15 @@ const FirmDetails = () => {
   return (
     <div>
       {firm ? (
-        <div className="flex flex-col items-center font-code">
+        <div className="font-code flex flex-col items-center">
           <h1 className="text-2xl font-bold">{firm.name}</h1>
           {photoUrl && (
-            <img src={photoUrl} alt={firm.name} className="h-auto w-1/2" />
+            <img
+              src={photoUrl}
+              alt={firm.name}
+              className="h-auto w-1/2"
+              loading="lazy"
+            />
           )}
           <p>Хаяг: {firm.address}</p>
         </div>

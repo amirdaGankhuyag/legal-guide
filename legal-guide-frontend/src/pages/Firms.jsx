@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import firebase from "../utils/firebase";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import axios from "../utils/axios";
-import Spinner from "../components/spinner";
+import Spinner from "../components/Spinner";
 import Button from "../components/Button";
 
 const Firms = () => {
@@ -36,7 +36,8 @@ const Firms = () => {
       const firmsWithPhotos = await Promise.all(
         firms.map(async (firm) => {
           if (firm.photo) {
-            const photoRef = ref(storage, firm.photo);
+            const imagePath = `gs://legal-guide-2f523.firebasestorage.app/FirmPhotos/${firm.photo}`;
+            const photoRef = ref(storage, imagePath);
             const url = await getDownloadURL(photoRef);
             return { ...firm, photo: url };
           }
@@ -191,17 +192,17 @@ const Firms = () => {
   const renderListView = () => {
     if (isLoading) return <Spinner />;
     return (
-      <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 font-code">
+      <ul className="font-code grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
         {sortedFirms.map((firm) => (
           <Link to={`/firms/${firm._id}`} key={firm._id}>
-            <li className="overflow-hidden rounded-md bg-white shadow-md transition-transform hover:scale-105">
+            <li className="flex h-64 flex-col overflow-hidden rounded-md bg-white shadow-md transition-transform hover:scale-105">
               <img
                 src={firm.photo || "/default-firm.jpg"}
                 alt={firm.name}
                 loading="lazy" // // Native lazy loading
-                className="h-40 w-full"
+                className="h-40 w-full object-cover"
               />
-              <div className="p-2">
+              <div className="flex flex-col p-2">
                 <h3 className="text-md font-semibold text-gray-800">
                   {firm.name}
                   {" - "}
@@ -215,7 +216,7 @@ const Firms = () => {
           </Link>
         ))}
         {sortedFirms.length === 0 && (
-          <li className="text-center text-gray-500 font-code">
+          <li className="font-code col-span-full text-center text-gray-500">
             Хуулийн фирмүүд олдсонгүй
           </li>
         )}
@@ -225,12 +226,12 @@ const Firms = () => {
 
   return (
     <div className="bg-gray-100 px-4 py-2">
-      <h3 className="mb-4 ml-2 text-2xl font-bold font-code">
+      <h3 className="font-code mb-4 ml-2 flex justify-center text-2xl font-bold">
         Тантай ойрхон хуулийн фирмүүд
       </h3>
       {userLocation ? (
         <>
-          <div className="mb-4 ml-2 flex gap-5">
+          <div className="mb-4 ml-2 flex justify-center gap-5">
             <Button onClick={() => setView("list")} black>
               Жагсаалтаар харах
             </Button>

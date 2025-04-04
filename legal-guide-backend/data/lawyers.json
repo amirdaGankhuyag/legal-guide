@@ -1,7 +1,11 @@
 [
   {
     "_id": "67ee4a2e3f6406b8a55e55d2",
-    "name": "Amjilttai",
-    "photo": "amjilttai.jpg"
+    "firstName": "John",
+    "lastName": "Doe",
+    "photo": "john.jpg",
+    "phone": "+976 9911 1111",
+    "email": "john@gmail.com",
+    "workAddress": "123 Main St, Ulaanbaatar, Mongolia"
   }
 ]
