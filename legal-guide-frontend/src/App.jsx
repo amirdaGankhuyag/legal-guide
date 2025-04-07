@@ -39,7 +39,7 @@ const App = () => {
         pauseOnHover={false}
         theme="dark"
       />
-      <div className="overflow-hidden pt-[4.75rem] lg:pt-[5.25rem]">
+      <div className="overflow-hidden pt-[6.5rem] lg:pt-[5.25rem]">
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
