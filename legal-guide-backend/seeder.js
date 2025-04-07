@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const User = require("./models/User");
 const Firm = require("./models/Firm");
 const Lawyer = require("./models/Lawyer");
+const Info = require("./models/Info");
 
 dotenv.config({ path: "./config/config.env" });
 
@@ -23,12 +24,17 @@ const lawyers = JSON.parse(
   fs.readFileSync(__dirname + "/data/lawyers.json", "utf8")
 );
 
+const infos = JSON.parse(
+  fs.readFileSync(__dirname + "/data/infos.json", "utf8")
+);
+
 // categories дотроос унщаад DB-рүү импортлоно.
 const importData = async () => {
   try {
     await User.create(users);
     await Firm.create(firms);
     await Lawyer.create(lawyers);
+    await Info.create(infos);
     console.log("Өгөгдлийг импортлолоо!".green.inverse); //green.inverse => өнгө
   } catch (err) {
     console.log(`${err}`.red.inverse); //red.inverse => өнгө
@@ -41,6 +47,7 @@ const deleteData = async () => {
     await User.deleteMany();
     await Firm.deleteMany();
     await Lawyer.deleteMany();
+    await Info.deleteMany();
     console.log("Бүх өгөгдлийг устгалаа!".red.inverse);
   } catch (err) {
     console.log(`${err}`.red.inverse); //red.inverse => өнгө

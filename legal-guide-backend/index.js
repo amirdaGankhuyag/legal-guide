@@ -17,6 +17,7 @@ const errorHandler = require("./middlewares/error");
 const usersRoutes = require("./routes/users");
 const firmsRoutes = require("./routes/firms");
 const lawyersRoutes = require("./routes/lawyers");
+const infosRoutes = require("./routes/infos");
 // Database
 const connectDB = require("./config/db");
 
@@ -55,10 +56,14 @@ const corsOptions = {
   credentials: true,
 };
 
-
-
 app.use(cors(corsOptions));
-app.use(session({ secret: process.env.EXPRESS_SESSION, resave: true, saveUninitialized: true }));
+app.use(
+  session({
+    secret: process.env.EXPRESS_SESSION,
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 app.use(passportAuth.initialize());
 app.use(passportAuth.session());
 
@@ -71,6 +76,7 @@ app.use(morgan("combined", { stream: accessLogStream }));
 app.use("/api/v1/users", usersRoutes);
 app.use("/api/v1/firms", firmsRoutes);
 app.use("/api/v1/lawyers", lawyersRoutes);
+app.use("/api/v1/infos", infosRoutes);
 app.use(errorHandler);
 
 const server = app.listen(
