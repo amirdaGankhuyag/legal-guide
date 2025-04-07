@@ -17,7 +17,7 @@ export const navigation = [
   {
     id: "3",
     title: "Мэдээлэл",
-    url: "/info",
+    url: "/infos",
   },
   {
     id: "4",

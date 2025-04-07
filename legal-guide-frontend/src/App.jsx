@@ -10,7 +10,8 @@ import Firms from "./pages/Firms";
 import FirmDetails from "./pages/FirmDetails";
 import Lawyers from "./pages/Lawyers";
 import LawyerDetails from "./pages/LawyerDetails";
-import Info from "./pages/Info";
+import Infos from "./pages/Infos";
+import InfoDetails from "./pages/InfoDetails";
 import Success from "./components/Success";
 import ButtonGradient from "./assets/svg/ButtonGradient";
 
@@ -44,11 +45,12 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="login" element={<Login onLogin={handleLogin} />} />
           <Route path="signup" element={<Signup onSignup={handleLogin} />} />
-          <Route path="info" element={<Info />} />
-          <Route path="lawyers" element={<Lawyers />} />
-          <Route path="lawyers/:id" element={<LawyerDetails />} />
           <Route path="firms" element={<Firms />} />
           <Route path="firms/:id" element={<FirmDetails />} />
+          <Route path="lawyers" element={<Lawyers />} />
+          <Route path="lawyers/:id" element={<LawyerDetails />} />
+          <Route path="infos" element={<Infos />} />
+          <Route path="infos/:id" element={<InfoDetails />} />
           <Route path="success" element={<Success />} />
         </Routes>
         <Footer />
