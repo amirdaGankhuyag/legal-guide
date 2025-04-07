@@ -50,8 +50,8 @@ const InfoDetails = () => {
   }
 
   return (
-    <div className="bg-gray-100 px-4 py-2">
-      <h3 className="font-code mb-4 ml-2 flex justify-center text-2xl font-bold">
+    <div className="font-code bg-gray-100 px-50 py-7">
+      <h3 className="mb-4 ml-2 flex justify-center text-2xl font-bold">
         {info.title}
       </h3>
       <div className="relative">

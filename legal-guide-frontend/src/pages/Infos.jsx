@@ -39,8 +39,8 @@ const Infos = () => {
 
   if (loading) return <Spinner />;
   return (
-    <div className="bg-gray-100 px-4 py-2">
-      <h3 className="font-code mb-4 ml-2 flex justify-center text-2xl font-bold">
+    <div className="bg-gray-100 px-4 py-2 font-code">
+      <h3 className="mb-4 ml-2 flex justify-center text-2xl font-bold">
         Мэдээлэл
       </h3>
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
