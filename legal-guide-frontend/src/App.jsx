@@ -1,15 +1,16 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Home from "./pages/Home";
-import Info from "./pages/Info";
-import Lawyers from "./pages/Lawyers";
-import LawyerDetails from "./pages/LawyerDetails";
 import Firms from "./pages/Firms";
 import FirmDetails from "./pages/FirmDetails";
-import Header from "./components/Header";
+import Lawyers from "./pages/Lawyers";
+import LawyerDetails from "./pages/LawyerDetails";
+import Info from "./pages/Info";
 import Success from "./components/Success";
 import ButtonGradient from "./assets/svg/ButtonGradient";
 
@@ -50,6 +51,7 @@ const App = () => {
           <Route path="firms/:id" element={<FirmDetails />} />
           <Route path="success" element={<Success />} />
         </Routes>
+        <Footer />
       </div>
       <ButtonGradient />
     </QueryClientProvider>

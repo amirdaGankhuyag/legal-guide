@@ -15,7 +15,8 @@ const FirmDetails = () => {
     const fetchFirmDetails = async () => {
       const response = await axios.get(`firms/${id}`);
       if (response.data.data.photo) {
-        const photoRef = ref(storage, response.data.data.photo);
+        const imagePath = `gs://legal-guide-2f523.firebasestorage.app/FirmPhotos/${response.data.data.photo}`;
+        const photoRef = ref(storage, imagePath);
         const url = await getDownloadURL(photoRef);
         setPhotoUrl(url);
       }
