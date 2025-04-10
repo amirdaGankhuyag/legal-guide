@@ -22,10 +22,10 @@ passport.use(
             password: crypto.randomBytes(20).toString("hex"),
           });
           const token = user_cr.getJsonWebToken();
-          return cb(null, token);
+          return cb(null, { token, role: user_cr.role });
         }
         const token = user.getJsonWebToken();
-        return cb(null, token);
+        return cb(null, { token, role: user.role });
       } catch (error) {
         return cb(error, null);
       }
@@ -38,7 +38,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((user, done) => {
-    done(null, user);
+  done(null, user);
 });
 
 module.exports = passport;

@@ -37,4 +37,9 @@ export const navigation = [
     url: "/login",
     onlyMobile: true,
   },
+  {
+    id: "7",
+    title: "Админ",
+    url: "/admin",
+  },
 ];

@@ -14,8 +14,8 @@ exports.googleAuthCallback = passportAuth.authenticate("google", {
   failureRedirect: "/api/v1/users/google/failure",
 });
 exports.googleAuthSuccess = asyncHandler(async (req, res, next) => {
-  const token = await req.user;
-  res.redirect("http://localhost:5173/success?token=" + token);
+  const { token, role } = await req.user;
+  res.redirect(`http://localhost:5173/success?token=${token}&role=${role}`);
 });
 exports.googleAuthFailure = asyncHandler(async (req, res, next) => {
   throw new MyError("Google нэвтрэхэд алдаа гарлаа.", 401);

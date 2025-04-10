@@ -8,11 +8,13 @@ import Button from "./Button";
 import MenuSvg from "../assets/svg/MenuSvg";
 import { HamburgerMenu } from "./design/Header";
 import axios from "../utils/axios";
+import { useAuth } from "../context/AuthContext";
 
 const Header = () => {
   const pathname = useLocation();
   const navigate = useNavigate();
   const [openNavigation, setOpenNavigation] = useState(false);
+  const { isAuth, isAdmin, logout } = useAuth();
 
   const toggleNavigation = () => {
     if (openNavigation) {
@@ -32,7 +34,7 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    logout();
     axios
       .get("users/logout")
       .then((result) => {})
@@ -42,36 +44,42 @@ const Header = () => {
     navigate("/login");
   };
 
-  const filteredNavigation = navigation.filter((item) => {
-    if (localStorage.getItem("token")) {
-      return item.id !== "4" && item.id !== "5";
-    } else {
-      return item.id !== "6";
-    }
-  });
+  const getFilteredNavigation = () => {
+    if (!isAuth)
+      return navigation.filter((item) => ["0", "4", "5"].includes(item.id));
+
+    const base = navigation.filter((item) =>
+      ["0", "1", "2", "3", "6"].includes(item.id),
+    );
+
+    if (isAdmin) return [...base, navigation.find((item) => item.id === "7")];
+
+    return base;
+  };
+  const filteredNavigation = getFilteredNavigation();
 
   return (
     <div
-      className={`fixed top-0 left-0 w-full z-50 border-b border-neutral-600 lg:bg-neutral-800/90 lg:backdrop-blur-sm ${
+      className={`fixed top-0 left-0 z-50 w-full border-b border-neutral-600 lg:bg-neutral-800/90 lg:backdrop-blur-sm ${
         openNavigation ? "bg-neutral-800" : "bg-neutral-800/90 backdrop-blur-sm"
       }`}
     >
-      <div className="flex items-center px-5 lg:px-7.5 xl:px-10 max-lg:py-4">
+      <div className="flex items-center px-5 max-lg:py-4 lg:px-7.5 xl:px-10">
         <a className="block w-[12rem] xl:mr-8" href="/">
           <img src={legalguide} width={190} height={40} alt="LegalGudie" />
         </a>
         <nav
           className={` ${
             openNavigation ? "flex" : "hidden"
-          } fixed top-[6.5rem] left-0 right-0 bottom-0 bg-neutral-800 lg:static lg:flex lg:mx-auto lg:bg-transparent`}
+          } fixed top-[6.5rem] right-0 bottom-0 left-0 bg-neutral-800 lg:static lg:mx-auto lg:flex lg:bg-transparent`}
         >
-          <div className="relative z-2 flex flex-col items-center justify-center m-auto lg:flex-row">
+          <div className="relative z-2 m-auto flex flex-col items-center justify-center lg:flex-row">
             {filteredNavigation.map((item) => (
               <a
                 key={item.id}
                 href={item.url}
                 onClick={item.id === "6" ? handleLogout : handleClick}
-                className={`block relative font-code text-2xl uppercase text-neutral-100 transition-colors hover:text-purple-700 ${
+                className={`font-code relative block text-2xl text-neutral-100 uppercase transition-colors hover:text-purple-700 ${
                   item.onlyMobile ? "lg:hidden" : ""
                 } px-6 py-6 md:py-8 lg:-mr-0.25 lg:text-xs lg:font-semibold ${
                   item.url === pathname.hash
@@ -86,7 +94,7 @@ const Header = () => {
           <HamburgerMenu />
         </nav>
 
-        {localStorage.getItem("token") ? (
+        {isAuth ? (
           <Button
             onClick={handleLogout}
             className="max-sm:hidden sm:hidden lg:flex"
@@ -97,7 +105,7 @@ const Header = () => {
           <>
             <a
               href="/signup"
-              className="button hidden mr-8 text-neutral-100/50 transition-colors hover:text-neutral-100 lg:block"
+              className="button mr-8 hidden text-neutral-100/50 transition-colors hover:text-neutral-100 lg:block"
             >
               Бүртгүүлэх
             </a>

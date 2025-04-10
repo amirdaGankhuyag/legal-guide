@@ -1,6 +1,7 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import AdminPanel from "./pages/AdminPanel";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Login from "./pages/Login";
@@ -14,14 +15,17 @@ import Infos from "./pages/Infos";
 import InfoDetails from "./pages/InfoDetails";
 import Success from "./components/Success";
 import ButtonGradient from "./assets/svg/ButtonGradient";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { useAuth } from "./context/AuthContext";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const handleLogin = (token) => {
-    localStorage.setItem("token", token);
+  const handleLogin = (token, role) => {
+    login(token, role);
     navigate("/");
   };
 
@@ -43,15 +47,20 @@ const App = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route element={<ProtectedRoute admin />}>
+            <Route path="admin" element={<AdminPanel />} />
+          </Route>
           <Route path="login" element={<Login onLogin={handleLogin} />} />
           <Route path="signup" element={<Signup onSignup={handleLogin} />} />
-          <Route path="firms" element={<Firms />} />
-          <Route path="firms/:id" element={<FirmDetails />} />
-          <Route path="lawyers" element={<Lawyers />} />
-          <Route path="lawyers/:id" element={<LawyerDetails />} />
-          <Route path="infos" element={<Infos />} />
-          <Route path="infos/:id" element={<InfoDetails />} />
           <Route path="success" element={<Success />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="firms" element={<Firms />} />
+            <Route path="firms/:id" element={<FirmDetails />} />
+            <Route path="lawyers" element={<Lawyers />} />
+            <Route path="lawyers/:id" element={<LawyerDetails />} />
+            <Route path="infos" element={<Infos />} />
+            <Route path="infos/:id" element={<InfoDetails />} />
+          </Route>
         </Routes>
         <Footer />
       </div>
