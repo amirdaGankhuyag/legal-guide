@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("role", role);
     setIsAuth(true);
     setIsAdmin(role === "admin");
-  }
+  };
 
   const logout = () => {
     localStorage.removeItem("token");

@@ -10,7 +10,7 @@ const Success = () => {
   useEffect(() => {
     const token = searchParams.get("token");
     const role = searchParams.get("role");
-    
+
     if (token && role) {
       login(token, role);
       navigate("/");
