@@ -36,7 +36,7 @@ exports.createFirm = asyncHandler(async (req, res, next) => {
   res.status(201).json({
     success: true,
     data: firm,
-  });s
+  });
 });
 
 /** Заагдсан нэг хуулийн фирмийн мэдээллийг авах */
