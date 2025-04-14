@@ -4,8 +4,14 @@
     "firstName": "John",
     "lastName": "Doe",
     "photo": "john.jpg",
-    "phone": "+976 9911 1111",
-    "email": "john@gmail.com",
-    "workAddress": "123 Main St, Ulaanbaatar, Mongolia"
+    "contact": {
+      "phone": "+976 9911 1111",
+      "email": "john@gmail.com",
+      "facebookAcc": "john",
+      "instagramAcc": "john-doe"
+    },
+    "workAddress": "123 Main St, Ulaanbaatar, Mongolia",
+    "services": ["Family Law", "Criminal Law", "Corporate Law"],
+    "position": "Senior Lawyer"
   }
 ]

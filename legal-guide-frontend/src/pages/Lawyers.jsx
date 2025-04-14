@@ -27,6 +27,7 @@ const Lawyers = () => {
             return lawyer;
           }),
         );
+        console.log(lawyersWithPhotos);
         setLawyers(lawyersWithPhotos);
       } catch (error) {
         console.error("Хуульчдын мэдээллийг татахад алдаа гарлаа", error);
@@ -39,7 +40,7 @@ const Lawyers = () => {
 
   if (loading) return <Spinner />;
   return (
-    <div className="bg-gray-100 px-4 py-2">
+    <div className="min-h-screen bg-gray-100 px-4 py-2">
       <h3 className="font-code mb-4 ml-2 flex justify-center text-2xl font-bold">
         Хуулийн зөвлөхүүд
       </h3>
@@ -48,7 +49,7 @@ const Lawyers = () => {
           <Link to={`/lawyers/${lawyer._id}`} key={lawyer._id}>
             <div
               key={lawyer._id}
-              className="overflow-hidden rounded-md bg-white shadow-md transition-transform hover:scale-105"
+              className="transform overflow-hidden rounded-md bg-white shadow-lg transition duration-300 hover:scale-105 hover:shadow-xl"
             >
               <img
                 src={lawyer.photo || "/default-lawyer.jpg"}
@@ -58,13 +59,9 @@ const Lawyers = () => {
               />
               <div className="p-2">
                 <h3 className="text-md font-semibold text-gray-800">
-                  {lawyer.firstName}
-                  {" - "}
-                  <span className="font-medium text-blue-600">
-                    {lawyer.email}
-                  </span>
+                  {lawyer.firstName} {lawyer.lastName}
                 </h3>
-                <p className="text-sm text-gray-600">{lawyer.phone}</p>
+                <p className="text-sm text-gray-600">{lawyer.position}</p>
               </div>
             </div>
           </Link>

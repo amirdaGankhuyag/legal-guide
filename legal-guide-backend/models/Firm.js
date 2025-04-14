@@ -17,6 +17,15 @@ const FirmSchema = new mongoose.Schema({
     required: [true, "Фирмийн хаягийг оруулна уу"],
     trim: true,
   },
+  description: {
+    type: String,
+    trim: true,
+  },
+  services: [String],
+  contact: {
+    phone: String,
+    email: String,
+  },
   location: {
     latitude: { type: Number, required: true },
     longitude: { type: Number, required: true },

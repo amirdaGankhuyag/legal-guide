@@ -27,19 +27,50 @@ const FirmDetails = () => {
   }, [id]);
 
   return (
-    <div>
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4 py-10">
       {firm ? (
-        <div className="font-code flex flex-col items-center">
-          <h1 className="text-2xl font-bold">{firm.name}</h1>
+        <div className="font-code w-full max-w-3xl overflow-hidden rounded-xl bg-white shadow-2xl">
           {photoUrl && (
             <img
               src={photoUrl}
               alt={firm.name}
-              className="h-auto w-1/2"
+              className="h-64 w-full object-cover"
               loading="lazy"
             />
           )}
-          <p>Хаяг: {firm.address}</p>
+
+          <div className="space-y-4 p-6">
+            <h1 className="text-3xl font-bold text-gray-900">{firm.name}</h1>
+            <p className="text-gray-600">
+              <strong>📍 Хаяг:</strong> {firm.address}
+            </p>
+            {firm.description && (
+              <p className="text-gray-700">{firm.description}</p>
+            )}
+
+            {firm.services?.length > 0 && (
+              <div>
+                <h2 className="text-xl font-semibold text-gray-800">
+                  🛠 Үйлчилгээ
+                </h2>
+                <ul className="mt-2 list-inside list-disc space-y-1 text-gray-700">
+                  {firm.services.map((service, index) => (
+                    <li key={index}>{service}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {firm.contact && (
+              <div>
+                <h2 className="text-xl font-semibold text-gray-800">
+                  📞 Холбоо барих
+                </h2>
+                <p className="mt-1 text-gray-700">Утас: {firm.contact.phone}</p>
+                <p className="text-gray-700">И-мэйл: {firm.contact.email}</p>
+              </div>
+            )}
+          </div>
         </div>
       ) : (
         <Spinner />

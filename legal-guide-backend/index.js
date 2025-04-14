@@ -10,6 +10,7 @@ const morgan = require("morgan");
 const colors = require("colors");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const fileupload = require("express-fileupload");
 // гараар бичсэн middleware
 const logger = require("./middlewares/logger");
 const errorHandler = require("./middlewares/error");
@@ -69,6 +70,7 @@ app.use(passportAuth.session());
 
 // Body parser
 app.use(express.json());
+app.use(fileupload());
 app.use(cookieParser());
 // router-үүдийг ашиглана
 app.use(logger);

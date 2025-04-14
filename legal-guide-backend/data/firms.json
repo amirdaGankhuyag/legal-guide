@@ -4,9 +4,21 @@
     "name": "'Алтаргана' хууль зүйн товчоо",
     "photo": "altargana.jpg",
     "address": "Peace Avenue, SBD - 1 khoroo, Ulaanbaatar 14210",
+    "description": "Таньд шаардлагатай хууль зүйн талаарх мэдээллийг бид хурдан шуурхай хүргэх болно.",
+    "services": [
+      "Хууль зүйн зөвлөгөө",
+      "Шүүхийн маргаан",
+      "Гэрээний зөрчил",
+      "Гэр бүл, хүүхдийн асуудал",
+      "Гадаадын иргэн, харьяатын асуудал"
+    ],
+    "contact": {
+      "phone": "7222 7282",
+      "email": "Info@altargana.org"
+    },
     "location": {
       "latitude": 47.91736,
-      "longitude": 106.92380
+      "longitude": 106.9238
     }
   },
   {
@@ -14,6 +26,18 @@
     "name": "Elite Legal Firm",
     "photo": "elite-legal.png",
     "address": "Sukhbaatar District, Ulaanbaatar, Mongolia",
+    "description": "Elite Legal Firm is a leading law firm in Mongolia, providing comprehensive legal services to clients.",
+    "services": [
+      "Corporate Law",
+      "Intellectual Property",
+      "Dispute Resolution",
+      "Real Estate",
+      "Employment Law"
+    ],
+    "contact": {
+      "phone": "+976 7000 0000",
+      "email": "info@elitelegal.org"
+    },
     "location": {
       "latitude": 47.9238654,
       "longitude": 106.9212336

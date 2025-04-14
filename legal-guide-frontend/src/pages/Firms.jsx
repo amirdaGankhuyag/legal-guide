@@ -192,7 +192,7 @@ const Firms = () => {
   const renderListView = () => {
     if (isLoading) return <Spinner />;
     return (
-      <ul className="font-code grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+      <ul className="min-h-screen font-code grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
         {sortedFirms.map((firm) => (
           <Link to={`/firms/${firm._id}`} key={firm._id}>
             <li className="flex h-64 flex-col overflow-hidden rounded-md bg-white shadow-md transition-transform hover:scale-105">
