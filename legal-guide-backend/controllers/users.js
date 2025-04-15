@@ -4,6 +4,7 @@ const asyncHandler = require("../middlewares/asyncHandler");
 const sendEmail = require("../utils/email");
 const crypto = require("crypto");
 const passportAuth = require("../utils/auth");
+const { count } = require("console");
 
 /** Google асcount ашиглан нэвтрэх */
 exports.googleAuth = passportAuth.authenticate("google", {
@@ -151,5 +152,64 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
     success: true,
     token: jwt,
     user,
+  });
+});
+
+/** Бүх хэрэглэгчийн мэдээлэлийг авах */
+exports.getUsers = asyncHandler(async (req, res, next) => {
+  const users = await User.find();
+  if (!users || users.length === 0)
+    throw new MyError("Бүртгэлтэй хэрэглэгч олдсонгүй", 404);
+
+  res.status(200).json({
+    success: true,
+    count: users.length,
+    data: users,
+  });
+});
+
+/** Заагдсан хэрэглэгчийн мэдээллийг авах */
+exports.getUser = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user)
+    throw new MyError(req.params.id + "ID-тай хэрэглэгч олдсонгүй", 404);
+
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
+
+/** Тухайн нэг хэрэглэгчийн мэдээллийг шинэчлэх */
+exports.updateUser = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    throw new MyError(req.params.id + " ID-тай хэрэглэгч олдсонгүй", 404);
+  }
+
+  for (let attr in req.body) user[attr] = req.body[attr];
+
+  user.save();
+
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
+
+/** Тухайн нэг хэрэглэгчийн мэдээллийг устгах */
+exports.deleteUser = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    throw new MyError(req.params.id + " ID-тай хэрэглэгч олдсонгүй", 404);
+  }
+
+  await user.deleteOne();
+
+  res.status(200).json({
+    success: true,
+    data: user,
   });
 });

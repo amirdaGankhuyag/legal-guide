@@ -14,14 +14,22 @@ const FirmDetails = () => {
   useEffect(() => {
     const fetchFirmDetails = async () => {
       const response = await axios.get(`firms/${id}`);
-      if (response.data.data.photo) {
-        const imagePath = `gs://legal-guide-2f523.firebasestorage.app/FirmPhotos/${response.data.data.photo}`;
-        const photoRef = ref(storage, imagePath);
-        const url = await getDownloadURL(photoRef);
-        setPhotoUrl(url);
+      const firmData = response.data.data;
+      if (firmData.photo && firmData.photoUrl === "no-url") {
+        try {
+          const imagePath = `gs://legal-guide-2f523.firebasestorage.app/FirmPhotos/${firmData.photo}`;
+          const photoRef = ref(storage, imagePath);
+          const url = await getDownloadURL(photoRef);
+          setPhotoUrl(url);
+        } catch (err) {
+          console.error("Зургийг татахад алдаа гарлаа", err);
+          setPhotoUrl(null);
+        }
       }
-      setFirm(response.data.data);
-      console.log(response.data.data);
+      if (firmData.photoUrl !== "no-url") {
+        setPhotoUrl(firmData.photoUrl);
+      }
+      setFirm(firmData);
     };
     fetchFirmDetails();
   }, [id]);

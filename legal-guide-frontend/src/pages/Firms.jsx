@@ -33,13 +33,19 @@ const Firms = () => {
         },
       });
       const firms = response.data.data;
+
       const firmsWithPhotos = await Promise.all(
         firms.map(async (firm) => {
-          if (firm.photo) {
-            const imagePath = `gs://legal-guide-2f523.firebasestorage.app/FirmPhotos/${firm.photo}`;
-            const photoRef = ref(storage, imagePath);
-            const url = await getDownloadURL(photoRef);
-            return { ...firm, photo: url };
+          if (firm.photo && firm.photoUrl === "no-url") {
+            try {
+              const imagePath = `gs://legal-guide-2f523.firebasestorage.app/FirmPhotos/${firm.photo}`;
+              const photoRef = ref(storage, imagePath);
+              const url = await getDownloadURL(photoRef);
+              return { ...firm, photoUrl: url };
+            } catch (err) {
+              console.error("Зургийг татахад алдаа гарлаа", err);
+              return firm;
+            }
           }
           return firm;
         }),
@@ -192,12 +198,12 @@ const Firms = () => {
   const renderListView = () => {
     if (isLoading) return <Spinner />;
     return (
-      <ul className="min-h-screen font-code grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+      <ul className="font-code grid min-h-screen grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
         {sortedFirms.map((firm) => (
           <Link to={`/firms/${firm._id}`} key={firm._id}>
             <li className="flex h-64 flex-col overflow-hidden rounded-md bg-white shadow-md transition-transform hover:scale-105">
               <img
-                src={firm.photo || "/default-firm.jpg"}
+                src={firm.photoUrl || "default-firm.jpg"}
                 alt={firm.name}
                 loading="lazy" // // Native lazy loading
                 className="h-40 w-full object-cover"

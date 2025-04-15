@@ -17,6 +17,10 @@ const LawyerSchema = new mongoose.Schema({
     type: String,
     default: "no-photo.jpg",
   },
+  photoUrl: {
+    type: String,
+    default: "no-url",
+  },
   contact: {
     phone: {
       type: String,
@@ -27,6 +31,7 @@ const LawyerSchema = new mongoose.Schema({
       required: [true, "И-мэйл хаягийг оруулна уу"],
       unique: true,
       lowercase: true,
+      sparse: true,
     },
     facebookAcc: {
       type: String,

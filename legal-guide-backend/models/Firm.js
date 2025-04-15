@@ -12,6 +12,10 @@ const FirmSchema = new mongoose.Schema({
     type: String,
     default: "no-photo.jpg",
   },
+  photoUrl: {
+    type: String,
+    default: "no-url",
+  },
   address: {
     type: String,
     required: [true, "Фирмийн хаягийг оруулна уу"],

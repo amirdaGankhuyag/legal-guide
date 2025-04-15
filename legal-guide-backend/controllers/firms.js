@@ -93,7 +93,8 @@ exports.deleteFirm = asyncHandler(async (req, res, next) => {
   });
 });
 
-/** Заагдсан нэг хуулийн фирмийн зураг оруулах */ // PUT: api/v1/firms/:id/photo
+/** Заагдсан нэг хуулийн фирмийн зураг оруулах */ 
+// PUT: api/v1/firms/:id/upload-photo
 exports.uploadFirmPhoto = asyncHandler(async (req, res, next) => {
   const firm = await Firm.findById(req.params.id);
 
@@ -136,6 +137,7 @@ exports.uploadFirmPhoto = asyncHandler(async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: fileName,
+      photoUrl: publicUrl,
     });
   });
   stream.end(file.data);

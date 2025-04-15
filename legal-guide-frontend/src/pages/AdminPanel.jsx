@@ -1,9 +1,7 @@
-import React from 'react'
+import { useState, useEffect } from "react";
 
 const AdminPanel = () => {
-  return (
-    <div>AdminPanel</div>
-  )
-}
+  return <div className="min-h-screen">AdminPanel</div>;
+};
 
-export default AdminPanel
+export default AdminPanel;

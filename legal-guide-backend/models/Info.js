@@ -13,6 +13,10 @@ const InfoSchema = new mongoose.Schema({
     type: String,
     default: "no-photo.jpg",
   },
+  photoUrl: {
+    type: String,
+    default: "no-url",
+  },
   summary: {
     type: String,
     required: true,
