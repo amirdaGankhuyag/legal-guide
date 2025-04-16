@@ -55,7 +55,7 @@ const Lawyers = () => {
                 src={lawyer.photo || "/default-lawyer.jpg"}
                 alt={lawyer.firsName}
                 loading="lazy"
-                className="h-40 w-full"
+                className="h-40 w-full object-cover"
               />
               <div className="p-2">
                 <h3 className="text-md font-semibold text-gray-800">

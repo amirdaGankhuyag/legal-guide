@@ -54,7 +54,7 @@ const Infos = () => {
                 src={info.photo || "/default-info.jpg"}
                 alt={info.title}
                 loading="lazy"
-                className="h-40 w-full"
+                className="h-40 w-full object-cover"
               />
               <div className="p-2">
                 <h3 className="text-md font-semibold text-gray-800">
