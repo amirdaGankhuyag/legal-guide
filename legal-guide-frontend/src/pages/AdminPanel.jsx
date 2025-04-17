@@ -14,13 +14,13 @@ const AdminPanel = () => {
       </h1>
       <div className="flex justify-center gap-4 py-4">
         <Button onClick={() => setSection("firm")} black>
-          Фирм нэмэх
+          Фирм
         </Button>
         <Button onClick={() => setSection("lawyer")} black>
-          Хуульч нэмэх
+          Хуульч
         </Button>
         <Button onClick={() => setSection("info")} black>
-          Мэдээлэл нэмэх
+          Мэдээлэл
         </Button>
       </div>
 

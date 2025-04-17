@@ -34,6 +34,14 @@ const FirmDetails = () => {
     fetchFirmDetails();
   }, [id]);
 
+  if (firm?.length === 0) {
+    return (
+      <div className="font-code col-span-full text-center text-gray-500">
+        Фирм олдсонгүй
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4 py-10">
       {firm ? (

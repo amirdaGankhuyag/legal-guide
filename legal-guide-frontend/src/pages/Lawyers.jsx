@@ -18,16 +18,15 @@ const Lawyers = () => {
         const lawyers = response.data.data;
         const lawyersWithPhotos = await Promise.all(
           lawyers.map(async (lawyer) => {
-            if (lawyer.photo) {
+            if (lawyer.photo && lawyer.photoUrl === "no-url") {
               const imagePath = `gs://legal-guide-2f523.firebasestorage.app/LawyerPhotos/${lawyer.photo}`;
               const photoRef = ref(storage, imagePath);
               const url = await getDownloadURL(photoRef);
-              return { ...lawyer, photo: url };
+              return { ...lawyer, photoUrl: url };
             }
             return lawyer;
           }),
         );
-        console.log(lawyersWithPhotos);
         setLawyers(lawyersWithPhotos);
       } catch (error) {
         console.error("Хуульчдын мэдээллийг татахад алдаа гарлаа", error);
@@ -42,7 +41,7 @@ const Lawyers = () => {
   return (
     <div className="min-h-screen bg-gray-100 px-4 py-2">
       <h3 className="font-code mb-4 ml-2 flex justify-center text-2xl font-bold">
-        Хуулийн зөвлөхүүд
+        Хуульчдын мэдээлэл
       </h3>
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {lawyers.map((lawyer) => (
@@ -52,7 +51,7 @@ const Lawyers = () => {
               className="transform overflow-hidden rounded-md bg-white shadow-lg transition duration-300 hover:scale-105 hover:shadow-xl"
             >
               <img
-                src={lawyer.photo || "/default-lawyer.jpg"}
+                src={lawyer.photoUrl || "default-lawyer.jpg"}
                 alt={lawyer.firsName}
                 loading="lazy"
                 className="h-40 w-full object-cover"
@@ -68,7 +67,7 @@ const Lawyers = () => {
         ))}
         {lawyers.length === 0 && (
           <div className="font-code col-span-full text-center text-gray-500">
-            Хуулийн зөвлөхүүд олдсонгүй
+            Хуульчид олдсонгүй
           </div>
         )}
       </div>

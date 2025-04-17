@@ -14,11 +14,11 @@ const LawyerDetails = () => {
   useEffect(() => {
     const fetchLawyerDetails = async () => {
       const response = await axios.get(`lawyers/${id}`);
-      if (response.data.data.photo) {
+      if (response.data.data.photoUrl === "no-url") {
         const imagePath = `gs://legal-guide-2f523.firebasestorage.app/LawyerPhotos/${response.data.data.photo}`;
         const photoRef = ref(storage, imagePath);
         const url = await getDownloadURL(photoRef);
-        setLawyer({ ...response.data.data, photo: url });
+        setLawyer({ ...response.data.data, photoUrl: url });
       } else {
         setLawyer(response.data.data);
       }
@@ -31,7 +31,7 @@ const LawyerDetails = () => {
       {lawyer ? (
         <div className="flex flex-col items-center space-y-2">
           <img
-            src={lawyer.photo}
+            src={lawyer.photoUrl}
             alt={lawyer.firstName}
             className="h-48 w-48 rounded-3xl border-2 border-blue-500 object-cover"
           />

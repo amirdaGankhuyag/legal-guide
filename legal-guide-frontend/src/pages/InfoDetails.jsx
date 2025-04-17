@@ -16,12 +16,11 @@ const InfoDetails = () => {
       try {
         const response = await axios.get(`infos/${id}`);
         const infoData = response.data.data;
-
-        if (infoData?.photo) {
+        if (infoData.photoUrl === "no-url") {
           const imagePath = `InfoPhotos/${infoData.photo}`;
           const photoRef = ref(storage, imagePath);
           const url = await getDownloadURL(photoRef);
-          setInfo({ ...infoData, photo: url });
+          setInfo({ ...infoData, photoUrl: url });
         } else {
           setInfo(infoData);
         }
@@ -45,21 +44,25 @@ const InfoDetails = () => {
 
   if (loading) return <Spinner />;
 
-  if (!info) {
-    return <p className="mt-4 text-center text-red-500">Мэдээлэл олдсонгүй</p>;
+  if (!info.length === 0) {
+    return (
+      <div className="font-code col-span-full text-center text-gray-500">
+        Mэдээлэл олдсонгүй
+      </div>
+    );
   }
 
   return (
-    <div className="font-code bg-gray-100 px-50 py-7">
+    <div className="font-code min-h-screen bg-gray-100 px-50 py-7">
       <h3 className="mb-4 ml-2 flex justify-center text-2xl font-bold">
         {info.title}
       </h3>
       <div className="relative">
         <img
-          src={info.photo || "/default-info.jpg"}
+          src={info.photoUrl || "default-info.jpg"}
           alt={info.title}
           loading="lazy"
-          className="h-40 w-full rounded-md object-cover shadow-sm"
+          className="h-55 w-full rounded-md object-cover shadow-sm"
         />
         <div className="absolute top-2 right-2 rounded bg-white/80 px-3 py-1 text-sm text-gray-700 shadow">
           🕒 Нийтэлсэн: {formatDate(info.createdAt)}
