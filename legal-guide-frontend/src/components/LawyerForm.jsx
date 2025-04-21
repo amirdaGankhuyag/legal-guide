@@ -152,10 +152,14 @@ const LawyerForm = () => {
     });
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id, photoName) => {
     if (window.confirm("Устгахдаа итгэлтэй байна уу?")) {
       try {
         await axios.delete(`/lawyers/${id}`);
+        if (photoName && photoName !== "no-photo") {
+          const imageRef = ref(storage, `LawyerPhotos/${photoName}`);
+          await deleteObject(imageRef);
+        }
         alert("Хуульч устгагдлаа.");
         fetchLawyers();
         if (editId === id) resetForm();
@@ -351,7 +355,7 @@ const LawyerForm = () => {
                     Засах
                   </button>
                   <button
-                    onClick={() => handleDelete(lawyer._id)}
+                    onClick={() => handleDelete(lawyer._id, lawyer.photo)}
                     className="rounded bg-red-500 px-3 py-1 text-white hover:bg-red-600"
                   >
                     Устгах

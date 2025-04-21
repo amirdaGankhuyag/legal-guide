@@ -123,6 +123,7 @@ const InfoForm = () => {
         }
         fetchInfos();
         alert("Мэдээлэл устгагдлаа.");
+        if (editId === id) resetForm();
       } catch (err) {
         console.error("Устгахад алдаа гарлаа", err);
       }
