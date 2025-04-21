@@ -1,4 +1,4 @@
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AdminPanel from "./pages/AdminPanel";
@@ -61,6 +61,8 @@ const App = () => {
             <Route path="infos" element={<Infos />} />
             <Route path="infos/:id" element={<InfoDetails />} />
           </Route>
+
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
         <Footer />
       </div>
