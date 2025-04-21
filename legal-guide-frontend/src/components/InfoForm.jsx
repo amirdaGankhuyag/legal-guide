@@ -54,6 +54,18 @@ const InfoForm = () => {
     setForm((prev) => ({ ...prev, photo: e.target.files[0] }));
   };
 
+  const resetForm = () => {
+    setForm({
+      title: "",
+      content: "",
+      summary: "",
+      photo: null,
+      photoUrl: null,
+    });
+    setEditId(null);
+    setPreviewUrl(null);
+  };
+
   const handleUploadData = async (e) => {
     e.preventDefault();
     try {
@@ -83,8 +95,7 @@ const InfoForm = () => {
         await axios.post("/infos", payload);
         alert("Мэдээлэл нэмэгдлээ!");
       }
-
-      setForm({ title: "", content: "", summary: "", photo: null, photoUrl: null });
+      resetForm();
       fetchInfos();
     } catch (err) {
       console.error("Алдаа гарлаа", err);
@@ -177,6 +188,11 @@ const InfoForm = () => {
           <Button type="submit" className="w-full" black>
             {editId ? "Шинэчлэх" : "Хадгалах"}
           </Button>
+          {editId && (
+            <Button type="button" black onClick={resetForm} className="w-full">
+              Болих
+            </Button>
+          )}
         </form>
       </div>
 

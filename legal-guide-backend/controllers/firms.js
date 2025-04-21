@@ -4,6 +4,17 @@ const asyncHandler = require("../middlewares/asyncHandler");
 const uuid = require("uuid").v4;
 const bucket = require("../utils/firebaseAdmin");
 
+/** Бүх хуулийн фирмүүдийн мэдээллийг авах */
+exports.getAllFirms = asyncHandler(async (req, res, next) => {
+  const firms = await Firm.find({}).sort({ createdAt: -1 });
+
+  res.status(200).json({
+    success: true,
+    count: firms.length,
+    data: firms,
+  });
+});
+
 /** Ойролцоох фирмүүдийн мэдээллийг авах */
 exports.getFirms = asyncHandler(async (req, res, next) => {
   const { latMin, latMax, lonMin, lonMax } = req.query;
@@ -93,7 +104,7 @@ exports.deleteFirm = asyncHandler(async (req, res, next) => {
   });
 });
 
-/** Заагдсан нэг хуулийн фирмийн зураг оруулах */ 
+/** Заагдсан нэг хуулийн фирмийн зураг оруулах */
 // PUT: api/v1/firms/:id/upload-photo
 exports.uploadFirmPhoto = asyncHandler(async (req, res, next) => {
   const firm = await Firm.findById(req.params.id);

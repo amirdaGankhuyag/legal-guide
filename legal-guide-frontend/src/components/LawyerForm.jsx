@@ -1,7 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "../utils/axios";
 import firebase from "../utils/firebase";
-import { getDownloadURL, ref, uploadBytes, getStorage } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref,
+  uploadBytes,
+  getStorage,
+  deleteObject,
+} from "firebase/storage";
 import Button from "../components/Button";
 
 const LawyerForm = () => {
@@ -15,7 +21,34 @@ const LawyerForm = () => {
     services: [],
     newService: "",
     photo: null,
+    photoUrl: "no-url",
   });
+  const [editId, setEditId] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [lawyers, setLawyers] = useState([]);
+
+  useEffect(() => {
+    fetchLawyers();
+  }, []);
+
+  useEffect(() => {
+    if (form.photo instanceof File) {
+      setPreviewUrl(URL.createObjectURL(form.photo));
+    } else if (form.photoUrl && form.photoUrl !== "no-url") {
+      setPreviewUrl(form.photoUrl);
+    } else {
+      setPreviewUrl(null);
+    }
+  }, [form.photo, form.photoUrl]);
+
+  const fetchLawyers = async () => {
+    try {
+      const res = await axios.get("/lawyers");
+      setLawyers(res.data.data);
+    } catch (err) {
+      console.error("Хуульчдын мэдээлэл татаж чадсангүй", err);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,6 +82,21 @@ const LawyerForm = () => {
     setForm((prev) => ({ ...prev, services: updated }));
   };
 
+  const resetForm = () => {
+    setForm({
+      firstName: "",
+      lastName: "",
+      position: "",
+      workAddress: "",
+      contact: { phone: "", email: "", facebookAcc: "", instagramAcc: "" },
+      services: [],
+      newService: "",
+      photo: null,
+    });
+    setEditId(null);
+    setPreviewUrl(null);
+  };
+
   const handleUploadData = async (e) => {
     e.preventDefault();
     try {
@@ -69,22 +117,51 @@ const LawyerForm = () => {
         services: form.services,
       };
 
-      const response = await axios.post("/lawyers", payload);
-      console.log("Хуульч амжилттай бүртгэгдлээ:", response.data);
-      alert("Хуульч нэмэгдлээ!");
+      if (editId) {
+        await axios.put(`/lawyers/${editId}`, payload);
+        alert("Хуульчийн мэдээлэл шинэчлэгдлээ.");
+      } else {
+        await axios.post("/lawyers", payload);
+        alert("Хуульч амжилттай нэмэгдлээ.");
+      }
 
-      setForm({
-        firstName: "",
-        lastName: "",
-        position: "",
-        workAddress: "",
-        contact: { phone: "", email: "", facebookAcc: "", instagramAcc: "" },
-        services: [],
-        newService: "",
-        photo: null,
-      });
+      resetForm();
+      fetchLawyers();
     } catch (err) {
       console.error("Хуульч нэмэхэд алдаа гарлаа:", err);
+    }
+  };
+
+  const handleEdit = (lawyer) => {
+    setEditId(lawyer._id);
+    setForm({
+      firstName: lawyer.firstName || "",
+      lastName: lawyer.lastName || "",
+      position: lawyer.position || "",
+      workAddress: lawyer.workAddress || "",
+      contact: lawyer.contact || {
+        phone: "",
+        email: "",
+        facebookAcc: "",
+        instagramAcc: "",
+      },
+      services: lawyer.services || [],
+      newService: "",
+      photo: null,
+      photoUrl: lawyer.photoUrl || "no-url",
+    });
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Устгахдаа итгэлтэй байна уу?")) {
+      try {
+        await axios.delete(`/lawyers/${id}`);
+        alert("Хуульч устгагдлаа.");
+        fetchLawyers();
+        if (editId === id) resetForm();
+      } catch (err) {
+        console.error("Устгахад алдаа гарлаа:", err);
+      }
     }
   };
 
@@ -92,7 +169,7 @@ const LawyerForm = () => {
     <div className="font-code min-h-screen bg-gray-50 px-4 pt-5 pb-10">
       <div className="mx-auto max-w-3xl rounded-xl bg-white p-8 shadow-xl">
         <h1 className="mb-6 text-center text-3xl font-bold text-gray-800">
-          Хуульч нэмэх
+          {editId ? "Хуульчийн мэдээлэл засах" : "Хуульч мэдээлэл нэмэх"}
         </h1>
         <form onSubmit={handleUploadData} className="space-y-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -228,13 +305,62 @@ const LawyerForm = () => {
               className="block w-full text-sm text-gray-500 file:mr-4 file:rounded-full file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
             />
           </div>
+            {previewUrl && (
+              <img
+                src={previewUrl}
+                alt="Preview"
+                className="mt-2 h-32 w-auto rounded-md border object-cover shadow-md"
+              />
+            )}
 
           <div className="text-center">
             <Button type="submit" black className="w-full">
-              Хадгалах
+              {editId ? "Шинэчлэх" : "Хадгалах"}
             </Button>
+            {editId && (
+              <Button
+                type="button"
+                black
+                onClick={resetForm}
+                className="mt-2 w-full"
+              >
+                Болих
+              </Button>
+            )}
           </div>
         </form>
+        {/* Lawyer List */}
+        <div className="mt-5 pt-6">
+          <h2 className="mb-4 text-xl font-semibold text-gray-700">
+            Хуульчдын жагсаалт
+          </h2>
+          <ul className="space-y-2">
+            {lawyers.map((lawyer) => (
+              <li
+                key={lawyer._id}
+                className="flex items-center justify-between rounded bg-gray-100 px-4 py-2"
+              >
+                <div>
+                  {lawyer.lastName} {lawyer.firstName} - {lawyer.position}
+                </div>
+                <div className="space-x-2">
+                  <button
+                    onClick={() => handleEdit(lawyer)}
+                    className="rounded bg-yellow-400 px-3 py-1 text-white hover:bg-yellow-500"
+                  >
+                    Засах
+                  </button>
+                  <button
+                    onClick={() => handleDelete(lawyer._id)}
+                    className="rounded bg-red-500 px-3 py-1 text-white hover:bg-red-600"
+                  >
+                    Устгах
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
