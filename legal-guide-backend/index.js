@@ -57,6 +57,8 @@ const corsOptions = {
   credentials: true,
 };
 
+app.use(express.static(path.join(__dirname, "public"))); // public доторх файлуудыг статик файлууд гэж үзнэ
+
 app.use(cors(corsOptions));
 app.use(
   session({
