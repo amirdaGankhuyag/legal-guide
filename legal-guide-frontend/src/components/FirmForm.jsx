@@ -166,7 +166,7 @@ const FirmForm = () => {
 
       // Дараа нь MongoDB-с устгана
       await axios.delete(`/firms/${id}`);
-      alert("Фирм болон зургыг амжилттай устгалаа");
+      alert("Фирм болон зургийг амжилттай устгалаа");
       fetchFirms();
       if (editId === id) resetForm();
     } catch (err) {
