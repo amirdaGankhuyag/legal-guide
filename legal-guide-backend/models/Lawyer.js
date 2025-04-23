@@ -46,6 +46,8 @@ const LawyerSchema = new mongoose.Schema({
     type: String,
     required: [true, "Ажлын хаягийг оруулна уу"],
   },
+  introduction: String,
+  experience: String,
   services: [String],
   position: String,
   createdAt: {

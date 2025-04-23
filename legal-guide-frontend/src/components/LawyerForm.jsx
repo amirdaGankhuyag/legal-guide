@@ -22,6 +22,8 @@ const LawyerForm = () => {
     newService: "",
     photo: null,
     photoUrl: "no-url",
+    introduction: "",
+    experience: "",
   });
   const [editId, setEditId] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -92,6 +94,9 @@ const LawyerForm = () => {
       services: [],
       newService: "",
       photo: null,
+      photoUrl: "no-url",
+      introduction: "",
+      experience: "",
     });
     setEditId(null);
     setPreviewUrl(null);
@@ -149,6 +154,8 @@ const LawyerForm = () => {
       newService: "",
       photo: null,
       photoUrl: lawyer.photoUrl || "no-url",
+      introduction: lawyer.introduction || "",
+      experience: lawyer.experience || "",
     });
   };
 
@@ -237,6 +244,24 @@ const LawyerForm = () => {
                 className="w-full rounded-md border-gray-300 p-2 shadow-sm"
               />
             </div>
+            <div>
+              <label className="mb-1 block font-medium">Танилцуулга</label>
+              <input
+                name="introduction"
+                value={form.introduction}
+                onChange={handleChange}
+                className="w-full rounded-md border-gray-300 p-2 shadow-sm"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block font-medium">Ажлын туршлага</label>
+              <input
+                name="experience"
+                value={form.experience}
+                onChange={handleChange}
+                className="w-full rounded-md border-gray-300 p-2 shadow-sm"
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -309,13 +334,13 @@ const LawyerForm = () => {
               className="block w-full text-sm text-gray-500 file:mr-4 file:rounded-full file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
             />
           </div>
-            {previewUrl && (
-              <img
-                src={previewUrl}
-                alt="Preview"
-                className="mt-2 h-32 w-auto rounded-md border object-cover shadow-md"
-              />
-            )}
+          {previewUrl && (
+            <img
+              src={previewUrl}
+              alt="Preview"
+              className="mt-2 h-32 w-auto rounded-md border object-cover shadow-md"
+            />
+          )}
 
           <div className="text-center">
             <Button type="submit" black className="w-full">

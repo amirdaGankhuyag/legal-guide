@@ -12,6 +12,8 @@
     },
     "workAddress": "123 Main St, Ulaanbaatar, Mongolia",
     "services": ["Family Law", "Criminal Law", "Corporate Law"],
-    "position": "Senior Lawyer"
+    "position": "Senior Lawyer",
+    "introduction": "John Doe is a senior lawyer with over 10 years of experience in various fields of law. He is known for his expertise in family law and has successfully handled numerous high-profile cases.",
+    "experience": "John has worked with several prestigious law firms and has a proven track record of winning cases. He is also a member of the Mongolian Bar Association and regularly participates in legal seminars and workshops."
   }
 ]

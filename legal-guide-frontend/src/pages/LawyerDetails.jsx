@@ -56,6 +56,14 @@ const LawyerDetails = () => {
                 <li key={index}>{service}</li>
               ))}
             </ul>
+            <p>
+              <span className="font-semibold">Танилцуулга:</span>{" "}
+              {lawyer.introduction}
+            </p>
+            <p>
+              <span className="font-semibold">Ажлын туршлага:</span>{" "}
+              {lawyer.experience}
+            </p>
           </div>
           <div className="mt-4 flex gap-4">
             {lawyer.contact?.facebookAcc && (
