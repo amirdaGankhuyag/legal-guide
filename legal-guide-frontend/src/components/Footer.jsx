@@ -5,7 +5,7 @@ const Footer = () => {
     <footer className="font-code bg-neutral-800/90 py-5 font-semibold text-white">
       <div className="container mx-auto flex flex-col items-center justify-between text-center md:flex-row md:text-left">
         <p className="md:text-md mb-4 text-sm md:mb-0">
-          © 2025 Legal Guide. Бүх эрх хуулиар хамгаалагдсан.
+          © 2025 Legal Guide.
         </p>
         <div className="mt-4 flex flex-wrap justify-center space-x-6 md:mt-0 md:justify-end">
           <p className="md:text-md mb-4 text-center text-sm md:mb-0 md:text-left">
