@@ -17,6 +17,7 @@ import Success from "./components/Success";
 import ButtonGradient from "./assets/svg/ButtonGradient";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useAuth } from "./context/AuthContext";
+import { toast } from "react-toastify";
 
 const queryClient = new QueryClient();
 
@@ -24,9 +25,10 @@ const App = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleLogin = (token, role) => {
-    login(token, role);
+  const handleLogin = (token) => {
+    login(token);
     navigate("/");
+    toast.success("Амжилттай!");
   };
 
   //Бүртгэл амжилттай нэвтэрч орно уу

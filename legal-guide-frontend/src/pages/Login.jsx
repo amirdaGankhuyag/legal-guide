@@ -22,7 +22,7 @@ const Login = ({ onLogin }) => {
     axios
       .post("users/login", { email, password })
       .then((result) => {
-        onLogin(result.data.token, result.data.user.role);
+        onLogin(result.data.token);
       })
       .catch((error) => {
         toast.error(error.response?.data?.error);

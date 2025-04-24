@@ -53,8 +53,8 @@ const Firms = () => {
       return firmsWithPhotos;
     },
     enabled: !!userLocation, // Байршил олдсон үед л асна
-    staleTime: 1000 * 60 * 5, // 5 минут шинэчлэхгүй
-    cacheTime: 1000 * 60 * 30, // 30 минут кэшлэнэ
+    staleTime: 1000 * 60 * 1, // 1 минут шинэчлэхгүй
+    cacheTime: 1000 * 60 * 3, // 3 минут кэшлэнэ
   });
   
   useEffect(() => {
