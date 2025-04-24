@@ -9,6 +9,7 @@ import {
   deleteObject,
 } from "firebase/storage";
 import Button from "../components/Button";
+import { toast } from "react-toastify";
 
 const FirmForm = () => {
   const storage = getStorage(firebase);
@@ -120,10 +121,10 @@ const FirmForm = () => {
 
       if (editId) {
         await axios.put(`/firms/${editId}`, payload);
-        alert("Фирм шинэчлэгдлээ!");
+        toast.success("Фирм шинэчлэгдлээ!");
       } else {
         await axios.post("/firms", payload);
-        alert("Фирм нэмэгдлээ!");
+        toast.success("Фирм нэмэгдлээ!");
       }
 
       resetForm();
@@ -166,7 +167,7 @@ const FirmForm = () => {
 
       // Дараа нь MongoDB-с устгана
       await axios.delete(`/firms/${id}`);
-      alert("Фирм болон зургийг амжилттай устгалаа");
+      toast.success("Фирм болон зургийг амжилттай устгалаа");
       fetchFirms();
       if (editId === id) resetForm();
     } catch (err) {

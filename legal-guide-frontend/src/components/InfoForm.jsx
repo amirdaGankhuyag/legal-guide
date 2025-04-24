@@ -9,6 +9,7 @@ import {
   getStorage,
 } from "firebase/storage";
 import Button from "../components/Button";
+import { toast } from "react-toastify";
 
 const InfoForm = () => {
   const storage = getStorage(firebase);
@@ -89,11 +90,11 @@ const InfoForm = () => {
 
       if (editId) {
         await axios.put(`/infos/${editId}`, payload);
-        alert("Мэдээлэл амжилттай шинэчлэгдлээ!");
+        toast.success("Мэдээлэл амжилттай шинэчлэгдлээ!");
         setEditId(null);
       } else {
         await axios.post("/infos", payload);
-        alert("Мэдээлэл нэмэгдлээ!");
+        toast.success("Мэдээлэл нэмэгдлээ!");
       }
       resetForm();
       fetchInfos();
@@ -122,7 +123,7 @@ const InfoForm = () => {
           await deleteObject(imageRef);
         }
         fetchInfos();
-        alert("Мэдээлэл устгагдлаа.");
+        toast.success("Мэдээлэл устгагдлаа.");
         if (editId === id) resetForm();
       } catch (err) {
         console.error("Устгахад алдаа гарлаа", err);

@@ -9,6 +9,7 @@ import {
   deleteObject,
 } from "firebase/storage";
 import Button from "../components/Button";
+import { toast } from "react-toastify";
 
 const LawyerForm = () => {
   const storage = getStorage(firebase);
@@ -124,10 +125,10 @@ const LawyerForm = () => {
 
       if (editId) {
         await axios.put(`/lawyers/${editId}`, payload);
-        alert("Хуульчийн мэдээлэл шинэчлэгдлээ.");
+        toast.success("Хуульчийн мэдээлэл шинэчлэгдлээ.");
       } else {
         await axios.post("/lawyers", payload);
-        alert("Хуульч амжилттай нэмэгдлээ.");
+        toast.success("Хуульч амжилттай нэмэгдлээ.");
       }
 
       resetForm();
@@ -167,7 +168,7 @@ const LawyerForm = () => {
           const imageRef = ref(storage, `LawyerPhotos/${photoName}`);
           await deleteObject(imageRef);
         }
-        alert("Хуульч устгагдлаа.");
+        toast.success("Хуульч устгагдлаа.");
         fetchLawyers();
         if (editId === id) resetForm();
       } catch (err) {
