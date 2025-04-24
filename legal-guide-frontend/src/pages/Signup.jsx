@@ -24,7 +24,7 @@ const Signup = ({ onSignup }) => {
     axios
       .post("users/register", { name, email, password })
       .then((result) => {
-        onSignup(result.data.token, result.data.user.role);
+        onSignup(result.data.token);
       })
       .catch((error) => {
         toast.error(error.response?.data?.error);

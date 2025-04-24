@@ -28,10 +28,15 @@ const App = () => {
   const handleLogin = (token) => {
     login(token);
     navigate("/");
-    toast.success("Амжилттай!");
+    toast.success("Амжилттай нэвтэрлээ!");
   };
 
   //Бүртгэл амжилттай нэвтэрч орно уу
+
+  const handleSignup = () => {
+    navigate("/login");
+    toast.success("Амжилттай бүртгүүллээ. Нэвтэрч орно уу!");
+  };
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -53,7 +58,7 @@ const App = () => {
             <Route path="admin" element={<AdminPanel />} />
           </Route>
           <Route path="login" element={<Login onLogin={handleLogin} />} />
-          <Route path="signup" element={<Signup onSignup={handleLogin} />} />
+          <Route path="signup" element={<Signup onSignup={handleSignup} />} />
           <Route path="success" element={<Success />} />
           <Route element={<ProtectedRoute />}>
             <Route path="firms" element={<Firms />} />

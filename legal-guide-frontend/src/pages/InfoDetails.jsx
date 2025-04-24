@@ -4,6 +4,7 @@ import axios from "../utils/axios";
 import firebase from "../utils/firebase";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import Spinner from "../components/Spinner";
+import Markdown from "react-markdown";
 
 const InfoDetails = () => {
   const { id } = useParams();
@@ -68,7 +69,7 @@ const InfoDetails = () => {
           🕒 Нийтэлсэн: {formatDate(info.createdAt)}
         </div>
       </div>
-      <p className="mt-4 whitespace-pre-line text-gray-800">{info.content}</p>
+      <Markdown>{info.content}</Markdown>
     </div>
   );
 };

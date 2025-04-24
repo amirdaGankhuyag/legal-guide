@@ -10,6 +10,7 @@ import {
 } from "firebase/storage";
 import Button from "../components/Button";
 import { toast } from "react-toastify";
+import MDEditor from "@uiw/react-md-editor";
 
 const InfoForm = () => {
   const storage = getStorage(firebase);
@@ -163,12 +164,21 @@ const InfoForm = () => {
             <label className="mb-1 block font-medium">
               Дэлгэрэнгүй агуулга
             </label>
-            <textarea
+            {/* <textarea
               name="content"
               value={form.content}
               onChange={handleChange}
               className="h-32 w-full rounded-md border-gray-300 p-2 shadow-md"
               required
+            /> */}
+            <MDEditor
+              value={form.content}
+              onChange={(value) =>
+                setForm((prev) => ({ ...prev, content: value }))
+              }
+              height={300}
+              preview="edit"
+              className="rounded-md"
             />
           </div>
           <div>
