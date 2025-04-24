@@ -98,6 +98,7 @@ const Firms = () => {
     }
   }, [userLocation, firmsData]);
 
+  // Haversine formula
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     if (
       lat1 === undefined ||
