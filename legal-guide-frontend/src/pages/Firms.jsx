@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { Link } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -10,12 +10,18 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import axios from "../utils/axios";
 import Spinner from "../components/Spinner";
 import Button from "../components/Button";
+import Select from "react-select";
 
 const Firms = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [sortedFirms, setSortedFirms] = useState([]);
   const [view, setView] = useState("list");
   const storage = getStorage(firebase);
+  const [allFirms, setAllFirms] = useState([]);
+  const [filteredFirms, setFilteredFirms] = useState([]);
+  const [serviceOptions, setServiceOptions] = useState([]);
+  const [selectedService, setSelectedService] = useState(null);
+  const [isAllFirmsLoading, setIsAllFirmsLoading] = useState(false);
 
   const { data: firmsData = [], isLoading } = useQuery({
     queryKey: ["firms", userLocation],
@@ -38,8 +44,7 @@ const Firms = () => {
         firms.map(async (firm) => {
           if (firm.photo && firm.photoUrl === "no-url") {
             try {
-              const imagePath = `gs://legal-guide-2f523.firebasestorage.app/FirmPhotos/${firm.photo}`;
-              const photoRef = ref(storage, imagePath);
+              const photoRef = ref(storage, `FirmPhotos/${firm.photo}`);
               const url = await getDownloadURL(photoRef);
               return { ...firm, photoUrl: url };
             } catch (err) {
@@ -56,7 +61,51 @@ const Firms = () => {
     staleTime: 1000 * 60 * 1, // 1 минут шинэчлэхгүй
     cacheTime: 1000 * 60 * 3, // 3 минут кэшлэнэ
   });
-  
+
+  const fetchAllFirms = async () => {
+    setIsAllFirmsLoading(true);
+    try {
+      const res = await axios.get("firms/all");
+      const firms = res.data.data || [];
+
+      // Firebase-оос зураг татах хэсэг
+      const firmsWithPhotos = await Promise.all(
+        firms.map(async (firm) => {
+          if (firm.photo && firm.photoUrl === "no-url") {
+            try {
+              const photoRef = ref(storage, `FirmPhotos/${firm.photo}`);
+              const url = await getDownloadURL(photoRef);
+              return { ...firm, photoUrl: url };
+            } catch (err) {
+              console.error("Зураг авахад алдаа:", err);
+              return firm;
+            }
+          }
+          return firm;
+        }),
+      );
+
+      setAllFirms(firmsWithPhotos);
+      setFilteredFirms(firmsWithPhotos);
+
+      // services-оос option жагсаалт гаргах
+      const allServices = new Set();
+      firmsWithPhotos.forEach((firm) => {
+        firm.services?.forEach((service) => allServices.add(service));
+      });
+
+      const options = Array.from(allServices).map((s) => ({
+        value: s,
+        label: s,
+      }));
+      setServiceOptions(options);
+    } catch (err) {
+      console.error("firms/all татахад алдаа:", err);
+    } finally {
+      setIsAllFirmsLoading(false);
+    }
+  };
+
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
@@ -97,6 +146,22 @@ const Firms = () => {
       setSortedFirms(sortedFirms);
     }
   }, [userLocation, firmsData]);
+
+  useEffect(() => {
+    fetchAllFirms();
+  }, [allFirms.length]);
+
+  const filterByService = (selected) => {
+    setSelectedService(selected);
+    if (!selected) {
+      setFilteredFirms(allFirms);
+    } else {
+      const filtered = allFirms.filter((firm) =>
+        firm.services?.includes(selected.value),
+      );
+      setFilteredFirms(filtered);
+    }
+  };
 
   // Haversine formula
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -143,6 +208,60 @@ const Firms = () => {
     popupAnchor: [1, -34],
     shadowSize: [30, 30],
   });
+
+  const renderContent = () => {
+    if (view === "all") return renderAllFirmsView();
+    if (view === "map") return renderMapView();
+    if (view === "list") return renderListView();
+  };
+
+  const renderAllFirmsView = () => {
+    if (isAllFirmsLoading) return <Spinner />;
+    if (!allFirms || allFirms.length === 0) {
+      return <div className="text-center text-gray-500">Фирм олдсонгүй</div>;
+    }
+
+    return (
+      <div className="flex flex-col items-end justify-center">
+        <div className="mb-4 w-64">
+          <Select
+            options={serviceOptions}
+            value={selectedService}
+            onChange={filterByService}
+            isClearable
+            isSearchable
+            placeholder="Үйлчилгээний төрлөөр шүүх"
+            className="font-code text-sm"
+          />
+        </div>
+        <ul className="font-code grid min-h-screen grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+          {filteredFirms.map((firm) => (
+            <Link to={`/firms/${firm._id}`} key={firm._id}>
+              <li className="flex h-64 flex-col overflow-hidden rounded-md bg-white shadow-md transition-transform hover:scale-105">
+                <img
+                  src={firm.photoUrl || "default-firm.jpg"}
+                  alt={firm.name}
+                  loading="lazy"
+                  className="h-40 w-full object-cover"
+                />
+                <div className="flex flex-col p-2">
+                  <h3 className="text-md font-semibold text-gray-800">
+                    {firm.name}
+                  </h3>
+                  <p className="text-sm text-gray-600">{firm.address}</p>
+                </div>
+              </li>
+            </Link>
+          ))}
+          {filteredFirms.length === 0 && (
+            <li className="col-span-full text-center text-gray-500">
+              Сонгосон үйлчилгээнд тохирох фирм олдсонгүй
+            </li>
+          )}
+        </ul>
+      </div>
+    );
+  };
 
   const renderMapView = () => {
     if (isLoading) return <Spinner />;
@@ -233,20 +352,27 @@ const Firms = () => {
 
   return (
     <div className="bg-gray-100 px-4 py-2">
-      <h3 className="font-code mb-4 ml-2 flex justify-center text-2xl font-bold">
+      <h3 className="font-code mb-4 ml-2 flex justify-start text-2xl font-bold">
         Тантай ойрхон хуулийн фирмүүд
       </h3>
       {userLocation ? (
         <>
-          <div className="mb-4 ml-2 flex justify-center gap-5">
-            <Button onClick={() => setView("list")} black>
-              Жагсаалтаар харах
-            </Button>
-            <Button onClick={() => setView("map")} black>
-              Газрын зураг дээр харах
-            </Button>
+          <div className="mb-4 ml-2 flex items-center justify-between">
+            <div className="flex gap-5">
+              <Button onClick={() => setView("list")} black>
+                Жагсаалтаар харах
+              </Button>
+              <Button onClick={() => setView("map")} black>
+                Газрын зураг дээр харах
+              </Button>
+            </div>
+            <div>
+              <Button onClick={() => setView("all")} black>
+                Бүх фирмүүд
+              </Button>
+            </div>
           </div>
-          {view === "list" ? renderListView() : renderMapView()}
+          {renderContent()}
         </>
       ) : (
         <Spinner />
