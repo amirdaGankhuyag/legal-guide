@@ -49,7 +49,7 @@ const Signup = ({ onSignup }) => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-200">
+    <div className="font-code flex min-h-screen items-center justify-center bg-gray-200">
       <div className="w-90 rounded-lg bg-gray-100 p-6 shadow-xl">
         <h1 className="text-center text-xl font-bold text-gray-800">
           Бүртгүүлэх
