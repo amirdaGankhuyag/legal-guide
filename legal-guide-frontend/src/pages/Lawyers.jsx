@@ -4,11 +4,15 @@ import axios from "../utils/axios";
 import firebase from "../utils/firebase";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import Spinner from "../components/Spinner";
+import Select from "react-select";
 
 const Lawyers = () => {
   const [lawyers, setLawyers] = useState([]);
   const [loading, setLoading] = useState(false);
   const storage = getStorage(firebase);
+  const [serviceOptions, setServiceOptions] = useState([]);
+  const [selectedService, setSelectedService] = useState(null);
+  const [initLawyers, setInitLawyers] = useState([]);
 
   useEffect(() => {
     const fetchLawyers = async () => {
@@ -19,7 +23,7 @@ const Lawyers = () => {
         const lawyersWithPhotos = await Promise.all(
           lawyers.map(async (lawyer) => {
             if (lawyer.photo && lawyer.photoUrl === "no-url") {
-              const imagePath = `gs://legal-guide-2f523.firebasestorage.app/LawyerPhotos/${lawyer.photo}`;
+              const imagePath = `gs://legal-guide-2f523.appspot.com/LawyerPhotos/${lawyer.photo}`;
               const photoRef = ref(storage, imagePath);
               const url = await getDownloadURL(photoRef);
               return { ...lawyer, photoUrl: url };
@@ -28,6 +32,17 @@ const Lawyers = () => {
           }),
         );
         setLawyers(lawyersWithPhotos);
+        setInitLawyers(lawyersWithPhotos);
+
+        const allServices = new Set();
+        lawyersWithPhotos.forEach((lawyer) => {
+          lawyer.services?.forEach((service) => allServices.add(service));
+        });
+        const options = Array.from(allServices).map((service) => ({
+          value: service,
+          label: service,
+        }));
+        setServiceOptions(options);
       } catch (error) {
         console.error("Хуульчдын мэдээллийг татахад алдаа гарлаа", error);
       } finally {
@@ -37,22 +52,42 @@ const Lawyers = () => {
     fetchLawyers();
   }, []);
 
+  const filterByService = (selected) => {
+    setSelectedService(selected);
+    if (selected) {
+      const filteredLawyers = initLawyers.filter((lawyer) =>
+        lawyer.services?.includes(selected.value),
+      );
+      setLawyers(filteredLawyers);
+    } else {
+      setLawyers(initLawyers);
+    }
+  };
+
   if (loading) return <Spinner />;
   return (
     <div className="min-h-screen bg-gray-100 px-4 py-2">
       <h3 className="font-code mb-4 ml-2 flex justify-center text-2xl font-bold">
         Хуульчдын мэдээлэл
       </h3>
+      <div className="mb-4 w-72">
+        <Select
+          options={serviceOptions}
+          value={selectedService}
+          onChange={filterByService}
+          isClearable
+          isSearchable
+          placeholder="Үйлчилгээний чиглэлээр шүүх"
+          className="font-code text-sm"
+        />
+      </div>
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {lawyers.map((lawyer) => (
           <Link to={`/lawyers/${lawyer._id}`} key={lawyer._id}>
-            <div
-              key={lawyer._id}
-              className="transform overflow-hidden rounded-md bg-white shadow-lg transition duration-300 hover:scale-105 hover:shadow-xl"
-            >
+            <div className="transform overflow-hidden rounded-md bg-white shadow-lg transition duration-300 hover:scale-105 hover:shadow-xl">
               <img
                 src={lawyer.photoUrl || "default-lawyer.jpg"}
-                alt={lawyer.firsName}
+                alt={lawyer.firstName}
                 loading="lazy"
                 className="h-40 w-full object-cover"
               />
