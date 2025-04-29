@@ -100,6 +100,11 @@ const Login = ({ onLogin }) => {
             Бүртгүүлэх
           </a>
         </div>
+        <div className="mt-2 text-center">
+          <a href="/forgot-password" className="text-blue-500 underline">
+            Нууц үгээ мартсан уу?
+          </a>
+        </div>
       </div>
     </div>
   );

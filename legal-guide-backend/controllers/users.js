@@ -103,9 +103,9 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   // await user.save({ validateBeforeSave: false }); // db-д хадгална, validateBeforeSave: false нь mongoose-ийн validator-уудыг ажлуулахгүй
 
   //Имэйл илгээнэ
-  const link = `https://legal-guide.mn/changepassword/${resetToken}`;
+  const link = `http://localhost:5173/reset-password/${resetToken}`;
 
-  const message = `Сайн байна уу. 👋 <br><br>Та нууц үг сэргээх хүсэлт илгээлээ. Нууц үгийг доорх линк дээр дарж солино уу: 👇<br><br><a target="_blanks" href="${link}">${link}</a><br><br>Өдрийг сайхан өнгөрүүлээрэй. 💪🥰`;
+  const message = `Сайн байна уу. 👋 <br><br>Та нууц үг сэргээх хүсэлт илгээлээ. Нууц үгийг доорх линк дээр дарж солино уу: 👇<br><br><a href="${link}">${link}</a><br><br>Өдрийг сайхан өнгөрүүлээрэй. 💪🥰`;
 
   const info = await sendEmail({
     email: user.email,

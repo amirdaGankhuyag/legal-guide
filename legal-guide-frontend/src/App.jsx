@@ -16,6 +16,8 @@ import InfoDetails from "./pages/InfoDetails";
 import Success from "./components/Success";
 import ButtonGradient from "./assets/svg/ButtonGradient";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ForgotPassword from "./components/ForgotPassword";
+import ResetPassword from "./components/ResetPassword";
 import { useAuth } from "./context/AuthContext";
 import { toast } from "react-toastify";
 
@@ -57,6 +59,8 @@ const App = () => {
             <Route path="admin" element={<AdminPanel />} />
           </Route>
           <Route path="login" element={<Login onLogin={handleLogin} />} />
+          <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="reset-password/:token" element={<ResetPassword />} />
           <Route path="signup" element={<Signup onSignup={handleSignup} />} />
           <Route path="success" element={<Success />} />
           <Route element={<ProtectedRoute />}>
