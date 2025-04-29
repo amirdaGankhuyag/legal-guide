@@ -23,7 +23,7 @@ const Infos = () => {
             }
             if (info.photo || info.photoUrl === "no-url") {
               try {
-                const imagePath = `gs://legal-guide-2f523.firebasestorage.app/InfoPhotos/${info.photo}`;
+                const imagePath = `InfoPhotos/${info.photo}`;
                 const photoRef = ref(storage, imagePath);
                 const url = await getDownloadURL(photoRef);
                 return { ...info, photoUrl: url };

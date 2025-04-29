@@ -23,7 +23,7 @@ const Lawyers = () => {
         const lawyersWithPhotos = await Promise.all(
           lawyers.map(async (lawyer) => {
             if (lawyer.photo && lawyer.photoUrl === "no-url") {
-              const imagePath = `gs://legal-guide-2f523.appspot.com/LawyerPhotos/${lawyer.photo}`;
+              const imagePath = `LawyerPhotos/${lawyer.photo}`;
               const photoRef = ref(storage, imagePath);
               const url = await getDownloadURL(photoRef);
               return { ...lawyer, photoUrl: url };
