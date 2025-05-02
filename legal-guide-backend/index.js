@@ -34,7 +34,10 @@ var accessLogStream = rfs.createStream("access.log", {
 });
 
 // Манай рест апиг дуудах эрхтэй сайтуудын жагсаалт
-const whitelist = ["http://localhost:5173"];
+const whitelist = [
+  "http://localhost:5173",
+  "https://amirdagankhuyag.github.io",
+];
 
 // Өөр домэйн дээр байрлах клиент вэб аппуудаас шаардах шаардлагуудыг энд тодорхойлно
 const corsOptions = {
