@@ -86,7 +86,7 @@ const Header = () => {
       return navigation.filter((item) => ["0", "4", "5"].includes(item.id));
 
     const base = navigation.filter((item) =>
-      ["0", "1", "2", "3"].includes(item.id),
+      ["0", "1", "2", "3", "8"].includes(item.id),
     );
 
     if (isAdmin) return [...base, navigation.find((item) => item.id === "7")];

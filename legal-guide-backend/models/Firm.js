@@ -38,5 +38,26 @@ const FirmSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  comments: [
+    {
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+      username: {
+        type: String,
+        required: true,
+      },
+      comment: {
+        type: String,
+        required: true,
+      },
+      date: {
+        type: Date,
+        default: Date.now,
+      },
+    },
+  ],
 });
 module.exports = mongoose.model("Firm", FirmSchema);

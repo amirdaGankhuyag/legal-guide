@@ -1,4 +1,5 @@
 const express = require("express");
+const { protect } = require("../middlewares/protect");
 
 const {
   getFirms,
@@ -7,7 +8,11 @@ const {
   getFirm,
   updateFirm,
   deleteFirm,
-  uploadFirmPhoto
+  uploadFirmPhoto,
+  addComment,
+  editComment,
+  deleteComment,
+  getComments,
 } = require("../controllers/firms");
 
 const router = express.Router();
@@ -20,5 +25,10 @@ router.route("/all").get(getAllFirms);
 router.route("/:id").get(getFirm).put(updateFirm).delete(deleteFirm);
 // api/v1/firms/:id/upload-photo
 router.route("/:id/upload-photo").put(uploadFirmPhoto);
+
+// api/v1/firms/:id/comments
+router.route("/:id/comments").get(getComments).post(protect, addComment);
+// api/v1/firms/:id/comments/:id
+router.route("/:id/comments/:id").put(editComment).delete(deleteComment);
 
 module.exports = router;

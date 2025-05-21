@@ -153,3 +153,108 @@ exports.uploadFirmPhoto = asyncHandler(async (req, res, next) => {
   });
   stream.end(file.data);
 });
+
+/** Заагдсан нэг хуулийн фирмд шинэ коммент үүсгэх */
+exports.addComment = asyncHandler(async (req, res, next) => {
+  const firm = await Firm.findById(req.params.id);
+  
+  if (!firm) {
+    throw new MyError(
+      req.params.id + " ID-тай хуулийн фирм байхгүй байна!",
+      404
+    );
+  }
+
+  const { comment } = req.body;
+  const newComment = {
+    user: req.user._id,
+    username: req.user.name,
+    comment,
+    date: Date.now(),
+  };
+
+  firm.comments.push(newComment);
+  await firm.save();
+
+  res.status(201).json({
+    success: true,
+    data: newComment,
+  });
+});
+
+/** Заагдсан нэг хуулийн фирмийн коммент шинэчлэх */
+exports.editComment = asyncHandler(async (req, res, next) => {
+  const firm = await Firm.findById(req.params.id);
+  if (!firm) {
+    throw new MyError(
+      req.params.id + " ID-тай хуулийн фирм байхгүй байна!",
+      404
+    );
+  }
+  const comment = firm.comments.id(req.params.id);
+  if (!comment) {
+    throw new MyError("Comment not found", 404);
+  }
+
+  if (
+    comment.user.toString() !== req.user._id.toString() &&
+    req.user.role !== "admin"
+  ) {
+    throw new MyError("Not authorized to edit this comment", 403);
+  }
+
+  comment.comment = req.body.comment;
+  await firm.save();
+
+  res.status(200).json({
+    success: true,
+    data: comment,
+  });
+});
+
+/** Заагдсан нэг хуулийн фирмийн коммент устгах */
+exports.deleteComment = asyncHandler(async (req, res, next) => {
+  const firm = await Firm.findById(req.params.id);
+  if (!firm) {
+    throw new MyError(
+      req.params.id + " ID-тай хуулийн фирм байхгүй байна!",
+      404
+    );
+  }
+  const comment = firm.comments.id(req.params.id);
+  if (!comment) {
+    throw new MyError("Comment not found", 404);
+  }
+
+  if (
+    comment.user.toString() !== req.user._id.toString() &&
+    req.user.role !== "admin"
+  ) {
+    throw new MyError("Not authorized to delete this comment", 403);
+  }
+
+  comment.remove();
+  await firm.save();
+
+  res.status(200).json({
+    success: true,
+    data: {},
+  });
+});
+
+/** Заагдсан нэг хуулийн фирмийн бүх комментүүдийг авах */
+exports.getComments = asyncHandler(async (req, res, next) => {
+  const firm = await Firm.findById(req.params.id);
+
+  if (!firm) {
+    throw new MyError(
+      req.params.id + " ID-тай хуулийн фирм байхгүй байна!",
+      404
+    );
+  }
+
+  res.status(200).json({
+    success: true,
+    data: firm.comments,
+  });
+});
