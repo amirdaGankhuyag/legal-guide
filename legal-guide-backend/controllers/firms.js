@@ -155,7 +155,7 @@ exports.uploadFirmPhoto = asyncHandler(async (req, res, next) => {
 });
 
 /** Заагдсан нэг хуулийн фирмд шинэ коммент үүсгэх */
-exports.addComment = asyncHandler(async (req, res, next) => {
+exports.createComment = asyncHandler(async (req, res, next) => {
   const firm = await Firm.findById(req.params.id);
   
   if (!firm) {
@@ -183,7 +183,7 @@ exports.addComment = asyncHandler(async (req, res, next) => {
 });
 
 /** Заагдсан нэг хуулийн фирмийн коммент шинэчлэх */
-exports.editComment = asyncHandler(async (req, res, next) => {
+exports.updateComment = asyncHandler(async (req, res, next) => {
   const firm = await Firm.findById(req.params.id);
   if (!firm) {
     throw new MyError(

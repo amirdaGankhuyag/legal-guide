@@ -9,8 +9,8 @@ const {
   updateFirm,
   deleteFirm,
   uploadFirmPhoto,
-  addComment,
-  editComment,
+  createComment,
+  updateComment,
   deleteComment,
   getComments,
 } = require("../controllers/firms");
@@ -27,8 +27,8 @@ router.route("/:id").get(getFirm).put(updateFirm).delete(deleteFirm);
 router.route("/:id/upload-photo").put(uploadFirmPhoto);
 
 // api/v1/firms/:id/comments
-router.route("/:id/comments").get(getComments).post(protect, addComment);
+router.route("/:id/comments").get(getComments).post(protect, createComment);
 // api/v1/firms/:id/comments/:id
-router.route("/:id/comments/:id").put(editComment).delete(deleteComment);
+router.route("/:id/comments/:id").put(updateComment).delete(deleteComment);
 
 module.exports = router;
