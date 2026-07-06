@@ -51,29 +51,31 @@ const App = () => {
         pauseOnHover={false}
         theme="dark"
       />
-      <div className="overflow-hidden pt-[6.5rem] lg:pt-[5.25rem]">
+      <div className="flex min-h-screen flex-col overflow-hidden pt-[6.5rem] lg:pt-[5.25rem]">
         <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route element={<ProtectedRoute admin />}>
-            <Route path="admin" element={<AdminPanel />} />
-          </Route>
-          <Route path="login" element={<Login onLogin={handleLogin} />} />
-          <Route path="forgot-password" element={<ForgotPassword />} />
-          <Route path="reset-password/:token" element={<ResetPassword />} />
-          <Route path="signup" element={<Signup onSignup={handleSignup} />} />
-          <Route path="success" element={<Success />} />
-          <Route element={<ProtectedRoute />}>
-            <Route path="firms" element={<Firms />} />
-            <Route path="firms/:id" element={<FirmDetails />} />
-            <Route path="lawyers" element={<Lawyers />} />
-            <Route path="lawyers/:id" element={<LawyerDetails />} />
-            <Route path="infos" element={<Infos />} />
-            <Route path="infos/:id" element={<InfoDetails />} />
-          </Route>
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route element={<ProtectedRoute admin />}>
+              <Route path="admin" element={<AdminPanel />} />
+            </Route>
+            <Route path="login" element={<Login onLogin={handleLogin} />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="reset-password/:token" element={<ResetPassword />} />
+            <Route path="signup" element={<Signup onSignup={handleSignup} />} />
+            <Route path="success" element={<Success />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="firms" element={<Firms />} />
+              <Route path="firms/:id" element={<FirmDetails />} />
+              <Route path="lawyers" element={<Lawyers />} />
+              <Route path="lawyers/:id" element={<LawyerDetails />} />
+              <Route path="infos" element={<Infos />} />
+              <Route path="infos/:id" element={<InfoDetails />} />
+            </Route>
 
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Routes>
+        </main>
         <Footer />
       </div>
       <ButtonGradient />

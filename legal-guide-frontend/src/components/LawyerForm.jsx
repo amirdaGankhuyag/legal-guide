@@ -1,18 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "../utils/axios";
-import firebase from "../utils/firebase";
-import {
-  getDownloadURL,
-  ref,
-  uploadBytes,
-  getStorage,
-  deleteObject,
-} from "firebase/storage";
 import Button from "../components/Button";
 import { toast } from "react-toastify";
 
 const LawyerForm = () => {
-  const storage = getStorage(firebase);
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -103,31 +94,36 @@ const LawyerForm = () => {
     setPreviewUrl(null);
   };
 
+  // Зургийг backend-ээр дамжуулан MongoDB-д хадгална
+  const uploadPhoto = async (lawyerId) => {
+    if (form.photo instanceof File) {
+      const data = new FormData();
+      data.append("file", form.photo);
+      await axios.put(`/lawyers/${lawyerId}/upload-photo`, data);
+    }
+  };
+
   const handleUploadData = async (e) => {
     e.preventDefault();
     try {
-      let photo = "no-photo",
-        photoUrl = "no-url";
-
-      if (form.photo) {
-        const storageRef = ref(storage, `LawyerPhotos/${form.photo.name}`);
-        await uploadBytes(storageRef, form.photo);
-        photoUrl = await getDownloadURL(storageRef);
-        photo = form.photo.name;
-      }
-
       const payload = {
-        ...form,
-        photo,
-        photoUrl,
+        firstName: form.firstName,
+        lastName: form.lastName,
+        position: form.position,
+        workAddress: form.workAddress,
+        contact: form.contact,
+        introduction: form.introduction,
+        experience: form.experience,
         services: form.services,
       };
 
       if (editId) {
         await axios.put(`/lawyers/${editId}`, payload);
+        await uploadPhoto(editId);
         toast.success("Хуульчийн мэдээлэл шинэчлэгдлээ.");
       } else {
-        await axios.post("/lawyers", payload);
+        const res = await axios.post("/lawyers", payload);
+        await uploadPhoto(res.data.data._id);
         toast.success("Хуульч амжилттай нэмэгдлээ.");
       }
 
@@ -160,14 +156,11 @@ const LawyerForm = () => {
     });
   };
 
-  const handleDelete = async (id, photoName) => {
+  const handleDelete = async (id) => {
     if (window.confirm("Устгахдаа итгэлтэй байна уу?")) {
       try {
+        // Зураг хуульчийн document дотор хадгалагддаг тул хамт устана
         await axios.delete(`/lawyers/${id}`);
-        if (photoName && photoName !== "no-photo") {
-          const imageRef = ref(storage, `LawyerPhotos/${photoName}`);
-          await deleteObject(imageRef);
-        }
         toast.success("Хуульч устгагдлаа.");
         fetchLawyers();
         if (editId === id) resetForm();
@@ -381,7 +374,7 @@ const LawyerForm = () => {
                     Засах
                   </button>
                   <button
-                    onClick={() => handleDelete(lawyer._id, lawyer.photo)}
+                    onClick={() => handleDelete(lawyer._id)}
                     className="rounded bg-red-500 px-3 py-1 text-white hover:bg-red-600"
                   >
                     Устгах

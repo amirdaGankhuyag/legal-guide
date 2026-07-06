@@ -1,19 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "../utils/axios";
-import firebase from "../utils/firebase";
-import {
-  getDownloadURL,
-  ref,
-  uploadBytes,
-  deleteObject,
-  getStorage,
-} from "firebase/storage";
 import Button from "../components/Button";
 import { toast } from "react-toastify";
 import MDEditor from "@uiw/react-md-editor";
 
 const InfoForm = () => {
-  const storage = getStorage(firebase);
   const [form, setForm] = useState({
     title: "",
     content: "",
@@ -68,33 +59,32 @@ const InfoForm = () => {
     setPreviewUrl(null);
   };
 
+  // Зургийг backend-ээр дамжуулан MongoDB-д хадгална
+  const uploadPhoto = async (infoId) => {
+    if (form.photo instanceof File) {
+      const data = new FormData();
+      data.append("file", form.photo);
+      await axios.put(`/infos/${infoId}/upload-photo`, data);
+    }
+  };
+
   const handleUploadData = async (e) => {
     e.preventDefault();
     try {
-      let photo = "no-photo";
-      let photoUrl = "no-url";
-
-      if (form.photo && typeof form.photo !== "string") {
-        const storageRef = ref(storage, `InfoPhotos/${form.photo.name}`);
-        await uploadBytes(storageRef, form.photo);
-        photoUrl = await getDownloadURL(storageRef);
-        photo = form.photo.name;
-      }
-
       const payload = {
         title: form.title,
         content: form.content,
         summary: form.summary,
-        photo,
-        photoUrl,
       };
 
       if (editId) {
         await axios.put(`/infos/${editId}`, payload);
+        await uploadPhoto(editId);
         toast.success("Мэдээлэл амжилттай шинэчлэгдлээ!");
         setEditId(null);
       } else {
-        await axios.post("/infos", payload);
+        const res = await axios.post("/infos", payload);
+        await uploadPhoto(res.data.data._id);
         toast.success("Мэдээлэл нэмэгдлээ!");
       }
       resetForm();
@@ -115,14 +105,11 @@ const InfoForm = () => {
     });
   };
 
-  const handleDelete = async (id, photoName) => {
+  const handleDelete = async (id) => {
     if (confirm("Устгах уу?")) {
       try {
+        // Зураг мэдээллийн document дотор хадгалагддаг тул хамт устана
         await axios.delete(`/infos/${id}`);
-        if (photoName && photoName !== "no-photo") {
-          const imageRef = ref(storage, `InfoPhotos/${photoName}`);
-          await deleteObject(imageRef);
-        }
         fetchInfos();
         toast.success("Мэдээлэл устгагдлаа.");
         if (editId === id) resetForm();
@@ -225,7 +212,7 @@ const InfoForm = () => {
                   Засах
                 </button>
                 <button
-                  onClick={() => handleDelete(info._id, info.photo)}
+                  onClick={() => handleDelete(info._id)}
                   className="rounded bg-red-500 px-3 py-1 text-white"
                 >
                   Устгах

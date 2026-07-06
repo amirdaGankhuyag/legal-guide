@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "../utils/axios";
-import firebase from "../utils/firebase";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { photoSrc } from "../utils/photo";
 import Spinner from "../components/Spinner";
 import Markdown from "react-markdown";
 
@@ -10,21 +9,13 @@ const InfoDetails = () => {
   const { id } = useParams();
   const [info, setInfo] = useState(null);
   const [loading, setLoading] = useState(true); // анхдагч утга true
-  const storage = getStorage(firebase);
 
   useEffect(() => {
     const fetchInfo = async () => {
       try {
         const response = await axios.get(`infos/${id}`);
-        const infoData = response.data.data;
-        if (infoData.photoUrl === "no-url") {
-          const imagePath = `InfoPhotos/${infoData.photo}`;
-          const photoRef = ref(storage, imagePath);
-          const url = await getDownloadURL(photoRef);
-          setInfo({ ...infoData, photoUrl: url });
-        } else {
-          setInfo(infoData);
-        }
+        // Зураг backend-ээс photoUrl-ээр шууд ирнэ
+        setInfo(response.data.data);
       } catch (error) {
         console.error("Мэдээллийг татахад алдаа гарлаа", error);
       } finally {
@@ -60,7 +51,7 @@ const InfoDetails = () => {
       </h3>
       <div className="relative">
         <img
-          src={info.photoUrl || "default-info.jpg"}
+          src={photoSrc(info.photoUrl, "default-info.jpg")}
           alt={info.title}
           loading="lazy"
           className="h-55 w-full rounded-md object-cover shadow-sm"

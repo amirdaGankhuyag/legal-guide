@@ -7,6 +7,7 @@ const {
   updateLawyer,
   deleteLawyer,
   uploadLawyerPhoto,
+  getLawyerPhoto,
 } = require("../controllers/lawyers");
 
 const router = express.Router();
@@ -17,5 +18,7 @@ router.route("/").get(getLawyers).post(createLawyer);
 router.route("/:id").get(getLawyer).put(updateLawyer).delete(deleteLawyer);
 // api/v1/lawyers/:id/upload-photo
 router.route("/:id/upload-photo").put(uploadLawyerPhoto);
+// api/v1/lawyers/:id/photo
+router.route("/:id/photo").get(getLawyerPhoto);
 
 module.exports = router;

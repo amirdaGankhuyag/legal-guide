@@ -1,18 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "../utils/axios";
-import firebase from "../utils/firebase";
-import {
-  getDownloadURL,
-  ref,
-  uploadBytes,
-  getStorage,
-  deleteObject,
-} from "firebase/storage";
 import Button from "../components/Button";
 import { toast } from "react-toastify";
 
 const FirmForm = () => {
-  const storage = getStorage(firebase);
   const initialFormData = {
     name: "",
     address: "",
@@ -90,21 +81,18 @@ const FirmForm = () => {
     setEditId(null);
   };
 
-  const uploadPhoto = async () => {
+  // Зургийг backend-ээр дамжуулан MongoDB-д хадгална
+  const uploadPhoto = async (firmId) => {
     if (formData.photo instanceof File) {
-      const storageRef = ref(storage, `FirmPhotos/${formData.photo.name}`);
-      await uploadBytes(storageRef, formData.photo);
-      const photoUrl = await getDownloadURL(storageRef);
-      return { photoUrl, photoName: formData.photo.name };
+      const data = new FormData();
+      data.append("file", formData.photo);
+      await axios.put(`/firms/${firmId}/upload-photo`, data);
     }
-    return { photoUrl: formData.photoUrl || "no-url", photoName: "no-photo" };
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { photoUrl, photoName } = await uploadPhoto();
-
       const payload = {
         name: formData.name,
         address: formData.address,
@@ -115,15 +103,15 @@ const FirmForm = () => {
           latitude: Number(formData.location.latitude),
           longitude: Number(formData.location.longitude),
         },
-        photo: photoName,
-        photoUrl,
       };
 
       if (editId) {
         await axios.put(`/firms/${editId}`, payload);
+        await uploadPhoto(editId);
         toast.success("Фирм шинэчлэгдлээ!");
       } else {
-        await axios.post("/firms", payload);
+        const res = await axios.post("/firms", payload);
+        await uploadPhoto(res.data.data._id);
         toast.success("Фирм нэмэгдлээ!");
       }
 
@@ -156,16 +144,7 @@ const FirmForm = () => {
     if (!window.confirm("Фирмийг устгах уу?")) return;
 
     try {
-      // Эхлээд фирмийн мэдээллийг авч зургийн нэрийг олно
-      const firm = firms.find((f) => f._id === id);
-
-      if (firm && firm.photo && firm.photo !== "no-photo") {
-        const imageRef = ref(storage, `FirmPhotos/${firm.photo}`);
-        await deleteObject(imageRef);
-        console.log("Firebase дээрх зураг устгагдлаа");
-      }
-
-      // Дараа нь MongoDB-с устгана
+      // Зураг фирмийн document дотор хадгалагддаг тул хамт устана
       await axios.delete(`/firms/${id}`);
       toast.success("Фирм болон зургийг амжилттай устгалаа");
       fetchFirms();

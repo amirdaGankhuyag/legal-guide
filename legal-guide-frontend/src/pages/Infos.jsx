@@ -1,41 +1,20 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "../utils/axios";
-import firebase from "../utils/firebase";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { photoSrc } from "../utils/photo";
 import Spinner from "../components/Spinner";
 
 const Infos = () => {
   const [infos, setInfos] = useState([]);
   const [loading, setLoading] = useState(false);
-  const storage = getStorage(firebase);
 
   useEffect(() => {
     const fetchInfos = async () => {
       try {
         setLoading(true);
         const response = await axios.get("infos");
-        const infos = response.data.data;
-        const infosWithPhotos = await Promise.all(
-          infos.map(async (info) => {
-            if (info.photoUrl !== "no-url") {
-              return info;
-            }
-            if (info.photo || info.photoUrl === "no-url") {
-              try {
-                const imagePath = `InfoPhotos/${info.photo}`;
-                const photoRef = ref(storage, imagePath);
-                const url = await getDownloadURL(photoRef);
-                return { ...info, photoUrl: url };
-              } catch (err) {
-                console.error("Зургийг татахад алдаа гарлаа", err);
-                return info;
-              }
-            }
-            return info;
-          }),
-        );
-        setInfos(infosWithPhotos);
+        // Зургууд backend-ээс photoUrl-ээр шууд ирнэ
+        setInfos(response.data.data);
       } catch (error) {
         console.error("Мэдээллийг татахад алдаа гарлаа", error);
       } finally {
@@ -66,7 +45,7 @@ const Infos = () => {
               className="h-60 overflow-hidden rounded-md bg-white shadow-md transition-transform hover:scale-105"
             >
               <img
-                src={info.photoUrl || "default-info.jpg"}
+                src={photoSrc(info.photoUrl, "default-info.jpg")}
                 alt={info.title}
                 loading="lazy"
                 className="h-40 w-full object-cover"

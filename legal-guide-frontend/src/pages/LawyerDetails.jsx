@@ -1,27 +1,19 @@
 import { useState, useEffect, use } from "react";
 import { useParams } from "react-router-dom";
 import axios from "../utils/axios";
-import firebase from "../utils/firebase";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { photoSrc } from "../utils/photo";
 import Spinner from "../components/Spinner";
 import { FaFacebook, FaInstagram } from "react-icons/fa";
 
 const LawyerDetails = () => {
   const { id } = useParams();
   const [lawyer, setLawyer] = useState(null);
-  const storage = getStorage(firebase);
 
   useEffect(() => {
     const fetchLawyerDetails = async () => {
       const response = await axios.get(`lawyers/${id}`);
-      if (response.data.data.photoUrl === "no-url") {
-        const imagePath = `gs://legal-guide-2f523.firebasestorage.app/LawyerPhotos/${response.data.data.photo}`;
-        const photoRef = ref(storage, imagePath);
-        const url = await getDownloadURL(photoRef);
-        setLawyer({ ...response.data.data, photoUrl: url });
-      } else {
-        setLawyer(response.data.data);
-      }
+      // Зураг backend-ээс photoUrl-ээр шууд ирнэ
+      setLawyer(response.data.data);
     };
     fetchLawyerDetails();
   }, [id]);
@@ -31,7 +23,7 @@ const LawyerDetails = () => {
       {lawyer ? (
         <div className="flex flex-col items-center space-y-2">
           <img
-            src={lawyer.photoUrl}
+            src={photoSrc(lawyer.photoUrl, "default-lawyer.jpg")}
             alt={lawyer.firstName}
             className="h-48 w-48 rounded-3xl border-2 border-blue-500 object-cover"
           />

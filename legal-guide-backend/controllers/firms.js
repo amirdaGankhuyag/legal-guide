@@ -1,8 +1,8 @@
 const Firm = require("../models/Firm");
 const MyError = require("../utils/myError");
 const asyncHandler = require("../middlewares/asyncHandler");
-const uuid = require("uuid").v4;
-const bucket = require("../utils/firebaseAdmin");
+
+const MAX_PHOTO_SIZE = 16 * 1024 * 1024; // MongoDB document 16MB хязгаартай
 
 /** Бүх хуулийн фирмүүдийн мэдээллийг авах */
 exports.getAllFirms = asyncHandler(async (req, res, next) => {
@@ -57,7 +57,7 @@ exports.getFirm = asyncHandler(async (req, res, next) => {
   if (!firm)
     throw new MyError(
       req.params.id + "ID-тай хуулийн фирм байхгүй байна!",
-      404
+      404,
     );
 
   res.status(200).json({
@@ -73,7 +73,7 @@ exports.updateFirm = asyncHandler(async (req, res, next) => {
   if (!firm)
     throw new MyError(
       req.params.id + "ID-тай хуулийн фирм байхгүй байна!",
-      404
+      404,
     );
 
   for (let attr in req.body) firm[attr] = req.body[attr];
@@ -93,7 +93,7 @@ exports.deleteFirm = asyncHandler(async (req, res, next) => {
   if (!firm)
     throw new MyError(
       req.params.id + "ID-тай хуулийн фирм байхгүй байна!",
-      404
+      404,
     );
 
   await firm.deleteOne();
@@ -105,63 +105,65 @@ exports.deleteFirm = asyncHandler(async (req, res, next) => {
 });
 
 /** Заагдсан нэг хуулийн фирмийн зураг оруулах */
-// PUT: api/v1/firms/:id/upload-photo
 exports.uploadFirmPhoto = asyncHandler(async (req, res, next) => {
   const firm = await Firm.findById(req.params.id);
 
   if (!firm)
     throw new MyError(
       req.params.id + "ID-тай хуулийн фирм байхгүй байна!",
-      404
+      404,
     );
 
   // Зураг оруулах
+  if (!req.files || !req.files.file) {
+    throw new MyError("Та зураг upload хийнэ үү!", 400);
+  }
   const file = req.files.file;
   if (!file.mimetype.startsWith("image")) {
     throw new MyError("Та зураг upload хийнэ үү!", 400);
   }
+  if (file.size > MAX_PHOTO_SIZE) {
+    throw new MyError("Зургийн хэмжээ 16MB-аас хэтрэхгүй байх ёстой!", 400);
+  }
 
-  const fileName = file.name;
-  const filePath = `FirmPhotos/${fileName}`;
-  const fileUpload = bucket.file(filePath);
-  const token = uuid();
-  // stream ашиглана
-  const stream = fileUpload.createWriteStream({
-    metadata: {
-      contentType: file.mimetype,
-      metadata: {
-        firebaseStorageDownloadTokens: token,
-      },
-    },
-  });
-  stream.on("error", (err) => {
-    throw new MyError("Зургийг upload хийхэд алдаа гарлаа!", 500);
-  });
-  stream.on("finish", async () => {
-    const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${
-      bucket.name
-    }/o/${encodeURIComponent(filePath)}?alt=media&token=${token}`;
+  // Зургийг MongoDB-д хадгална
+  firm.photo = file.name;
+  firm.photoData = file.data;
+  firm.photoContentType = file.mimetype;
+  firm.photoUrl = `${req.protocol}://${req.get("host")}/api/v1/firms/${
+    firm._id
+  }/photo`;
+  await firm.save();
 
-    firm.photoUrl = publicUrl;
-    firm.photo = fileName;
-    await firm.save();
-    res.status(200).json({
-      success: true,
-      data: fileName,
-      photoUrl: publicUrl,
-    });
+  res.status(200).json({
+    success: true,
+    data: file.name,
+    photoUrl: firm.photoUrl,
   });
-  stream.end(file.data);
+});
+
+/** Заагдсан нэг хуулийн фирмийн зургийг буцаах */
+exports.getFirmPhoto = asyncHandler(async (req, res, next) => {
+  const firm = await Firm.findById(req.params.id).select(
+    "+photoData +photoContentType",
+  );
+
+  if (!firm || !firm.photoData) {
+    throw new MyError("Зураг олдсонгүй", 404);
+  }
+
+  res.set("Content-Type", firm.photoContentType || "image/jpeg");
+  res.send(firm.photoData);
 });
 
 /** Заагдсан нэг хуулийн фирмд шинэ коммент үүсгэх */
 exports.createComment = asyncHandler(async (req, res, next) => {
   const firm = await Firm.findById(req.params.id);
-  
+
   if (!firm) {
     throw new MyError(
       req.params.id + " ID-тай хуулийн фирм байхгүй байна!",
-      404
+      404,
     );
   }
 
@@ -188,7 +190,7 @@ exports.updateComment = asyncHandler(async (req, res, next) => {
   if (!firm) {
     throw new MyError(
       req.params.id + " ID-тай хуулийн фирм байхгүй байна!",
-      404
+      404,
     );
   }
   const comment = firm.comments.id(req.params.commentId);
@@ -218,7 +220,7 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
   if (!firm) {
     throw new MyError(
       req.params.id + " ID-тай хуулийн фирм байхгүй байна!",
-      404
+      404,
     );
   }
   const comment = firm.comments.id(req.params.commentId);
@@ -249,7 +251,7 @@ exports.getComments = asyncHandler(async (req, res, next) => {
   if (!firm) {
     throw new MyError(
       req.params.id + " ID-тай хуулийн фирм байхгүй байна!",
-      404
+      404,
     );
   }
 

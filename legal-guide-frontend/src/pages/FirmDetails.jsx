@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "../utils/axios";
-import firebase from "../utils/firebase";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { photoSrc } from "../utils/photo";
 import Spinner from "../components/Spinner";
 import Button from "../components/Button";
 import { useAuth } from "../context/AuthContext";
@@ -10,7 +9,6 @@ import { useAuth } from "../context/AuthContext";
 const FirmDetails = () => {
   const { id } = useParams();
   const [firm, setFirm] = useState(null);
-  const storage = getStorage(firebase);
   const [photoUrl, setPhotoUrl] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -20,20 +18,8 @@ const FirmDetails = () => {
     const fetchFirmDetails = async () => {
       const response = await axios.get(`firms/${id}`);
       const firmData = response.data.data;
-      if (firmData.photo && firmData.photoUrl === "no-url") {
-        try {
-          const imagePath = `gs://legal-guide-2f523.firebasestorage.app/FirmPhotos/${firmData.photo}`;
-          const photoRef = ref(storage, imagePath);
-          const url = await getDownloadURL(photoRef);
-          setPhotoUrl(url);
-        } catch (err) {
-          console.error("Зургийг татахад алдаа гарлаа", err);
-          setPhotoUrl(null);
-        }
-      }
-      if (firmData.photoUrl !== "no-url") {
-        setPhotoUrl(firmData.photoUrl);
-      }
+      // Зураг backend-ээс photoUrl-ээр шууд ирнэ
+      setPhotoUrl(photoSrc(firmData.photoUrl));
       setFirm(firmData);
     };
     fetchFirmDetails();

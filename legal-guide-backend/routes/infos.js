@@ -7,6 +7,7 @@ const {
   updateInfo,
   deleteInfo,
   uploadInfoPhoto,
+  getInfoPhoto,
 } = require("../controllers/infos");
 
 const router = express.Router();
@@ -21,5 +22,7 @@ router
   .delete(deleteInfo);
 // api/v1/infos/:id/upload-photo
 router.route("/:id/upload-photo").put(uploadInfoPhoto);
+// api/v1/infos/:id/photo
+router.route("/:id/photo").get(getInfoPhoto);
 
 module.exports = router;

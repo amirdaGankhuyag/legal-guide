@@ -5,9 +5,8 @@ import "leaflet/dist/leaflet.css";
 import leaflet from "leaflet";
 import { myLocation, firmLocation } from "../assets";
 import { useQuery } from "@tanstack/react-query";
-import firebase from "../utils/firebase";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import axios from "../utils/axios";
+import { photoSrc } from "../utils/photo";
 import Spinner from "../components/Spinner";
 import Button from "../components/Button";
 import Select from "react-select";
@@ -16,7 +15,6 @@ const Firms = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [sortedFirms, setSortedFirms] = useState([]);
   const [view, setView] = useState("list");
-  const storage = getStorage(firebase);
   const [allFirms, setAllFirms] = useState([]);
   const [filteredFirms, setFilteredFirms] = useState([]);
   const [serviceOptions, setServiceOptions] = useState([]);
@@ -38,24 +36,8 @@ const Firms = () => {
           lonMax: longitude + 0.1,
         },
       });
-      const firms = response.data.data;
-
-      const firmsWithPhotos = await Promise.all(
-        firms.map(async (firm) => {
-          if (firm.photo && firm.photoUrl === "no-url") {
-            try {
-              const photoRef = ref(storage, `FirmPhotos/${firm.photo}`);
-              const url = await getDownloadURL(photoRef);
-              return { ...firm, photoUrl: url };
-            } catch (err) {
-              console.error("Зургийг татахад алдаа гарлаа", err);
-              return firm;
-            }
-          }
-          return firm;
-        }),
-      );
-      return firmsWithPhotos;
+      // Зургууд backend-ээс photoUrl-ээр шууд ирнэ
+      return response.data.data;
     },
     enabled: !!userLocation, // Байршил олдсон үед л асна
     staleTime: 1000 * 60 * 1, // 1 минут шинэчлэхгүй
@@ -68,29 +50,12 @@ const Firms = () => {
       const res = await axios.get("firms/all");
       const firms = res.data.data || [];
 
-      // Firebase-оос зураг татах хэсэг
-      const firmsWithPhotos = await Promise.all(
-        firms.map(async (firm) => {
-          if (firm.photo && firm.photoUrl === "no-url") {
-            try {
-              const photoRef = ref(storage, `FirmPhotos/${firm.photo}`);
-              const url = await getDownloadURL(photoRef);
-              return { ...firm, photoUrl: url };
-            } catch (err) {
-              console.error("Зураг авахад алдаа:", err);
-              return firm;
-            }
-          }
-          return firm;
-        }),
-      );
-
-      setAllFirms(firmsWithPhotos);
-      setFilteredFirms(firmsWithPhotos);
+      setAllFirms(firms);
+      setFilteredFirms(firms);
 
       // services-оос option жагсаалт гаргах
       const allServices = new Set();
-      firmsWithPhotos.forEach((firm) => {
+      firms.forEach((firm) => {
         firm.services?.forEach((service) => allServices.add(service));
       });
 
@@ -239,7 +204,7 @@ const Firms = () => {
             <Link to={`/firms/${firm._id}`} key={firm._id}>
               <li className="flex h-64 flex-col overflow-hidden rounded-md bg-white shadow-md transition-transform hover:scale-105">
                 <img
-                  src={firm.photoUrl || "default-firm.jpg"}
+                  src={photoSrc(firm.photoUrl, "default-firm.jpg")}
                   alt={firm.name}
                   loading="lazy"
                   className="h-40 w-full object-cover"
@@ -323,7 +288,7 @@ const Firms = () => {
           <Link to={`/firms/${firm._id}`} key={firm._id}>
             <li className="flex h-64 flex-col overflow-hidden rounded-md bg-white shadow-md transition-transform hover:scale-105">
               <img
-                src={firm.photoUrl || "default-firm.jpg"}
+                src={photoSrc(firm.photoUrl, "default-firm.jpg")}
                 alt={firm.name}
                 loading="lazy" // // Native lazy loading
                 className="h-40 w-full object-cover"

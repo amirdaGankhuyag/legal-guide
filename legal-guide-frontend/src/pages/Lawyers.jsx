@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "../utils/axios";
-import firebase from "../utils/firebase";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { photoSrc } from "../utils/photo";
 import Spinner from "../components/Spinner";
 import Select from "react-select";
 
 const Lawyers = () => {
   const [lawyers, setLawyers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const storage = getStorage(firebase);
   const [serviceOptions, setServiceOptions] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
   const [initLawyers, setInitLawyers] = useState([]);
@@ -19,23 +17,13 @@ const Lawyers = () => {
       try {
         setLoading(true);
         const response = await axios.get("lawyers");
+        // Зургууд backend-ээс photoUrl-ээр шууд ирнэ
         const lawyers = response.data.data;
-        const lawyersWithPhotos = await Promise.all(
-          lawyers.map(async (lawyer) => {
-            if (lawyer.photo && lawyer.photoUrl === "no-url") {
-              const imagePath = `LawyerPhotos/${lawyer.photo}`;
-              const photoRef = ref(storage, imagePath);
-              const url = await getDownloadURL(photoRef);
-              return { ...lawyer, photoUrl: url };
-            }
-            return lawyer;
-          }),
-        );
-        setLawyers(lawyersWithPhotos);
-        setInitLawyers(lawyersWithPhotos);
+        setLawyers(lawyers);
+        setInitLawyers(lawyers);
 
         const allServices = new Set();
-        lawyersWithPhotos.forEach((lawyer) => {
+        lawyers.forEach((lawyer) => {
           lawyer.services?.forEach((service) => allServices.add(service));
         });
         const options = Array.from(allServices).map((service) => ({
@@ -86,7 +74,7 @@ const Lawyers = () => {
           <Link to={`/lawyers/${lawyer._id}`} key={lawyer._id}>
             <div className="transform overflow-hidden rounded-md bg-white shadow-lg transition duration-300 hover:scale-105 hover:shadow-xl">
               <img
-                src={lawyer.photoUrl || "default-lawyer.jpg"}
+                src={photoSrc(lawyer.photoUrl, "default-lawyer.jpg")}
                 alt={lawyer.firstName}
                 loading="lazy"
                 className="h-40 w-full object-cover"

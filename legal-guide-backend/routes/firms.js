@@ -9,6 +9,7 @@ const {
   updateFirm,
   deleteFirm,
   uploadFirmPhoto,
+  getFirmPhoto,
   createComment,
   updateComment,
   deleteComment,
@@ -25,6 +26,8 @@ router.route("/all").get(getAllFirms);
 router.route("/:id").get(getFirm).put(updateFirm).delete(deleteFirm);
 // api/v1/firms/:id/upload-photo
 router.route("/:id/upload-photo").put(uploadFirmPhoto);
+// api/v1/firms/:id/photo
+router.route("/:id/photo").get(getFirmPhoto);
 
 // api/v1/firms/:id/comments
 router.route("/:id/comments").get(getComments).post(protect, createComment);
