@@ -23,7 +23,7 @@ const LawyerDetails = () => {
       {lawyer ? (
         <div className="flex flex-col items-center space-y-2">
           <img
-            src={photoSrc(lawyer.photoUrl, "default-lawyer.jpg")}
+            src={photoSrc(lawyer.photoUrl, "/default-lawyer.jpg")}
             alt={lawyer.firstName}
             className="h-48 w-48 rounded-3xl border-2 border-blue-500 object-cover"
           />

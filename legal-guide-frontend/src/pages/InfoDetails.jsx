@@ -51,7 +51,7 @@ const InfoDetails = () => {
       </h3>
       <div className="relative">
         <img
-          src={photoSrc(info.photoUrl, "default-info.jpg")}
+          src={photoSrc(info.photoUrl, "/default-info.jpg")}
           alt={info.title}
           loading="lazy"
           className="h-55 w-full rounded-md object-cover shadow-sm"

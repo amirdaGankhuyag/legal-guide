@@ -45,7 +45,7 @@ const Infos = () => {
               className="h-60 overflow-hidden rounded-md bg-white shadow-md transition-transform hover:scale-105"
             >
               <img
-                src={photoSrc(info.photoUrl, "default-info.jpg")}
+                src={photoSrc(info.photoUrl, "/default-info.jpg")}
                 alt={info.title}
                 loading="lazy"
                 className="h-40 w-full object-cover"

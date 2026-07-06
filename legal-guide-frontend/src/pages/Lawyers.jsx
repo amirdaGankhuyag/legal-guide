@@ -74,7 +74,7 @@ const Lawyers = () => {
           <Link to={`/lawyers/${lawyer._id}`} key={lawyer._id}>
             <div className="transform overflow-hidden rounded-md bg-white shadow-lg transition duration-300 hover:scale-105 hover:shadow-xl">
               <img
-                src={photoSrc(lawyer.photoUrl, "default-lawyer.jpg")}
+                src={photoSrc(lawyer.photoUrl, "/default-lawyer.jpg")}
                 alt={lawyer.firstName}
                 loading="lazy"
                 className="h-40 w-full object-cover"

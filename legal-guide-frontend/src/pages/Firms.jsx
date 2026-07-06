@@ -204,7 +204,7 @@ const Firms = () => {
             <Link to={`/firms/${firm._id}`} key={firm._id}>
               <li className="flex h-64 flex-col overflow-hidden rounded-md bg-white shadow-md transition-transform hover:scale-105">
                 <img
-                  src={photoSrc(firm.photoUrl, "default-firm.jpg")}
+                  src={photoSrc(firm.photoUrl, "/default-firm.jpg")}
                   alt={firm.name}
                   loading="lazy"
                   className="h-40 w-full object-cover"
@@ -288,7 +288,7 @@ const Firms = () => {
           <Link to={`/firms/${firm._id}`} key={firm._id}>
             <li className="flex h-64 flex-col overflow-hidden rounded-md bg-white shadow-md transition-transform hover:scale-105">
               <img
-                src={photoSrc(firm.photoUrl, "default-firm.jpg")}
+                src={photoSrc(firm.photoUrl, "/default-firm.jpg")}
                 alt={firm.name}
                 loading="lazy" // // Native lazy loading
                 className="h-40 w-full object-cover"
