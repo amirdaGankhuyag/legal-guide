@@ -14,7 +14,7 @@ const FirmDetails = () => {
   const [photoUrl, setPhotoUrl] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
-  const { isAuth } = useAuth();
+  const { isAuth, isAdmin } = useAuth();
 
   useEffect(() => {
     const fetchFirmDetails = async () => {
@@ -50,6 +50,15 @@ const FirmDetails = () => {
     };
     fetchComments();
   }, [id]);
+
+  const handleCommentDelete = async (commentId) => {
+    try {
+      await axios.delete(`firms/${id}/comments/${commentId}`);
+      setComments(comments.filter((comment) => comment._id !== commentId));
+    } catch (error) {
+      console.error("Comment delete error:", error);
+    }
+  };
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -141,7 +150,18 @@ const FirmDetails = () => {
               <div className="mt-4 space-y-2">
                 {comments.map((comment) => (
                   <div key={comment._id} className="rounded bg-gray-50 p-2">
-                    <p className="font-semibold">{comment.username}</p>
+                    <div className="flex items-start justify-between">
+                      <p className="font-semibold">{comment.username}</p>
+                      {isAdmin && (
+                        <button
+                          type="button"
+                          onClick={() => handleCommentDelete(comment._id)}
+                          className="text-sm text-red-500 hover:text-red-700"
+                        >
+                          Устгах
+                        </button>
+                      )}
+                    </div>
                     <p>{comment.comment}</p>
                     <p className="text-sm text-gray-500">
                       {new Date(comment.date).toLocaleString()}

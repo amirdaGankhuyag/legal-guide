@@ -191,7 +191,7 @@ exports.updateComment = asyncHandler(async (req, res, next) => {
       404
     );
   }
-  const comment = firm.comments.id(req.params.id);
+  const comment = firm.comments.id(req.params.commentId);
   if (!comment) {
     throw new MyError("Comment not found", 404);
   }
@@ -221,7 +221,7 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
       404
     );
   }
-  const comment = firm.comments.id(req.params.id);
+  const comment = firm.comments.id(req.params.commentId);
   if (!comment) {
     throw new MyError("Comment not found", 404);
   }
@@ -233,7 +233,7 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
     throw new MyError("Not authorized to delete this comment", 403);
   }
 
-  comment.remove();
+  comment.deleteOne();
   await firm.save();
 
   res.status(200).json({

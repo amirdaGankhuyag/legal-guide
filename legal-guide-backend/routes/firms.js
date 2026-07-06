@@ -28,7 +28,10 @@ router.route("/:id/upload-photo").put(uploadFirmPhoto);
 
 // api/v1/firms/:id/comments
 router.route("/:id/comments").get(getComments).post(protect, createComment);
-// api/v1/firms/:id/comments/:id
-router.route("/:id/comments/:id").put(updateComment).delete(deleteComment);
+// api/v1/firms/:id/comments/:commentId
+router
+  .route("/:id/comments/:commentId")
+  .put(protect, updateComment)
+  .delete(protect, deleteComment);
 
 module.exports = router;
