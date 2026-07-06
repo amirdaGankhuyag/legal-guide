@@ -36,7 +36,9 @@ const Signup = ({ onSignup }) => {
 
   const handleClickGoogle = () => {
     setGoogleLoading(true);
-    window.location.href = "http://localhost:5000/api/v1/users/google";
+    // window.location.href = "http://localhost:5000/api/v1/users/google";
+    // Backend-ийн хаягийг axios-ийн baseURL (VITE_API_URL)-аас авна
+    window.location.href = `${axios.defaults.baseURL}users/google`;
     setGoogleLoading(false);
   };
 
