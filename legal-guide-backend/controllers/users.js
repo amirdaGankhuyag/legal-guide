@@ -16,7 +16,8 @@ exports.googleAuthCallback = passportAuth.authenticate("google", {
 });
 exports.googleAuthSuccess = asyncHandler(async (req, res, next) => {
   const { token, role } = await req.user;
-  res.redirect(`http://localhost:5173/success?token=${token}&role=${role}`);
+  const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+  res.redirect(`${frontendUrl}/success?token=${token}&role=${role}`);
 });
 exports.googleAuthFailure = asyncHandler(async (req, res, next) => {
   throw new MyError("Google нэвтрэхэд алдаа гарлаа.", 401);
@@ -55,6 +56,9 @@ exports.login = asyncHandler(async (req, res, next) => {
       Date.now() + process.env.COOKIE_EXPIRE_DAYS * 24 * 60 * 60 * 1000 // COOKIE_EXPIRE_DAYS хоногийн дараа expire хийнэ
     ),
     httpOnly: true, // client талаас document.cookie гэж cookie-д хандаж чадахгүй
+    // Production-д frontend өөр domain дээр байх тул cross-site cookie шаардлагатай
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   };
 
   res.status(200).cookie("legal-guide-token", token, cookieOption).json({
@@ -72,6 +76,8 @@ exports.logout = asyncHandler(async (req, res, next) => {
       Date.now() - process.env.COOKIE_EXPIRE_DAYS * 24 * 60 * 60 * 1000 // cookie-г server талаас устгаж байна
     ),
     httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   };
 
   res

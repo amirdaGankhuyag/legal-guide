@@ -5,3 +5,5 @@ logs
 *.log
 
 #config files нэмэх
+config/config.env
+config/firebase-adminsdk.json

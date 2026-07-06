@@ -27,6 +27,9 @@ const app = express();
 dotenv.config({ path: "./config/config.env" }); // Апп-ын тохиргоог process.env руу оруулах
 connectDB();
 
+// Render гэх мэт proxy-ийн ард ажиллах үед req.protocol, secure cookie зөв ажиллана
+app.set("trust proxy", 1);
+
 // access.log файлыг үүсгэх
 var accessLogStream = rfs.createStream("access.log", {
   interval: "1d", // rotate daily
@@ -38,6 +41,8 @@ const whitelist = [
   "http://localhost:5173",
   "https://amirdagankhuyag.github.io",
 ];
+// Production frontend-ийн хаягийг env-ээс нэмнэ (жишээ нь Vercel domain)
+if (process.env.FRONTEND_URL) whitelist.push(process.env.FRONTEND_URL);
 
 // Өөр домэйн дээр байрлах клиент вэб аппуудаас шаардах шаардлагуудыг энд тодорхойлно
 const corsOptions = {
