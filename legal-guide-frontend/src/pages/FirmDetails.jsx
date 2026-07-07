@@ -5,6 +5,7 @@ import { photoSrc } from "../utils/photo";
 import Spinner from "../components/Spinner";
 import Button from "../components/Button";
 import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 const FirmDetails = () => {
   const { id } = useParams();
@@ -12,7 +13,8 @@ const FirmDetails = () => {
   const [photoUrl, setPhotoUrl] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
-  const { isAuth, isAdmin } = useAuth();
+  // const { isAuth, isAdmin } = useAuth();
+  const { isAuth, isAdmin, userId } = useAuth();
 
   useEffect(() => {
     const fetchFirmDetails = async () => {
@@ -41,8 +43,10 @@ const FirmDetails = () => {
     try {
       await axios.delete(`firms/${id}/comments/${commentId}`);
       setComments(comments.filter((comment) => comment._id !== commentId));
+      toast.success("Амжилттай устгагдлаа.");
     } catch (error) {
       console.error("Comment delete error:", error);
+      toast.error(error.response?.data?.error || "Устгахад алдаа гарлаа");
     }
   };
 
@@ -138,7 +142,8 @@ const FirmDetails = () => {
                   <div key={comment._id} className="rounded bg-gray-50 p-2">
                     <div className="flex items-start justify-between">
                       <p className="font-semibold">{comment.username}</p>
-                      {isAdmin && (
+                      {/* Admin бүх сэтгэгдлийг, хэрэглэгч зөвхөн өөрийнхөө сэтгэгдлийг устгана */}
+                      {(isAdmin || comment.user === userId) && (
                         <button
                           type="button"
                           onClick={() => handleCommentDelete(comment._id)}
