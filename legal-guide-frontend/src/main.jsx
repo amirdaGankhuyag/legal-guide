@@ -8,7 +8,8 @@ import { AuthProvider } from "./context/AuthContext";
 createRoot(document.getElementById("root")).render(
   <AuthProvider>
     <StrictMode>
-      <BrowserRouter>
+      {/* GH Pages-ийн /legal-guide/ дэд зам дээр ч зөв ажиллуулахын тулд basename өгнө */}
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <App />
       </BrowserRouter>
     </StrictMode>
