@@ -20,10 +20,10 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
   const tokenObj = jwt.verify(token, process.env.JWT_SECRET); // Token шалгах
 
-  // Find user and attach to request
+  // Хэрэглэгчийг олоод ID, role-г зааж өгнө
   const user = await User.findById(tokenObj.id);
   if (!user) {
-    throw new MyError("User not found", 404);
+    throw new MyError("Хэрэглэгч олдсонгүй!", 404);
   }
 
   req.user = user;

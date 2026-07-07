@@ -21,7 +21,6 @@ const LawyerSchema = new mongoose.Schema({
     type: String,
     default: "no-url",
   },
-  // Зургийн binary өгөгдлийг MongoDB-д хадгална (жагсаалтын query-д ачаалахгүй)
   photoData: {
     type: Buffer,
     select: false,

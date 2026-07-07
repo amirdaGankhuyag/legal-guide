@@ -195,14 +195,14 @@ exports.updateComment = asyncHandler(async (req, res, next) => {
   }
   const comment = firm.comments.id(req.params.commentId);
   if (!comment) {
-    throw new MyError("Comment not found", 404);
+    throw new MyError("Сэтгэгдэл олдсонгүй!", 404);
   }
 
   if (
     comment.user.toString() !== req.user._id.toString() &&
     req.user.role !== "admin"
   ) {
-    throw new MyError("Not authorized to edit this comment", 403);
+    throw new MyError("Тухайн сэтгэгдлийг засах эрхгүй байна!", 403);
   }
 
   comment.comment = req.body.comment;
@@ -225,14 +225,14 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
   }
   const comment = firm.comments.id(req.params.commentId);
   if (!comment) {
-    throw new MyError("Comment not found", 404);
+    throw new MyError("Сэтгэгдэл олдсонгүй!", 404);
   }
 
   if (
     comment.user.toString() !== req.user._id.toString() &&
     req.user.role !== "admin"
   ) {
-    throw new MyError("Not authorized to delete this comment", 403);
+    throw new MyError("Тухайн сэтгэгдлийг устгах эрхгүй байна!", 403);
   }
 
   comment.deleteOne();

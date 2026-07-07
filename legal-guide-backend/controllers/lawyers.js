@@ -9,7 +9,7 @@ exports.getLawyers = asyncHandler(async (req, res, next) => {
   const lawyers = await Lawyer.find();
 
   if (!lawyers || lawyers.length === 0) {
-    throw new MyError("Хуулийн зөвлөхүүд байхгүй байна", 404);
+    throw new MyError("Хуульчдын мэдээлэл байхгүй байна", 404);
   }
 
   res.status(200).json({
