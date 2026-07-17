@@ -36,7 +36,9 @@ const InfoDetails = () => {
 
   if (loading) return <Spinner />;
 
-  if (!info.length === 0) {
+  // хуучин: if (!info.length === 0) — (!info.length) === 0 гэж уншигдаад үргэлж false,
+  // алдааны үед info=null тул доор info.title дээр app унадаг байсан
+  if (!info) {
     return (
       <div className="font-code col-span-full text-center text-gray-500">
         Mэдээлэл олдсонгүй
@@ -45,7 +47,8 @@ const InfoDetails = () => {
   }
 
   return (
-    <div className="font-code min-h-screen bg-gray-100 px-50 py-7">
+    // хуучин: px-50 (200px тал бүрд) — мобайл дээр агуулга бараг харагддаггүй байсан
+    <div className="font-code min-h-screen bg-gray-100 px-4 py-7 md:px-20 xl:px-50">
       <h3 className="mb-4 ml-2 flex justify-center text-2xl font-bold">
         {info.title}
       </h3>

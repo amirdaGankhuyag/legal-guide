@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { disablePageScroll, enablePageScroll } from "scroll-lock";
 import { jwtDecode } from "jwt-decode";
 
@@ -103,9 +103,9 @@ const Header = () => {
         }`}
       >
         <div className="flex items-center px-5 max-lg:py-4 lg:px-7.5 xl:px-10">
-          <a className="block w-[12rem] xl:mr-8" href="/">
+          <Link className="block w-[12rem] xl:mr-8" to="/">
             <img src={legalguide} width={190} height={40} alt="LegalGudie" />
-          </a>
+          </Link>
           <nav
             className={` ${
               openNavigation ? "flex" : "hidden"
@@ -113,58 +113,65 @@ const Header = () => {
           >
             <div className="relative z-2 m-auto flex flex-col items-center justify-center lg:flex-row">
               {filteredNavigation.map((item) => (
-                <a
+                <Link
                   key={item.id}
-                  href={item.url}
-                  onClick={item.id === "6" ? handleLogout : handleClick}
+                  to={item.url}
+                  onClick={
+                    // Нэвтэрсэн үеийн цэсэнд "Гарах" нь id "8"-тай ордог тул хоёуланг нь шалгана
+                    item.id === "6" || item.id === "8"
+                      ? handleLogout
+                      : handleClick
+                  }
                   className={`font-code relative block text-2xl text-neutral-100 uppercase transition-colors hover:text-purple-700 ${
                     item.onlyMobile ? "lg:hidden" : ""
                   } px-6 py-6 md:py-8 lg:-mr-0.25 lg:text-xs lg:font-semibold ${
-                    item.url === pathname.hash
+                    item.url === pathname.pathname
                       ? "z-2 lg:text-neutral-100"
                       : "lg:text-neutral-100/50"
                   } lg:leading-5 lg:hover:text-neutral-100 xl:px-12`}
                 >
                   {item.title}
-                </a>
+                </Link>
               ))}
             </div>
             <HamburgerMenu />
           </nav>
 
-          {isAuth ? (
-            <div ref={profileRef} className="relative">
-              <button
-                onClick={() => setIsProfileModalOpen(!isProfileModalOpen)}
-                className="button items-center text-neutral-100 transition-colors hover:text-purple-700 max-sm:hidden sm:hidden lg:flex"
-              >
-                {userName}
-              </button>
-              <ProfileModal
-                isOpen={isProfileModalOpen}
-                onClose={() => setIsProfileModalOpen(false)}
-              />
-            </div>
-          ) : (
-            <>
-              <a
-                href="/signup"
-                className="button mr-8 hidden text-neutral-100/50 transition-colors hover:text-neutral-100 lg:block"
-              >
-                Бүртгүүлэх
-              </a>
-              <Button className="max-sm:hidden sm:hidden lg:flex" href="/login">
-                Нэвтрэх
-              </Button>
-            </>
-          )}
-          <Button
-            className="ml-auto lg:hidden"
-            px="px-3"
-            onClick={toggleNavigation}
-          >
-            <MenuSvg openNavigation={openNavigation} />
-          </Button>
+          {/* Баруун талын хэсэг: профайл/нэвтрэх + мобайлын цэсний товч */}
+          <div className="ml-auto flex items-center">
+            {isAuth ? (
+              <div ref={profileRef} className="relative">
+                <button
+                  onClick={() => setIsProfileModalOpen(!isProfileModalOpen)}
+                  className="button flex items-center text-neutral-100 transition-colors hover:text-purple-700"
+                >
+                  {userName}
+                </button>
+                <ProfileModal
+                  isOpen={isProfileModalOpen}
+                  onClose={() => setIsProfileModalOpen(false)}
+                />
+              </div>
+            ) : (
+              <>
+                <Link
+                  to="/signup"
+                  className="button mr-8 hidden text-neutral-100/50 transition-colors hover:text-neutral-100 lg:block"
+                >
+                  Бүртгүүлэх
+                </Link>
+                <Button
+                  className="max-sm:hidden sm:hidden lg:flex"
+                  href="/login"
+                >
+                  Нэвтрэх
+                </Button>
+              </>
+            )}
+            <Button className="ml-4 lg:hidden" px="px-3" onClick={toggleNavigation}>
+              <MenuSvg openNavigation={openNavigation} />
+            </Button>
+          </div>
         </div>
       </div>
     </>

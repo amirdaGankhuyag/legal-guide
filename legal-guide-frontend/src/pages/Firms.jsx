@@ -199,7 +199,7 @@ const Firms = () => {
             className="font-code text-sm"
           />
         </div>
-        <ul className="font-code grid min-h-screen grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+        <ul className="font-code grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
           {filteredFirms.map((firm) => (
             <Link to={`/firms/${firm._id}`} key={firm._id}>
               <li className="flex h-64 flex-col overflow-hidden rounded-md bg-white shadow-md transition-transform hover:scale-105">
@@ -237,7 +237,8 @@ const Firms = () => {
             center={[userLocation.latitude, userLocation.longitude]}
             zoom={15}
             style={{
-              height: "510px",
+              // хуучин: height: "510px" — жижиг дэлгэцэд хэт өндөр байсан
+              height: "60vh",
               width: "95%",
               borderRadius: "5px",
               boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
@@ -283,7 +284,8 @@ const Firms = () => {
   const renderListView = () => {
     if (isLoading) return <Spinner />;
     return (
-      <ul className="font-code grid min-h-screen grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+      // хуучин: grid min-h-screen — фирм цөөхөн үед их хоосон зай үүсгэдэг байсан
+      <ul className="font-code grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
         {sortedFirms.map((firm) => (
           <Link to={`/firms/${firm._id}`} key={firm._id}>
             <li className="flex h-64 flex-col overflow-hidden rounded-md bg-white shadow-md transition-transform hover:scale-105">
@@ -322,8 +324,9 @@ const Firms = () => {
       </h3>
       {userLocation ? (
         <>
-          <div className="mb-4 ml-2 flex items-center justify-between">
-            <div className="flex gap-5">
+          {/* хуучин: flex items-center justify-between + flex gap-5 — жижиг дэлгэцэд товчнууд шахагдаж халидаг байсан */}
+          <div className="mb-4 ml-2 flex flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-wrap gap-2 sm:gap-5">
               <Button onClick={() => setView("list")} black>
                 Жагсаалтаар харах
               </Button>

@@ -119,7 +119,7 @@ const ProfileModal = ({ isOpen, onClose }) => {
           </div>
         ) : !user ? (
           <div className="flex h-20 items-center justify-center">
-            <p className="text-sm text-neutral-100">
+            <p className="text-sm text-black">
               Хэрэглэгчийн мэдээлэл олдсонгүй
             </p>
           </div>
@@ -185,7 +185,7 @@ const ProfileModal = ({ isOpen, onClose }) => {
                     name="currentPassword"
                     value={formData.currentPassword}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border border-neutral-600 bg-white px-3 py-1.5 text-sm text-neutral-100 shadow-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none"
+                    className="mt-1 block w-full rounded-md border border-neutral-600 bg-white px-3 py-1.5 text-sm text-black shadow-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -209,7 +209,7 @@ const ProfileModal = ({ isOpen, onClose }) => {
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border border-neutral-600 bg-white px-3 py-1.5 text-sm text-neutral-100 shadow-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none"
+                    className="mt-1 block w-full rounded-md border border-neutral-600 bg-white px-3 py-1.5 text-sm text-black shadow-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none"
                   />
                 </div>
                 <div className="flex space-x-2">

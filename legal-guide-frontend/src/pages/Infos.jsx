@@ -25,7 +25,7 @@ const Infos = () => {
   }, []);
 
   if (loading) return <Spinner />;
-  if (!infos.length === 0) {
+  if (infos.length === 0) {
     return (
       <div className="font-code col-span-full text-center text-gray-500">
         Мэдээлэл олдсонгүй

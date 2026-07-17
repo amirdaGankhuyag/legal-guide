@@ -13,16 +13,21 @@ const FirmDetails = () => {
   const [photoUrl, setPhotoUrl] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
-  // const { isAuth, isAdmin } = useAuth();
+  const [error, setError] = useState(false);
   const { isAuth, isAdmin, userId } = useAuth();
 
   useEffect(() => {
     const fetchFirmDetails = async () => {
-      const response = await axios.get(`firms/${id}`);
-      const firmData = response.data.data;
-      // Зураг backend-ээс photoUrl-ээр шууд ирнэ
-      setPhotoUrl(photoSrc(firmData.photoUrl));
-      setFirm(firmData);
+      try {
+        const response = await axios.get(`firms/${id}`);
+        const firmData = response.data.data;
+        // Зураг backend-ээс photoUrl-ээр шууд ирнэ
+        setPhotoUrl(photoSrc(firmData.photoUrl));
+        setFirm(firmData);
+      } catch (err) {
+        console.error("Фирмийн мэдээлэл татахад алдаа гарлаа", err);
+        setError(true);
+      }
     };
     fetchFirmDetails();
   }, [id]);
@@ -64,7 +69,7 @@ const FirmDetails = () => {
     }
   };
 
-  if (firm?.length === 0) {
+  if (error) {
     return (
       <div className="font-code col-span-full text-center text-gray-500">
         Фирм олдсонгүй
