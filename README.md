@@ -4,7 +4,7 @@
 
 **🌐 Live demo:** https://legal-guide-three.vercel.app
 
-> *EN: A full-stack web app for finding legal service providers (law firms and lawyers) near you on an interactive map — with reviews, role-based admin panel, Google OAuth, and legal info articles. Built with React 19, Express, and MongoDB.*
+> _EN: A full-stack web app for finding legal service providers (law firms and lawyers) near you on an interactive map — with reviews, role-based admin panel, Google OAuth, and legal info articles. Built with React 19, Express, and MongoDB._
 
 ---
 
@@ -20,12 +20,12 @@
 
 ## 🛠 Технологи
 
-| Хэсэг | Стек |
-|---|---|
-| Frontend | React 19, Vite 6, React Router 7, TanStack Query, Tailwind CSS 4, Leaflet, Axios |
-| Backend | Node.js, Express 4, Mongoose 8, Passport (Google OAuth 2.0), JWT, Nodemailer |
-| Өгөгдлийн сан | MongoDB Atlas |
-| Deployment | Vercel (frontend) · Render (backend) · GitHub Pages (нөөц) |
+| Хэсэг         | Стек                                                                             |
+| ------------- | -------------------------------------------------------------------------------- |
+| Frontend      | React 19, Vite 6, React Router 7, TanStack Query, Tailwind CSS 4, Leaflet, Axios |
+| Backend       | Node.js, Express 4, Mongoose 8, Passport (Google OAuth 2.0), JWT, Nodemailer     |
+| Өгөгдлийн сан | MongoDB Atlas                                                                    |
+| Deployment    | Vercel (frontend) · Render (backend) · GitHub Pages (нөөц)                       |
 
 ## 🏗 Архитектур
 
@@ -65,21 +65,21 @@ npm run dev
 
 ## 🔑 Туршиж үзэх
 
-| Эрх | Имэйл | Нууц үг |
-|---|---|---|
-| Хэрэглэгч | `demo@legalguide.demo.mn` | `Demo1234` |
+| Эрх       | Имэйл            | Нууц үг |
+| --------- | ---------------- | ------- |
+| Хэрэглэгч | `demo@gmail.com` | `demo`  |
 
 > Бүртгүүлэх хуудсаар өөрийн эрх үүсгэж эсвэл Google-ээр нэвтэрч болно.
 
 ## 📸 Дэлгэцийн зургууд
 
-| | |
-|---|---|
+|                                           |                                                  |
+| ----------------------------------------- | ------------------------------------------------ |
 | ![Нүүр хуудас](docs/screenshots/home.png) | ![Газрын зурагт хайлт](docs/screenshots/map.png) |
-| *Нүүр хуудас* | *Газрын зурагт фирм хайх* |
+| _Нүүр хуудас_                             | _Газрын зурагт фирм хайх_                        |
 
 ![Admin panel](docs/screenshots/admin.png)
-*Admin panel — фирмийн удирдлага*
+_Admin panel — фирмийн удирдлага_
 
 ---
 
@@ -92,8 +92,8 @@ npm run dev
 
 ## Deployment
 
-| Орчин | Хаяг | Үүрэг |
-|---|---|---|
-| **Production (үндсэн)** | https://legal-guide-three.vercel.app | Vercel — албан ёсны ажиллаж буй хувилбар |
-| Нөөц / туршилт | https://amirdagankhuyag.github.io/legal-guide/ | GitHub Pages — `npm run deploy`-оор гараар шинэчилнэ |
-| Backend API | https://legal-guide-n8eg.onrender.com/api/v1/ | Render (free tier) — Express + MongoDB Atlas |
+| Орчин                   | Хаяг                                           | Үүрэг                                                |
+| ----------------------- | ---------------------------------------------- | ---------------------------------------------------- |
+| **Production (үндсэн)** | https://legal-guide-three.vercel.app           | Vercel — албан ёсны ажиллаж буй хувилбар             |
+| Нөөц / туршилт          | https://amirdagankhuyag.github.io/legal-guide/ | GitHub Pages — `npm run deploy`-оор гараар шинэчилнэ |
+| Backend API             | https://legal-guide-n8eg.onrender.com/api/v1/  | Render (free tier) — Express + MongoDB Atlas         |
