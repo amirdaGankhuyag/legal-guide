@@ -32,7 +32,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="font-sans relative flex min-h-[calc(100vh-4.75rem)] items-center justify-center overflow-hidden bg-slate-50 px-4 py-12 dark:bg-slate-950">
+    <div className="relative flex min-h-[calc(100vh-4.75rem)] items-center justify-center overflow-hidden bg-slate-50 px-4 py-12 font-sans dark:bg-slate-950">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-indigo-300/30 blur-3xl dark:bg-indigo-900/20"
@@ -58,7 +58,7 @@ const ForgotPassword = () => {
             <input
               type="email"
               placeholder="you@example.com"
-              className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+              className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
               value={email}
               onChange={handleType}
             />

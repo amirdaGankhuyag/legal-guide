@@ -52,7 +52,7 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="font-sans relative flex min-h-[calc(100vh-4.75rem)] items-center justify-center overflow-hidden bg-slate-50 px-4 py-12 dark:bg-slate-950">
+    <div className="relative flex min-h-[calc(100vh-4.75rem)] items-center justify-center overflow-hidden bg-slate-50 px-4 py-12 font-sans dark:bg-slate-950">
       {/* Home hero-той нэгдсэн indigo/sky blur blob */}
       <div
         aria-hidden="true"
@@ -80,7 +80,7 @@ const Login = ({ onLogin }) => {
               name="email"
               type="email"
               placeholder="you@example.com"
-              className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+              className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
               onChange={handleType}
               onKeyDown={handleEnterKey}
             />
@@ -101,7 +101,7 @@ const Login = ({ onLogin }) => {
               name="password"
               type="password"
               placeholder="••••••••"
-              className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+              className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
               onChange={handleType}
               onKeyDown={handleEnterKey}
             />
