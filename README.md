@@ -1,5 +1,7 @@
 # ⚖️ LegalGuide — Map based legal advice agency finder
 
+[![CI/CD](https://github.com/amirdaGankhuyag/legal-guide/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/amirdaGankhuyag/legal-guide/actions/workflows/ci-cd.yml)
+
 Хуулийн үйлчилгээ үзүүлэгч байгууллага, хуульчдыг газрын зургаас хайж олох, харьцуулах, сэтгэгдэл үлдээх боломжтой бүрэн ажиллагаатай веб систем.
 
 **🌐 Live demo:** https://legal-guide-three.vercel.app
@@ -25,6 +27,8 @@
 | Frontend      | React 19, Vite 6, React Router 7, TanStack Query, Tailwind CSS 4, Leaflet, Axios |
 | Backend       | Node.js, Express 4, Mongoose 8, Passport (Google OAuth 2.0), JWT, Nodemailer     |
 | Өгөгдлийн сан | MongoDB Atlas                                                                    |
+| Тест          | Vitest (frontend) · Node.js built-in test runner (backend) · ESLint              |
+| CI/CD         | GitHub Actions — тест давсан үед л автомат deploy                                |
 | Deployment    | Vercel (frontend) · Render (backend) · GitHub Pages (нөөц)                       |
 
 ## 🏗 Архитектур
@@ -40,6 +44,33 @@ graph LR
 - Route → Controller → Model давхаргатай REST API (`/api/v1/{users,firms,lawyers,infos}`)
 - Төвлөрсөн алдааны middleware + custom `MyError` класс, async handler wrapper
 - CORS whitelist, `trust proxy`, cross-site cookie (`SameSite=None; Secure`) production тохиргоо
+
+## ⚙️ CI/CD Pipeline
+
+`main` branch руу push хийгдэх бүрт GitHub Actions дараах урсгалыг автоматаар гүйцэтгэнэ:
+
+```mermaid
+graph LR
+    P[git push] --> BT[Backend тестүүд<br/>node --test]
+    P --> FT[Frontend<br/>ESLint + Vitest + build]
+    BT --> G{Бүгд ✓ ?}
+    FT --> G
+    G -- Тийм --> R[Render deploy<br/>backend]
+    G -- Тийм --> V[Vercel deploy<br/>frontend]
+    G -- Үгүй --> X[Deploy хийгдэхгүй ❌]
+```
+
+- **Тестүүд зэрэгцээ ажиллана** — backend (unit тестүүд: error handling, async wrapper), frontend (ESLint, `photoSrc` utility тестүүд, production build шалгалт)
+- **Deploy нь тестээр "хаалгалагдсан"** — аль нэг шалгалт унавал аль ч орчин шинэчлэгдэхгүй тул эвдэрсэн код production руу гарах боломжгүй
+- Pull request дээр зөвхөн тестүүд ажиллаж, deploy хийгдэхгүй
+- Тохиргоо: [`.github/workflows/ci-cd.yml`](.github/workflows/ci-cd.yml)
+
+Тестүүдийг локал ажиллуулах:
+
+```bash
+cd legal-guide-backend && npm test    # Node built-in test runner
+cd legal-guide-frontend && npm test   # Vitest
+```
 
 ## 🧩 Шийдсэн сонирхолтой асуудлууд
 
