@@ -1,10 +1,7 @@
 import { useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "../utils/axios";
-import { legalguide } from "../assets";
-
-// Login.jsx-тэй ижил indigo/slate дизайны системд шилжүүлэв
 
 const ResetPassword = () => {
   const { token } = useParams();
@@ -54,9 +51,6 @@ const ResetPassword = () => {
       />
 
       <div className="relative w-full max-w-sm rounded-2xl border border-slate-200/70 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <Link to="/" className="mb-6 flex justify-center">
-          <img src={legalguide} width={130} height={28} alt="LegalGuide" />
-        </Link>
         <h1 className="text-center text-xl font-bold text-slate-900 dark:text-white">
           Нууц үг шинэчлэх
         </h1>

@@ -5,7 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import { FiSun, FiMoon } from "react-icons/fi";
 
 import { navigation } from "../constants";
-import { legalguide } from "../assets";
+import Logo from "./Logo";
 import MenuSvg from "../assets/svg/MenuSvg";
 import axios from "../utils/axios";
 import { useAuth } from "../context/AuthContext";
@@ -126,7 +126,7 @@ const Header = () => {
         {/* min-h-[4.75rem] — App.jsx-ийн pt offset-той таарч, mobile/desktop хоёуланд ижил өндөртэй байлгана */}
         <div className="container mx-auto flex min-h-[4.75rem] items-center px-5 py-3 font-sans lg:px-8">
           <Link className="block w-[10rem] xl:mr-8" to="/">
-            <img src={legalguide} width={160} height={34} alt="LegalGuide" />
+            <Logo width={160} height={34} />
           </Link>
 
           {/* Desktop цэс — header мөрөнд шууд, ямар ч fixed positioning хэрэггүй */}
