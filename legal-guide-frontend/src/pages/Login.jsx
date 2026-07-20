@@ -2,14 +2,14 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "../utils/axios";
 import { googleicon } from "../assets";
-import { useAuth } from "../context/AuthContext";
+// хуучин: import { useAuth } from "../context/AuthContext"; — isAuth хэрэглэхээ больсон тул хассан
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
-  const { isAuth } = useAuth();
+  // хуучин: const { isAuth } = useAuth(); — ашиглагдаагүй байсан
 
   const handleType = (e) => {
     const { name, value } = e.target;

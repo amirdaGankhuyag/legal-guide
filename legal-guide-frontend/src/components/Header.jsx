@@ -74,7 +74,8 @@ const Header = () => {
     logout();
     axios
       .get("users/logout")
-      .then((result) => {})
+      // хуучин: .then((result) => {}) — result ашиглагдаагүй байсан
+      .then(() => {})
       .catch((error) => {
         console.log(error);
       });

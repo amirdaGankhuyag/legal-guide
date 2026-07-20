@@ -1,0 +1,94 @@
+# LegalGuide CI/CD pipeline
+#
+# Ажиллах логик:
+#   1. main руу push (эсвэл PR) хийгдэх бүрт frontend, backend тестүүд ЗЭРЭГ ажиллана
+#   2. Хоёулаа амжилттай болбол л Vercel рүү production deploy хийгдэнэ
+#   3. Аль нэг тест унавал deploy огт хийгдэхгүй — эвдэрсэн код production руу гарахгүй
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ─── Backend тестүүд ───────────────────────────────────────────────
+  backend-test:
+    name: Backend tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: legal-guide-backend
+    steps:
+      # Repo-ийн кодыг CI серверт татаж авна
+      - uses: actions/checkout@v4
+
+      # Node.js суулгаж, npm cache ашиглан дараагийн ажиллагааг хурдасгана
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: legal-guide-backend/package-lock.json
+
+      # npm ci = package-lock.json-д яг заасан хувилбаруудыг суулгана (npm install-оос найдвартай)
+      - run: npm ci
+
+      # node --test tests/ — MyError, asyncHandler, errorHandler тестүүд
+      - run: npm test
+
+  # ─── Frontend шалгалтууд ───────────────────────────────────────────
+  frontend-test:
+    name: Frontend lint + tests + build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: legal-guide-frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: legal-guide-frontend/package-lock.json
+
+      - run: npm ci
+
+      # ESLint — кодын чанарын шалгалт (error гарвал унана)
+      - run: npm run lint
+
+      # Vitest — photoSrc зэрэг unit тестүүд
+      - run: npm test
+
+      # Build шалгалт — Linux дээр case-sensitivity зэрэг алдааг барина
+      - run: npm run build
+
+  # ─── Vercel deploy (зөвхөн тестүүд амжилттай үед) ─────────────────
+  deploy:
+    name: Deploy to Vercel
+    # needs = энэ хоёр job амжилттай дуусахыг хүлээнэ — энэ бол pipeline-ийн "хаалга"
+    needs: [backend-test, frontend-test]
+    # PR дээр deploy хийхгүй, зөвхөн main руу push хийгдсэн үед
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm install -g vercel
+
+      # Vercel-ийн project тохиргоо, env хувьсагчдыг татна
+      - run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      # CI сервер дээр build хийнэ (Vercel-ийн орчинд биш — тиймээс "prebuilt")
+      - run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      # Бэлэн build-ийг production руу гаргана
+      - run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}

@@ -1,4 +1,5 @@
-import { useState, useEffect, use } from "react";
+// хуучин: import { useState, useEffect, use } from "react"; — "use" ашиглагдаагүй байсан
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "../utils/axios";
 import { photoSrc } from "../utils/photo";
