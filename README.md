@@ -111,8 +111,10 @@ npm run dev
 | ![Нүүр хуудас](docs/screenshots/desktopSite.png) | ![Газрын зурагт хайлт](docs/screenshots/map.png) |
 | _Нүүр хуудас_                             | _Газрын зурагт фирм хайх_                        |
 
-![Admin panel](docs/screenshots/admin.png)
-_Admin panel — системийн удирдлага_
+|                                           |                                                  |
+| ----------------------------------------- | ------------------------------------------------ |
+| ![Admin panel](docs/screenshots/admin.png) | ![Газрын зурагт хайлт](docs/screenshots/mobileSite.png) |
+| _Admin panel — системийн удирдлага_       | _Гар утсны дизайн_                        |
 
 ---
 
