@@ -64,6 +64,17 @@ jobs:
       # Build шалгалт — Linux дээр case-sensitivity зэрэг алдааг барина
       - run: npm run build
 
+  # ─── Render deploy (зөвхөн тестүүд амжилттай үед) ─────────────────
+  deploy-backend:
+    name: Deploy backend to Render
+    needs: [backend-test, frontend-test]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      # Render-ийн Deploy Hook = нууц URL руу POST илгээхэд deploy эхэлдэг.
+      # --fail туг нь Render алдаа буцаавал энэ алхмыг унагаж, pipeline дээр улаанаар харуулна
+      - run: curl --fail --request POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+
   # ─── Vercel deploy (зөвхөн тестүүд амжилттай үед) ─────────────────
   deploy:
     name: Deploy to Vercel
