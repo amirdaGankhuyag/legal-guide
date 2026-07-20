@@ -22,12 +22,12 @@ jobs:
         working-directory: legal-guide-backend
     steps:
       # Repo-ийн кодыг CI серверт татаж авна
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # Node.js суулгаж, npm cache ашиглан дараагийн ажиллагааг хурдасгана
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: legal-guide-backend/package-lock.json
 
@@ -45,11 +45,11 @@ jobs:
       run:
         working-directory: legal-guide-frontend
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: legal-guide-frontend/package-lock.json
 
@@ -87,11 +87,11 @@ jobs:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
 
       - run: npm install -g vercel
 
