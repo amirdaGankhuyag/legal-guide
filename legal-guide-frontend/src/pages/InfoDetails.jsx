@@ -4,6 +4,9 @@ import axios from "../utils/axios";
 import { photoSrc } from "../utils/photo";
 import Spinner from "../components/Spinner";
 import Markdown from "react-markdown";
+import { FiClock } from "react-icons/fi";
+
+// Firms/LawyerDetails-тэй ижил indigo/slate дизайны системд шилжүүлэв
 
 const InfoDetails = () => {
   const { id } = useParams();
@@ -36,34 +39,38 @@ const InfoDetails = () => {
 
   if (loading) return <Spinner />;
 
-  // хуучин: if (!info.length === 0) — (!info.length) === 0 гэж уншигдаад үргэлж false,
-  // алдааны үед info=null тул доор info.title дээр app унадаг байсан
   if (!info) {
     return (
-      <div className="font-code col-span-full text-center text-gray-500">
+      <div className="font-sans flex min-h-screen items-center justify-center bg-slate-50 text-center text-slate-500 dark:bg-slate-950 dark:text-slate-400">
         Mэдээлэл олдсонгүй
       </div>
     );
   }
 
   return (
-    // хуучин: px-50 (200px тал бүрд) — мобайл дээр агуулга бараг харагддаггүй байсан
-    <div className="font-code min-h-screen bg-gray-100 px-4 py-7 md:px-20 xl:px-50">
-      <h3 className="mb-4 ml-2 flex justify-center text-2xl font-bold">
-        {info.title}
-      </h3>
-      <div className="relative">
-        <img
-          src={photoSrc(info.photoUrl, "/default-info.jpg")}
-          alt={info.title}
-          loading="lazy"
-          className="h-55 w-full rounded-md object-cover shadow-sm"
-        />
-        <div className="absolute top-2 right-2 rounded bg-white/80 px-3 py-1 text-sm text-gray-700 shadow">
-          🕒 Нийтэлсэн: {formatDate(info.createdAt)}
+    <div className="font-sans min-h-screen bg-slate-50 px-4 py-10 dark:bg-slate-950">
+      <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-2xl border border-slate-200/70 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div className="relative">
+          <img
+            src={photoSrc(info.photoUrl, "/default-info.jpg")}
+            alt={info.title}
+            loading="lazy"
+            className="h-56 w-full object-cover md:h-72"
+          />
+          <div className="absolute top-3 right-3 flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-slate-700 shadow-sm backdrop-blur-sm dark:bg-slate-900/90 dark:text-slate-200">
+            <FiClock className="text-indigo-600 dark:text-indigo-400" />
+            {formatDate(info.createdAt)}
+          </div>
+        </div>
+        <div className="p-6 md:p-8">
+          <h1 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">
+            {info.title}
+          </h1>
+          <div className="prose prose-slate dark:prose-invert max-w-none leading-relaxed text-slate-600 dark:text-slate-400">
+            <Markdown>{info.content}</Markdown>
+          </div>
         </div>
       </div>
-      <Markdown>{info.content}</Markdown>
     </div>
   );
 };

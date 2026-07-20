@@ -7,9 +7,13 @@ import { myLocation, firmLocation } from "../assets";
 import { useQuery } from "@tanstack/react-query";
 import axios from "../utils/axios";
 import { photoSrc } from "../utils/photo";
+import { selectClassNames } from "../utils/selectStyles";
 import Spinner from "../components/Spinner";
-import Button from "../components/Button";
 import Select from "react-select";
+import { FiMapPin } from "react-icons/fi";
+
+// Хуучин bg-gray-100/font-code загварыг Home/Login-той нэг indigo/slate
+// дизайны системд шилжүүлж, товчнуудыг segmented control болгов.
 
 const Firms = () => {
   const [userLocation, setUserLocation] = useState(null);
@@ -76,7 +80,6 @@ const Firms = () => {
       (position) => {
         const { latitude, longitude } = position.coords;
         setUserLocation({ latitude, longitude });
-        console.log(latitude, longitude);
       },
       (error) => {
         console.error("Байршлыг авахад алдаа гарлаа", error);
@@ -174,6 +177,33 @@ const Firms = () => {
     shadowSize: [30, 30],
   });
 
+  // Фирмийн жагсаалтын карт (renderListView, renderAllFirmsView хоёуланд ашиглана)
+  const FirmCard = ({ firm, distanceKm }) => (
+    <Link to={`/firms/${firm._id}`}>
+      <div className="flex h-64 flex-col overflow-hidden rounded-2xl border border-slate-200/70 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
+        <img
+          src={photoSrc(firm.photoUrl, "/default-firm.jpg")}
+          alt={firm.name}
+          loading="lazy"
+          className="h-40 w-full object-cover"
+        />
+        <div className="flex flex-col p-3">
+          <h3 className="truncate text-sm font-semibold text-slate-900 dark:text-white">
+            {firm.name}
+            {distanceKm != null && (
+              <span className="ml-1 font-medium text-indigo-600 dark:text-indigo-400">
+                · {distanceKm.toFixed(2)} км
+              </span>
+            )}
+          </h3>
+          <p className="mt-1 truncate text-sm text-slate-500 dark:text-slate-400">
+            {firm.address}
+          </p>
+        </div>
+      </div>
+    </Link>
+  );
+
   const renderContent = () => {
     if (view === "all") return renderAllFirmsView();
     if (view === "map") return renderMapView();
@@ -183,43 +213,35 @@ const Firms = () => {
   const renderAllFirmsView = () => {
     if (isAllFirmsLoading) return <Spinner />;
     if (!allFirms || allFirms.length === 0) {
-      return <div className="text-center text-gray-500">Фирм олдсонгүй</div>;
+      return (
+        <div className="text-center text-slate-500 dark:text-slate-400">
+          Фирм олдсонгүй
+        </div>
+      );
     }
 
     return (
       <div className="flex flex-col items-end justify-center">
         <div className="mb-4 w-64">
           <Select
+            unstyled
+            classNames={selectClassNames}
             options={serviceOptions}
             value={selectedService}
             onChange={filterByService}
             isClearable
             isSearchable
             placeholder="Үйлчилгээний төрлөөр шүүх"
-            className="font-code text-sm"
           />
         </div>
-        <ul className="font-code grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+        <ul className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
           {filteredFirms.map((firm) => (
-            <Link to={`/firms/${firm._id}`} key={firm._id}>
-              <li className="flex h-64 flex-col overflow-hidden rounded-md bg-white shadow-md transition-transform hover:scale-105">
-                <img
-                  src={photoSrc(firm.photoUrl, "/default-firm.jpg")}
-                  alt={firm.name}
-                  loading="lazy"
-                  className="h-40 w-full object-cover"
-                />
-                <div className="flex flex-col p-2">
-                  <h3 className="text-md font-semibold text-gray-800">
-                    {firm.name}
-                  </h3>
-                  <p className="text-sm text-gray-600">{firm.address}</p>
-                </div>
-              </li>
-            </Link>
+            <li key={firm._id}>
+              <FirmCard firm={firm} />
+            </li>
           ))}
           {filteredFirms.length === 0 && (
-            <li className="col-span-full text-center text-gray-500">
+            <li className="col-span-full text-center text-slate-500 dark:text-slate-400">
               Сонгосон үйлчилгээнд тохирох фирм олдсонгүй
             </li>
           )}
@@ -233,49 +255,44 @@ const Firms = () => {
     return (
       <div className="mb-3 flex flex-col items-center justify-center">
         {userLocation && (
-          <MapContainer
-            center={[userLocation.latitude, userLocation.longitude]}
-            zoom={15}
-            style={{
-              // хуучин: height: "510px" — жижиг дэлгэцэд хэт өндөр байсан
-              height: "60vh",
-              width: "95%",
-              borderRadius: "5px",
-              boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
-              border: "1px solid #ccc",
-            }}
-            scrollWheelZoom={false}
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <Marker
-              position={[userLocation.latitude, userLocation.longitude]}
-              icon={locationIcon}
+          <div className="w-[95%] overflow-hidden rounded-2xl border border-slate-200 shadow-sm dark:border-slate-800">
+            <MapContainer
+              center={[userLocation.latitude, userLocation.longitude]}
+              zoom={15}
+              style={{ height: "60vh", width: "100%" }}
+              scrollWheelZoom={false}
             >
-              <Popup>Таны байршил</Popup>
-            </Marker>
-            {sortedFirms.map((firm) => (
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
               <Marker
-                key={firm._id}
-                position={[firm.location.latitude, firm.location.longitude]}
-                icon={firmIcon}
-                // eventHandlers={{
-                //   click: () => {
-                //     console.log("Marker clicked", firm.name);
-                //   },
-                // }}
+                position={[userLocation.latitude, userLocation.longitude]}
+                icon={locationIcon}
               >
-                <Popup>
-                  <div>
-                    <p>{firm.name}</p>
-                    <a href={`/firms/${firm._id}`}>Дэлгэрэнгүй</a>
-                  </div>
-                </Popup>
+                <Popup>Таны байршил</Popup>
               </Marker>
-            ))}
-          </MapContainer>
+              {sortedFirms.map((firm) => (
+                <Marker
+                  key={firm._id}
+                  position={[firm.location.latitude, firm.location.longitude]}
+                  icon={firmIcon}
+                >
+                  <Popup>
+                    <div>
+                      <p>{firm.name}</p>
+                      <Link
+                        to={`/firms/${firm._id}`}
+                        className="text-indigo-600"
+                      >
+                        Дэлгэрэнгүй
+                      </Link>
+                    </div>
+                  </Popup>
+                </Marker>
+              ))}
+            </MapContainer>
+          </div>
         )}
       </div>
     );
@@ -284,32 +301,14 @@ const Firms = () => {
   const renderListView = () => {
     if (isLoading) return <Spinner />;
     return (
-      // хуучин: grid min-h-screen — фирм цөөхөн үед их хоосон зай үүсгэдэг байсан
-      <ul className="font-code grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+      <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
         {sortedFirms.map((firm) => (
-          <Link to={`/firms/${firm._id}`} key={firm._id}>
-            <li className="flex h-64 flex-col overflow-hidden rounded-md bg-white shadow-md transition-transform hover:scale-105">
-              <img
-                src={photoSrc(firm.photoUrl, "/default-firm.jpg")}
-                alt={firm.name}
-                loading="lazy" // // Native lazy loading
-                className="h-40 w-full object-cover"
-              />
-              <div className="flex flex-col p-2">
-                <h3 className="text-md font-semibold text-gray-800">
-                  {firm.name}
-                  {" - "}
-                  <span className="font-medium text-blue-600">
-                    {firm.distance.toFixed(2)} км
-                  </span>
-                </h3>
-                <p className="text-sm text-gray-600">{firm.address}</p>
-              </div>
-            </li>
-          </Link>
+          <li key={firm._id}>
+            <FirmCard firm={firm} distanceKm={firm.distance} />
+          </li>
         ))}
         {sortedFirms.length === 0 && (
-          <li className="font-code col-span-full text-center text-gray-500">
+          <li className="col-span-full text-center text-slate-500 dark:text-slate-400">
             Хуулийн фирмүүд олдсонгүй
           </li>
         )}
@@ -318,33 +317,51 @@ const Firms = () => {
   };
 
   return (
-    <div className="bg-gray-100 px-4 py-2">
-      <h3 className="font-code mb-4 ml-2 flex justify-start text-2xl font-bold">
-        Тантай ойрхон хуулийн фирмүүд
-      </h3>
-      {userLocation ? (
-        <>
-          {/* хуучин: flex items-center justify-between + flex gap-5 — жижиг дэлгэцэд товчнууд шахагдаж халидаг байсан */}
-          <div className="mb-4 ml-2 flex flex-wrap items-center justify-between gap-2">
-            <div className="flex flex-wrap gap-2 sm:gap-5">
-              <Button onClick={() => setView("list")} black>
-                Жагсаалтаар харах
-              </Button>
-              <Button onClick={() => setView("map")} black>
-                Газрын зураг дээр харах
-              </Button>
-            </div>
-            <div>
-              <Button onClick={() => setView("all")} black>
+    <div className="font-sans min-h-screen bg-slate-50 px-4 py-8 md:px-8 dark:bg-slate-950">
+      <div className="mx-auto max-w-7xl">
+        <h1 className="mb-6 flex items-center gap-2 text-2xl font-bold text-slate-900 dark:text-white">
+          <FiMapPin className="text-indigo-600 dark:text-indigo-400" />
+          Тантай ойрхон хуулийн фирмүүд
+        </h1>
+        {userLocation ? (
+          <>
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+              {/* Segmented control: жагсаалт/газрын зураг сэлгэх */}
+              <div className="inline-flex rounded-xl bg-slate-100 p-1 dark:bg-slate-800">
+                {[
+                  { key: "list", label: "Жагсаалт" },
+                  { key: "map", label: "Газрын зураг" },
+                ].map((tab) => (
+                  <button
+                    key={tab.key}
+                    onClick={() => setView(tab.key)}
+                    className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                      view === tab.key
+                        ? "bg-white text-indigo-600 shadow-sm dark:bg-slate-700 dark:text-indigo-400"
+                        : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() => setView("all")}
+                className={`rounded-xl px-4 py-2 text-sm font-medium transition-colors ${
+                  view === "all"
+                    ? "bg-indigo-600 text-white shadow-sm"
+                    : "border border-slate-200 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+                }`}
+              >
                 Бүх фирмүүд
-              </Button>
+              </button>
             </div>
-          </div>
-          {renderContent()}
-        </>
-      ) : (
-        <Spinner />
-      )}
+            {renderContent()}
+          </>
+        ) : (
+          <Spinner />
+        )}
+      </div>
     </div>
   );
 };

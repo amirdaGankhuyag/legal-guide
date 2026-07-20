@@ -1,7 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from "../utils/axios";
-import Button from "../components/Button";
 import { toast } from "react-toastify";
+import {
+  inputClasses,
+  labelClasses,
+  fileInputClasses,
+  primaryBtn,
+  secondaryBtn,
+  editBtn,
+  deleteBtn,
+} from "../utils/formStyles";
 
 const FirmForm = () => {
   const initialFormData = {
@@ -155,16 +163,16 @@ const FirmForm = () => {
   };
 
   return (
-    <div className="font-code min-h-screen bg-gray-50 px-4 pt-5 pb-10">
-      <div className="mx-auto max-w-3xl rounded-xl bg-white p-8 shadow-xl">
-        <h1 className="mb-6 text-center text-3xl font-bold text-gray-800">
+    <div className="mx-auto max-w-3xl">
+      <div className="rounded-2xl border border-slate-200/70 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <h2 className="mb-6 text-center text-xl font-bold text-slate-900 dark:text-white">
           {editId ? "Хуулийн фирм засах" : "Хуулийн фирм нэмэх"}
-        </h1>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        </h2>
+        <form onSubmit={handleSubmit} className="space-y-5">
           {/* Basic Info */}
           {["name", "address", "description"].map((field) => (
             <div key={field}>
-              <label className="mb-1 block font-medium">
+              <label className={labelClasses}>
                 {field === "name"
                   ? "Фирмийн нэр"
                   : field === "address"
@@ -176,7 +184,8 @@ const FirmForm = () => {
                   name={field}
                   value={formData[field]}
                   onChange={handleChange}
-                  className="w-full rounded-md border-gray-300 p-2 shadow-md"
+                  className={inputClasses}
+                  rows={3}
                 />
               ) : (
                 <input
@@ -184,7 +193,7 @@ const FirmForm = () => {
                   value={formData[field]}
                   onChange={handleChange}
                   required
-                  className="w-full rounded-md border-gray-300 p-2 shadow-md"
+                  className={inputClasses}
                 />
               )}
             </div>
@@ -192,7 +201,7 @@ const FirmForm = () => {
 
           {/* Services */}
           <div>
-            <label className="mb-1 block font-medium">Үйлчилгээ</label>
+            <label className={labelClasses}>Үйлчилгээ</label>
             <div className="flex gap-2">
               <input
                 type="text"
@@ -200,60 +209,62 @@ const FirmForm = () => {
                 value={formData.newService}
                 onChange={handleChange}
                 placeholder="Үйлчилгээ нэмэх"
-                className="flex-grow rounded-md border-gray-300 p-2 shadow-md"
+                className={`flex-grow ${inputClasses}`}
               />
               <button
                 type="button"
                 onClick={handleAddService}
-                className="rounded bg-blue-600 px-3 py-1 text-white"
+                className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-700"
               >
                 Нэмэх
               </button>
             </div>
-            <ul className="mt-2 space-y-1">
-              {formData.services.map((s, i) => (
-                <li
-                  key={i}
-                  className="flex justify-between rounded bg-gray-100 px-3 py-1"
-                >
-                  {s}
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveService(i)}
-                    className="text-red-500"
+            {formData.services.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-2">
+                {formData.services.map((s, i) => (
+                  <span
+                    key={i}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300"
                   >
-                    Устгах
-                  </button>
-                </li>
-              ))}
-            </ul>
+                    {s}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveService(i)}
+                      className="text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-200"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Contact & Location */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {["phone", "email"].map((key) => (
               <div key={key}>
-                <label className="mb-1 block font-medium">
+                <label className={labelClasses}>
                   {key === "phone" ? "Утас" : "Имэйл"}
                 </label>
                 <input
                   name={`contact.${key}`}
                   value={formData.contact[key]}
                   onChange={handleChange}
-                  className="w-full rounded-md border-gray-300 p-2 shadow-md"
+                  className={inputClasses}
                 />
               </div>
             ))}
             {["latitude", "longitude"].map((key) => (
               <div key={key}>
-                <label className="mb-1 block font-medium">
+                <label className={labelClasses}>
                   {key === "latitude" ? "Өргөрөг" : "Уртраг"}
                 </label>
                 <input
                   name={`location.${key}`}
                   value={formData.location[key]}
                   onChange={handleChange}
-                  className="w-full rounded-md border-gray-300 p-2 shadow-md"
+                  className={inputClasses}
                 />
               </div>
             ))}
@@ -261,67 +272,72 @@ const FirmForm = () => {
 
           {/* Photo */}
           <div>
-            <label className="mb-1 block font-medium">Зураг</label>
+            <label className={labelClasses}>Зураг</label>
             <input
               type="file"
               accept="image/*"
               onChange={handlePhotoChange}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:rounded-full file:bg-blue-50 file:px-4 file:py-2 file:text-blue-700"
+              className={fileInputClasses}
             />
             {previewUrl && (
               <img
                 src={previewUrl}
                 alt="Preview"
-                className="mt-2 h-32 w-auto rounded-md border object-cover shadow-md"
+                className="mt-2 h-32 w-auto rounded-xl border border-slate-200 object-cover dark:border-slate-700"
               />
             )}
           </div>
 
-          <Button type="submit" black className="w-full">
+          <button type="submit" className={primaryBtn}>
             {editId ? "Шинэчлэх" : "Хадгалах"}
-          </Button>
+          </button>
           {editId && (
-            <Button type="button" black onClick={resetForm} className="w-full">
+            <button type="button" onClick={resetForm} className={secondaryBtn}>
               Болих
-            </Button>
+            </button>
           )}
         </form>
+      </div>
 
-        {/* Firm List */}
-        <div className="mt-10">
-          <h2 className="mb-4 text-xl font-semibold">Бүртгэлтэй фирмүүд</h2>
-          {firms.length === 0 ? (
-            <p>Фирм бүртгэгдээгүй байна.</p>
-          ) : (
-            <ul className="space-y-2">
-              {firms.map((firm) => (
-                <li
-                  key={firm._id}
-                  className="flex justify-between rounded-md bg-gray-100 p-3"
-                >
-                  <div>
-                    <h3 className="font-semibold">{firm.name}</h3>
-                    <p className="text-sm text-gray-600">{firm.address}</p>
-                  </div>
-                  <div className="space-x-2">
-                    <button
-                      onClick={() => handleEdit(firm)}
-                      className="rounded bg-yellow-400 px-3 py-1 text-white hover:bg-yellow-500"
-                    >
-                      Засах
-                    </button>
-                    <button
-                      onClick={() => handleDelete(firm._id)}
-                      className="rounded bg-red-500 px-3 py-1 text-white hover:bg-red-600"
-                    >
-                      Устгах
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+      {/* Firm List */}
+      <div className="mt-8">
+        <h3 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
+          Бүртгэлтэй фирмүүд
+        </h3>
+        {firms.length === 0 ? (
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            Фирм бүртгэгдээгүй байна.
+          </p>
+        ) : (
+          <ul className="space-y-2">
+            {firms.map((firm) => (
+              <li
+                key={firm._id}
+                className="flex items-center justify-between rounded-xl border border-slate-200/70 bg-white p-3 dark:border-slate-800 dark:bg-slate-900"
+              >
+                <div className="min-w-0">
+                  <h4 className="truncate font-semibold text-slate-900 dark:text-white">
+                    {firm.name}
+                  </h4>
+                  <p className="truncate text-sm text-slate-500 dark:text-slate-400">
+                    {firm.address}
+                  </p>
+                </div>
+                <div className="ml-3 flex shrink-0 gap-2">
+                  <button onClick={() => handleEdit(firm)} className={editBtn}>
+                    Засах
+                  </button>
+                  <button
+                    onClick={() => handleDelete(firm._id)}
+                    className={deleteBtn}
+                  >
+                    Устгах
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

@@ -1,7 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from "../utils/axios";
-import Button from "../components/Button";
 import { toast } from "react-toastify";
+import {
+  inputClasses,
+  labelClasses,
+  fileInputClasses,
+  primaryBtn,
+  secondaryBtn,
+  editBtn,
+  deleteBtn,
+} from "../utils/formStyles";
 
 const LawyerForm = () => {
   const [form, setForm] = useState({
@@ -171,116 +179,116 @@ const LawyerForm = () => {
   };
 
   return (
-    <div className="font-code min-h-screen bg-gray-50 px-4 pt-5 pb-10">
-      <div className="mx-auto max-w-3xl rounded-xl bg-white p-8 shadow-xl">
-        <h1 className="mb-6 text-center text-3xl font-bold text-gray-800">
+    <div className="mx-auto max-w-3xl">
+      <div className="rounded-2xl border border-slate-200/70 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <h2 className="mb-6 text-center text-xl font-bold text-slate-900 dark:text-white">
           {editId ? "Хуульчийн мэдээлэл засах" : "Хуульч мэдээлэл нэмэх"}
-        </h1>
-        <form onSubmit={handleUploadData} className="space-y-6">
+        </h2>
+        <form onSubmit={handleUploadData} className="space-y-5">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block font-medium">Овог</label>
+              <label className={labelClasses}>Овог</label>
               <input
                 name="lastName"
                 value={form.lastName}
                 onChange={handleChange}
-                className="w-full rounded-md border-gray-300 p-2 shadow-sm"
+                className={inputClasses}
               />
             </div>
             <div>
-              <label className="mb-1 block font-medium">Нэр</label>
+              <label className={labelClasses}>Нэр</label>
               <input
                 name="firstName"
                 value={form.firstName}
                 onChange={handleChange}
-                className="w-full rounded-md border-gray-300 p-2 shadow-sm"
+                className={inputClasses}
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block font-medium">Албан тушаал</label>
+              <label className={labelClasses}>Албан тушаал</label>
               <input
                 name="position"
                 value={form.position}
                 onChange={handleChange}
-                className="w-full rounded-md border-gray-300 p-2 shadow-sm"
+                className={inputClasses}
               />
             </div>
             <div>
-              <label className="mb-1 block font-medium">Ажлын хаяг</label>
+              <label className={labelClasses}>Ажлын хаяг</label>
               <input
                 name="workAddress"
                 value={form.workAddress}
                 onChange={handleChange}
-                className="w-full rounded-md border-gray-300 p-2 shadow-sm"
+                className={inputClasses}
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block font-medium">Утас</label>
+              <label className={labelClasses}>Утас</label>
               <input
                 name="contact.phone"
                 value={form.contact.phone}
                 onChange={handleChange}
-                className="w-full rounded-md border-gray-300 p-2 shadow-sm"
+                className={inputClasses}
               />
             </div>
             <div>
-              <label className="mb-1 block font-medium">Имэйл</label>
+              <label className={labelClasses}>Имэйл</label>
               <input
                 name="contact.email"
                 value={form.contact.email}
                 onChange={handleChange}
-                className="w-full rounded-md border-gray-300 p-2 shadow-sm"
+                className={inputClasses}
               />
             </div>
             <div>
-              <label className="mb-1 block font-medium">Танилцуулга</label>
+              <label className={labelClasses}>Танилцуулга</label>
               <input
                 name="introduction"
                 value={form.introduction}
                 onChange={handleChange}
-                className="w-full rounded-md border-gray-300 p-2 shadow-sm"
+                className={inputClasses}
               />
             </div>
             <div>
-              <label className="mb-1 block font-medium">Ажлын туршлага</label>
+              <label className={labelClasses}>Ажлын туршлага</label>
               <input
                 name="experience"
                 value={form.experience}
                 onChange={handleChange}
-                className="w-full rounded-md border-gray-300 p-2 shadow-sm"
+                className={inputClasses}
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block font-medium">Facebook хаяг</label>
+              <label className={labelClasses}>Facebook хаяг</label>
               <input
                 name="contact.facebookAcc"
                 value={form.contact.facebookAcc}
                 onChange={handleChange}
-                className="w-full rounded-md border-gray-300 p-2 shadow-sm"
+                className={inputClasses}
               />
             </div>
             <div>
-              <label className="mb-1 block font-medium">Instagram хаяг</label>
+              <label className={labelClasses}>Instagram хаяг</label>
               <input
                 name="contact.instagramAcc"
                 value={form.contact.instagramAcc}
                 onChange={handleChange}
-                className="w-full rounded-md border-gray-300 p-2 shadow-sm"
+                className={inputClasses}
               />
             </div>
           </div>
 
           <div>
-            <label className="mb-1 block font-medium">Үйлчилгээ нэмэх</label>
+            <label className={labelClasses}>Үйлчилгээ нэмэх</label>
             <div className="flex gap-2">
               <input
                 type="text"
@@ -288,102 +296,93 @@ const LawyerForm = () => {
                 name="newService"
                 value={form.newService}
                 onChange={handleChange}
-                className="flex-grow rounded-md border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+                className={`flex-grow ${inputClasses}`}
               />
               <button
                 type="button"
                 onClick={handleAddService}
-                className="rounded-lg bg-blue-600 px-3 py-1 text-white transition hover:bg-blue-700"
+                className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-700"
               >
                 Нэмэх
               </button>
             </div>
             {form.services.length > 0 && (
-              <ul className="mt-2 space-y-1">
+              <div className="mt-2 flex flex-wrap gap-2">
                 {form.services.map((s, i) => (
-                  <li
+                  <span
                     key={i}
-                    className="flex items-center justify-between rounded bg-gray-100 px-3 py-1"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300"
                   >
                     {s}
                     <button
                       type="button"
                       onClick={() => handleRemoveService(i)}
-                      className="text-red-500 hover:text-red-700"
+                      className="text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-200"
                     >
-                      Устгах
+                      ×
                     </button>
-                  </li>
+                  </span>
                 ))}
-              </ul>
+              </div>
             )}
           </div>
 
           <div>
-            <label className="mb-1 block font-medium">Зураг</label>
+            <label className={labelClasses}>Зураг</label>
             <input
               type="file"
               accept="image/*"
               onChange={handlePhotoChange}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:rounded-full file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
+              className={fileInputClasses}
             />
-          </div>
-          {previewUrl && (
-            <img
-              src={previewUrl}
-              alt="Preview"
-              className="mt-2 h-32 w-auto rounded-md border object-cover shadow-md"
-            />
-          )}
-
-          <div className="text-center">
-            <Button type="submit" black className="w-full">
-              {editId ? "Шинэчлэх" : "Хадгалах"}
-            </Button>
-            {editId && (
-              <Button
-                type="button"
-                black
-                onClick={resetForm}
-                className="mt-2 w-full"
-              >
-                Болих
-              </Button>
+            {previewUrl && (
+              <img
+                src={previewUrl}
+                alt="Preview"
+                className="mt-2 h-32 w-auto rounded-xl border border-slate-200 object-cover dark:border-slate-700"
+              />
             )}
           </div>
+
+          <button type="submit" className={primaryBtn}>
+            {editId ? "Шинэчлэх" : "Хадгалах"}
+          </button>
+          {editId && (
+            <button type="button" onClick={resetForm} className={secondaryBtn}>
+              Болих
+            </button>
+          )}
         </form>
-        {/* Lawyer List */}
-        <div className="mt-5 pt-6">
-          <h2 className="mb-4 text-xl font-semibold text-gray-700">
-            Хуульчдын жагсаалт
-          </h2>
-          <ul className="space-y-2">
-            {lawyers.map((lawyer) => (
-              <li
-                key={lawyer._id}
-                className="flex items-center justify-between rounded bg-gray-100 px-4 py-2"
-              >
-                <div>
-                  {lawyer.lastName} {lawyer.firstName} - {lawyer.position}
-                </div>
-                <div className="space-x-2">
-                  <button
-                    onClick={() => handleEdit(lawyer)}
-                    className="rounded bg-yellow-400 px-3 py-1 text-white hover:bg-yellow-500"
-                  >
-                    Засах
-                  </button>
-                  <button
-                    onClick={() => handleDelete(lawyer._id)}
-                    className="rounded bg-red-500 px-3 py-1 text-white hover:bg-red-600"
-                  >
-                    Устгах
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
+      </div>
+
+      {/* Lawyer List */}
+      <div className="mt-8">
+        <h3 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
+          Хуульчдын жагсаалт
+        </h3>
+        <ul className="space-y-2">
+          {lawyers.map((lawyer) => (
+            <li
+              key={lawyer._id}
+              className="flex items-center justify-between rounded-xl border border-slate-200/70 bg-white p-3 dark:border-slate-800 dark:bg-slate-900"
+            >
+              <div className="min-w-0 truncate text-slate-900 dark:text-white">
+                {lawyer.lastName} {lawyer.firstName} · {lawyer.position}
+              </div>
+              <div className="ml-3 flex shrink-0 gap-2">
+                <button onClick={() => handleEdit(lawyer)} className={editBtn}>
+                  Засах
+                </button>
+                <button
+                  onClick={() => handleDelete(lawyer._id)}
+                  className={deleteBtn}
+                >
+                  Устгах
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

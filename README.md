@@ -19,6 +19,7 @@
 - 🔐 **Нэвтрэлт** — JWT + httpOnly cookie, Google OAuth 2.0 (Passport), нууц үг сэргээх имэйл (Nodemailer)
 - 👨‍💼 **Admin panel** — role-based хандалт, фирм/хуульч/мэдээллийн бүрэн CRUD
 - 🖼 **Зургийн хадгалалт** — зургуудыг MongoDB-д Buffer хэлбэрээр хадгалж, өөрийн API endpoint-оор үзүүлдэг (гадны storage үйлчилгээнээс хараат бус)
+- 🎨 **Custom дизайны систем** — Indigo/Slate өнгөний схем дээр суурилсан минимал SaaS дизайн (Tailwind CSS 4), бүх хуудсанд **dark mode** (localStorage-д хадгалагдана, системийн тохиргоог автоматаар дагана)
 
 ## 🛠 Технологи
 
@@ -78,6 +79,7 @@ cd legal-guide-frontend && npm test   # Vitest
 2. **Domain солигдоход зураг эвдрэхгүй байх.** Хадгалагдсан зургийн URL-ын `/api/v1/`-ээс хойшхи замыг runtime дээр одоогийн API хаягтай залгадаг тул backend ямар ч domain руу нүүсэн зурагнууд хэвээр ажиллана.
 3. **Windows/Linux build зөрүү.** Фолдерын нэрийн том жижиг үсгийн зөрүү (`spinner` vs `Spinner`) Vercel-ийн Linux build дээр л илэрдэг байсныг git-ийн түвшинд зассан.
 4. **Cross-site нэвтрэлт.** Frontend (Vercel) ба backend (Render) өөр domain дээр байх үед cookie ажиллуулахын тулд `trust proxy` + `SameSite=None; Secure` тохиргоог нөхцөлтэйгөөр (зөвхөн production) хэрэглэсэн.
+5. **`backdrop-filter` нь `position: fixed`-ийг эвддэг.** Mobile цэсний overlay толгой хэсгийн frosted-glass эффект (`backdrop-blur`) бүхий эцэг элементийн дотор байрлаж байсан тул `fixed` хүүхэд элемент viewport биш эцгийнхээ хэмжээгээр байрлалаа тооцоолж, дэлгэц дүүргэхийн оронд нарийн зурвас болж хумигдаж байсныг олж, mobile overlay-г тусдаа (sibling) элемент болгон гаргаж шийдсэн.
 
 ## 🚀 Локал орчинд ажиллуулах
 

@@ -14,7 +14,6 @@ import LawyerDetails from "./pages/LawyerDetails";
 import Infos from "./pages/Infos";
 import InfoDetails from "./pages/InfoDetails";
 import Success from "./components/Success";
-import ButtonGradient from "./assets/svg/ButtonGradient";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
@@ -51,7 +50,12 @@ const App = () => {
         pauseOnHover={false}
         theme="dark"
       />
-      <div className="flex min-h-screen flex-col overflow-hidden pt-[6.5rem] lg:pt-[5.25rem]">
+      {/* хуучин: pt-[6.5rem] lg:pt-[5.25rem] — толгой хэсэг mobile/desktop өөр өндөртэй байсан,
+          одоо min-h-[4.75rem]-тэй тул нэг л утга хэрэгтэй */}
+      {/* dark:bg-slate-950 — Header/Footer хоорондох дэвсгэрийг dark mode-д тааруулна.
+          Бусад хуудсууд (Firms, Lawyers г.м.) одоохондоо зөвхөн цайвар горимтой тул
+          тэдгээр дээр байхад dark mode идэвхжсэн ч харагдах өөрчлөлт хараахан алга */}
+      <div className="flex min-h-screen flex-col overflow-hidden bg-white pt-[4.75rem] dark:bg-slate-950">
         <Header />
         <main className="flex-grow">
           <Routes>
@@ -78,7 +82,6 @@ const App = () => {
         </main>
         <Footer />
       </div>
-      <ButtonGradient />
     </QueryClientProvider>
   );
 };

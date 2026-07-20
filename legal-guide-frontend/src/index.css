@@ -1,10 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700;&display=swap");
+/* Орчин үеийн SaaS дизайны стандарт фонт — зөвхөн font-sans ангилал ашигласан
+   хэсэгт орно, бусад хуудсуудын font-code (Source Code Pro) хэвээр үлдэнэ */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
+/* InfoDetails.jsx-ийн Markdown агуулгыг (гарчиг, жагсаалт, тод үсэг г.м.) `prose`
+   классаар автоматаар хэвлэмэл маягаар харуулна */
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --font-code: "Source Code Pro", monospace;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --color-1: #ac6aff;
   --color-stroke-1: #26242c;
 }
@@ -24,5 +31,20 @@
 @layer utilities {
   .text-color {
     @apply font-code;
+  }
+  /* ProfileModal animation */
+  .animate-pop-in {
+    animation: pop-in 0.15s ease-out;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }

@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "../utils/axios";
 import { googleicon } from "../assets";
+
+// Login.jsx-тэй ижил indigo/slate дизайны системд шилжүүлэв
 
 const Signup = ({ onSignup }) => {
   const [name, setName] = useState("");
@@ -36,13 +39,12 @@ const Signup = ({ onSignup }) => {
 
   const handleClickGoogle = () => {
     setGoogleLoading(true);
-    // window.location.href = "http://localhost:5000/api/v1/users/google";
-    // Backend-ийн хаягийг axios-ийн baseURL (VITE_API_URL)-аас авна
     window.location.href = `${axios.defaults.baseURL}users/google`;
     setGoogleLoading(false);
   };
 
   const isFormValid = name && email && password && password === passRepeat;
+  const passwordsMismatch = passRepeat.length > 0 && password !== passRepeat;
 
   const handleEnterKey = (e) => {
     if (e.key === "Enter" && isFormValid && !loading) {
@@ -50,63 +52,102 @@ const Signup = ({ onSignup }) => {
     }
   };
 
+  const inputClasses =
+    "w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white";
+  const labelClasses =
+    "mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300";
+
   return (
-    <div className="font-code flex min-h-screen items-center justify-center bg-gray-200">
-      <div className="w-90 rounded-lg bg-gray-100 p-6 shadow-xl">
-        <h1 className="text-center text-xl font-bold text-gray-800">
+    <div className="font-sans relative flex min-h-[calc(100vh-4.75rem)] items-center justify-center overflow-hidden bg-slate-50 px-4 py-12 dark:bg-slate-950">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-indigo-300/30 blur-3xl dark:bg-indigo-900/20"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-24 -bottom-24 h-96 w-96 rounded-full bg-sky-300/30 blur-3xl dark:bg-sky-900/20"
+      />
+
+      <div className="relative w-full max-w-sm rounded-2xl border border-slate-200/70 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <h1 className="text-center text-xl font-bold text-slate-900 dark:text-white">
           Бүртгүүлэх
         </h1>
-        <div className="mt-5">
-          <input
-            name="name"
-            type="text"
-            placeholder="Нэр"
-            className="w-full rounded-md border border-gray-300 p-2"
-            onChange={handleType}
-            onKeyDown={handleEnterKey}
-          />
+        <p className="mt-1 text-center text-sm text-slate-500 dark:text-slate-400">
+          Үнэгүй эрх үүсгэж эхлээрэй
+        </p>
+
+        <div className="mt-6 space-y-4">
+          <div>
+            <label className={labelClasses}>Нэр</label>
+            <input
+              name="name"
+              type="text"
+              placeholder="Таны нэр"
+              className={inputClasses}
+              onChange={handleType}
+              onKeyDown={handleEnterKey}
+            />
+          </div>
+          <div>
+            <label className={labelClasses}>Имэйл</label>
+            <input
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              className={inputClasses}
+              onChange={handleType}
+              onKeyDown={handleEnterKey}
+            />
+          </div>
+          <div>
+            <label className={labelClasses}>Нууц үг</label>
+            <input
+              name="password"
+              type="password"
+              placeholder="••••••••"
+              className={inputClasses}
+              onChange={handleType}
+              onKeyDown={handleEnterKey}
+            />
+          </div>
+          <div>
+            <label className={labelClasses}>Нууц үг давтах</label>
+            <input
+              name="passRepeat"
+              type="password"
+              placeholder="••••••••"
+              className={inputClasses}
+              onChange={handleType}
+              onKeyDown={handleEnterKey}
+            />
+            {passwordsMismatch && (
+              <p className="mt-1 text-xs text-red-500">
+                Нууц үг таарахгүй байна
+              </p>
+            )}
+          </div>
         </div>
-        <div className="mt-3">
-          <input
-            name="email"
-            type="email"
-            placeholder="Имэйл"
-            className="w-full rounded-md border border-gray-300 p-2"
-            onChange={handleType}
-            onKeyDown={handleEnterKey}
-          />
-        </div>
-        <div className="mt-3">
-          <input
-            name="password"
-            type="password"
-            placeholder="Нууц үг"
-            className="w-full rounded-md border border-gray-300 p-2"
-            onChange={handleType}
-            onKeyDown={handleEnterKey}
-          />
-        </div>
-        <div className="mt-3">
-          <input
-            name="passRepeat"
-            type="password"
-            placeholder="Нууц үг давтах"
-            className="w-full rounded-md border border-gray-300 p-2"
-            onChange={handleType}
-            onKeyDown={handleEnterKey}
-          />
-        </div>
+
         <button
           type="submit"
-          className="mt-5 w-full rounded-lg bg-blue-500 py-2 text-white transition hover:bg-blue-600 disabled:bg-gray-400"
+          className="mt-6 w-full rounded-xl bg-indigo-600 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-slate-300 dark:disabled:bg-slate-700"
           onClick={handleClick}
           disabled={!isFormValid || loading}
         >
           {loading ? "Түр хүлээнэ үү..." : "Бүртгүүлэх"}
         </button>
+
+        <div className="my-5 flex items-center gap-3">
+          <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+          <span className="text-xs text-slate-400 dark:text-slate-500">
+            эсвэл
+          </span>
+          <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+        </div>
+
         <button
-          type="submit"
-          className="mt-5 flex w-full items-center justify-center gap-3 rounded-lg bg-gray-900 py-2 text-white transition hover:bg-black"
+          type="button"
+          className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-60 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
           onClick={handleClickGoogle}
           disabled={googleLoading}
         >
@@ -119,12 +160,16 @@ const Signup = ({ onSignup }) => {
             </>
           )}
         </button>
-        <div className="mt-3 text-center">
-          <label>Бүртгэлтэй юу? </label>
-          <a href="/login" className="text-blue-500 underline">
+
+        <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
+          Бүртгэлтэй юу?{" "}
+          <Link
+            to="/login"
+            className="font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400"
+          >
             Нэвтрэх
-          </a>
-        </div>
+          </Link>
+        </p>
       </div>
     </div>
   );
