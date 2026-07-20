@@ -108,11 +108,11 @@ npm run dev
 
 |                                           |                                                  |
 | ----------------------------------------- | ------------------------------------------------ |
-| ![Нүүр хуудас](docs/screenshots/home.png) | ![Газрын зурагт хайлт](docs/screenshots/map.png) |
+| ![Нүүр хуудас](docs/screenshots/desktopSite.png) | ![Газрын зурагт хайлт](docs/screenshots/map.png) |
 | _Нүүр хуудас_                             | _Газрын зурагт фирм хайх_                        |
 
 ![Admin panel](docs/screenshots/admin.png)
-_Admin panel — фирмийн удирдлага_
+_Admin panel — системийн удирдлага_
 
 ---
 
