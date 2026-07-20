@@ -1,4 +1,3 @@
-// хуучин: import { useState, useEffect, use } from "react"; — "use" ашиглагдаагүй байсан
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
