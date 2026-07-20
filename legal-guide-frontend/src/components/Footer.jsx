@@ -11,7 +11,7 @@ const Footer = () => {
         </Link>
 
         <p className="text-center text-slate-500 md:text-left dark:text-slate-400">
-          © 2026 LegalGuide · Системийг хөгжүүлсэн Г. Амирда
+          © 2026 LegalGuide
         </p>
 
         <div className="flex items-center gap-2">
