@@ -2,7 +2,6 @@
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1/";
 
 // Зургийн URL-ыг шалгаж, ашиглах боломжгүй бол fallback буцаана.
-// Firebase-ийн хуучин URL-ууд subscription дууссан тул ажиллахгүй.
 export const photoSrc = (photoUrl, fallback = null) => {
   if (
     !photoUrl ||

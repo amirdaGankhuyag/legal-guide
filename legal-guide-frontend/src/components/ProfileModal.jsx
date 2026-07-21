@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import { FiEdit3, FiLogOut, FiX, FiCheck, FiLock } from "react-icons/fi";
 
-// Header-ийн шинэ indigo/slate дизайнд тааруулж энгийн товчны стиль ашиглана
 const primaryBtn =
   "flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700";
 const secondaryBtn =
@@ -124,7 +123,7 @@ const ProfileModal = ({ isOpen, onClose }) => {
   const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : "?";
 
   return (
-    <div className="font-sans animate-pop-in absolute top-full right-0 mt-2 w-80 overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-xl dark:border-slate-800 dark:bg-slate-900">
+    <div className="animate-pop-in absolute top-full right-0 mt-2 w-80 overflow-hidden rounded-2xl border border-slate-100 bg-white font-sans shadow-xl dark:border-slate-800 dark:bg-slate-900">
       {loading ? (
         <div className="flex h-32 items-center justify-center">
           <div className="h-6 w-6 animate-spin rounded-full border-4 border-indigo-500 border-t-transparent"></div>
@@ -138,7 +137,7 @@ const ProfileModal = ({ isOpen, onClose }) => {
       ) : !isEditing ? (
         <>
           {/* Профайлын толгой хэсэг — indigo/sky зөөлөн градиент дэвсгэр дээр avatar */}
-          <div className="bg-linear-to-br relative from-indigo-50 via-white to-sky-50 p-5 text-center dark:from-indigo-950/40 dark:via-slate-900 dark:to-slate-900">
+          <div className="relative bg-linear-to-br from-indigo-50 via-white to-sky-50 p-5 text-center dark:from-indigo-950/40 dark:via-slate-900 dark:to-slate-900">
             <button
               onClick={onClose}
               aria-label="Хаах"

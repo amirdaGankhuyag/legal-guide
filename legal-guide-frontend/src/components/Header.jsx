@@ -96,7 +96,6 @@ const Header = () => {
   };
   const filteredNavigation = getFilteredNavigation();
 
-  //нэрний эхний үсэг
   const userInitial = userName ? userName.charAt(0).toUpperCase() : "?";
 
   // Desktop (header мөрөнд шууд орох) болон mobile (бүтэн дэлгэцийн overlay)

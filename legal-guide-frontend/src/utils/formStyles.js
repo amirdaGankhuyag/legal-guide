@@ -1,4 +1,4 @@
-// Admin форм -> FirmForm, LawyerForm, InfoForm-д ижил ашиглагдах Tailwind класс мөрүүд
+// Admin форм -> FirmForm, LawyerForm, InfoForm-д ижил ашиглагдах style-ууд
 
 export const inputClasses =
   "w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white";

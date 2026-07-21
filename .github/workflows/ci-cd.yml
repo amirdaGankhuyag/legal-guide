@@ -1,9 +1,5 @@
 # LegalGuide CI/CD pipeline
-#
-# Ажиллах логик:
-#   1. main руу push (эсвэл PR) хийгдэх бүрт frontend, backend тестүүд ЗЭРЭГ ажиллана
-#   2. Хоёулаа амжилттай болбол л Vercel рүү production deploy хийгдэнэ
-#   3. Аль нэг тест унавал deploy огт хийгдэхгүй — эвдэрсэн код production руу гарахгүй
+
 name: CI/CD
 
 on:
@@ -13,7 +9,6 @@ on:
     branches: [main]
 
 jobs:
-  # ─── Backend тестүүд ───────────────────────────────────────────────
   backend-test:
     name: Backend tests
     runs-on: ubuntu-latest
@@ -34,10 +29,9 @@ jobs:
       # npm ci = package-lock.json-д яг заасан хувилбаруудыг суулгана (npm install-оос найдвартай)
       - run: npm ci
 
-      # node --test tests/ — MyError, asyncHandler, errorHandler тестүүд
+      # node --test — MyError, asyncHandler, errorHandler тестүүд
       - run: npm test
 
-  # ─── Frontend шалгалтууд ───────────────────────────────────────────
   frontend-test:
     name: Frontend lint + tests + build
     runs-on: ubuntu-latest
@@ -78,7 +72,6 @@ jobs:
   # ─── Vercel deploy (зөвхөн тестүүд амжилттай үед) ─────────────────
   deploy:
     name: Deploy to Vercel
-    # needs = энэ хоёр job амжилттай дуусахыг хүлээнэ — энэ бол pipeline-ийн "хаалга"
     needs: [backend-test, frontend-test]
     # PR дээр deploy хийхгүй, зөвхөн main руу push хийгдсэн үед
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'

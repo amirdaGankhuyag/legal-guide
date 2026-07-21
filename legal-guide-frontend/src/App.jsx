@@ -50,11 +50,6 @@ const App = () => {
         pauseOnHover={false}
         theme="dark"
       />
-      {/* хуучин: pt-[6.5rem] lg:pt-[5.25rem] — толгой хэсэг mobile/desktop өөр өндөртэй байсан,
-          одоо min-h-[4.75rem]-тэй тул нэг л утга хэрэгтэй */}
-      {/* dark:bg-slate-950 — Header/Footer хоорондох дэвсгэрийг dark mode-д тааруулна.
-          Бусад хуудсууд (Firms, Lawyers г.м.) одоохондоо зөвхөн цайвар горимтой тул
-          тэдгээр дээр байхад dark mode идэвхжсэн ч харагдах өөрчлөлт хараахан алга */}
       <div className="flex min-h-screen flex-col overflow-hidden bg-white pt-[4.75rem] dark:bg-slate-950">
         <Header />
         <main className="flex-grow">
