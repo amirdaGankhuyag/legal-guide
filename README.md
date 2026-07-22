@@ -4,7 +4,7 @@
 
 Хуулийн үйлчилгээ үзүүлэгч байгууллага, хуульчдыг газрын зургаас хайж олох, харьцуулах, сэтгэгдэл үлдээх боломжтой бүрэн ажиллагаатай веб систем.
 
-**🌐 Live demo:** https://legal-guide-three.vercel.app
+**🌐 Live demo:** https://legalguide-mn.vercel.app
 
 > _EN: A full-stack web app for finding legal service providers (law firms and lawyers) near you on an interactive map — with reviews, role-based admin panel, Google OAuth, and legal info articles. Built with React 19, Express, and MongoDB._
 
@@ -129,6 +129,6 @@ npm run dev
 
 | Орчин                   | Хаяг                                           | Үүрэг                                                |
 | ----------------------- | ---------------------------------------------- | ---------------------------------------------------- |
-| **Production (үндсэн)** | https://legal-guide-three.vercel.app           | Vercel — албан ёсны ажиллаж буй хувилбар             |
+| **Production (үндсэн)** | https://legalguide-mn.vercel.app               | Vercel — албан ёсны ажиллаж буй хувилбар             |
 | Нөөц / туршилт          | https://amirdagankhuyag.github.io/legal-guide/ | GitHub Pages — `npm run deploy`-оор гараар шинэчилнэ |
 | Backend API             | https://legal-guide-n8eg.onrender.com/api/v1/  | Render (free tier) — Express + MongoDB Atlas         |
