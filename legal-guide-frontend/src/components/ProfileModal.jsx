@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "../utils/axios";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
-import { FiEdit3, FiLogOut, FiX, FiCheck, FiLock } from "react-icons/fi";
+import { FiEdit3, FiLogOut, FiX, FiCheck } from "react-icons/fi";
 
 const primaryBtn =
   "flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700";
