@@ -53,7 +53,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 
   const cookieOption = {
     expires: new Date(
-      Date.now() + process.env.COOKIE_EXPIRE_DAYS * 24 * 60 * 60 * 1000 // COOKIE_EXPIRE_DAYS хоногийн дараа expire хийнэ
+      Date.now() + process.env.COOKIE_EXPIRE_DAYS * 24 * 60 * 60 * 1000, // COOKIE_EXPIRE_DAYS хоногийн дараа expire хийнэ
     ),
     httpOnly: true, // client талаас document.cookie гэж cookie-д хандаж чадахгүй
     // Production-д frontend өөр domain дээр байх тул cross-site cookie шаардлагатай
@@ -73,7 +73,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 exports.logout = asyncHandler(async (req, res, next) => {
   const cookieOption = {
     expires: new Date(
-      Date.now() - process.env.COOKIE_EXPIRE_DAYS * 24 * 60 * 60 * 1000 // cookie-г server талаас устгаж байна
+      Date.now() - process.env.COOKIE_EXPIRE_DAYS * 24 * 60 * 60 * 1000, // cookie-г server талаас устгаж байна
     ),
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -100,7 +100,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   if (!user) {
     throw new MyError(
       req.body.email + " имэйл хаягтай хэрэглэгч олдсонгүй!",
-      400
+      400,
     ); // Урт нь ижил боловч байхгүй ID-тай үед ажиллана
   }
 
@@ -196,7 +196,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
 
   for (let attr in req.body) user[attr] = req.body[attr];
 
-  user.save();
+  await user.save();
 
   res.status(200).json({
     success: true,

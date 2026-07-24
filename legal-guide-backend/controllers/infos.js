@@ -52,7 +52,7 @@ exports.updateInfo = asyncHandler(async (req, res, next) => {
 
   for (let attr in req.body) info[attr] = req.body[attr];
 
-  info.save();
+  await info.save();
 
   res.status(200).json({
     success: true,

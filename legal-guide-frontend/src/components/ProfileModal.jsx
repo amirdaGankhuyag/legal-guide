@@ -24,9 +24,6 @@ const ProfileModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
   });
 
   useEffect(() => {
@@ -46,9 +43,6 @@ const ProfileModal = ({ isOpen, onClose }) => {
         setFormData({
           name: response.data.data.name,
           email: response.data.data.email,
-          currentPassword: "",
-          newPassword: "",
-          confirmPassword: "",
         });
       }
     } catch (error) {
@@ -70,14 +64,6 @@ const ProfileModal = ({ isOpen, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      formData.newPassword &&
-      formData.newPassword !== formData.confirmPassword
-    ) {
-      toast.error("Шинэ нууц үг таарахгүй байна");
-      return;
-    }
-
     try {
       const token = localStorage.getItem("token");
       const decoded = jwtDecode(token);
@@ -86,11 +72,6 @@ const ProfileModal = ({ isOpen, onClose }) => {
         name: formData.name,
         email: formData.email,
       };
-
-      if (formData.currentPassword && formData.newPassword) {
-        updateData.currentPassword = formData.currentPassword;
-        updateData.newPassword = formData.newPassword;
-      }
 
       await axios.put(`users/${decoded.id}`, updateData);
       toast.success("Мэдээлэл амжилттай шинэчлэгдлээ");
@@ -205,46 +186,6 @@ const ProfileModal = ({ isOpen, onClose }) => {
                 className={inputClasses}
                 required
               />
-            </div>
-          </div>
-
-          {/* Нууц үг солих хэсгийг тусад нь ялгаж, заавал биш гэдгийг тодотгов */}
-          <div className="mt-4 border-t border-slate-100 pt-4 dark:border-slate-800">
-            <p className="mb-3 flex items-center gap-1.5 text-xs font-semibold text-slate-500 uppercase dark:text-slate-400">
-              <FiLock size={12} />
-              Нууц үг солих (заавал биш)
-            </p>
-            <div className="space-y-3">
-              <div>
-                <label className={labelClasses}>Одоогийн нууц үг</label>
-                <input
-                  type="password"
-                  name="currentPassword"
-                  value={formData.currentPassword}
-                  onChange={handleChange}
-                  className={inputClasses}
-                />
-              </div>
-              <div>
-                <label className={labelClasses}>Шинэ нууц үг</label>
-                <input
-                  type="password"
-                  name="newPassword"
-                  value={formData.newPassword}
-                  onChange={handleChange}
-                  className={inputClasses}
-                />
-              </div>
-              <div>
-                <label className={labelClasses}>Шинэ нууц үг давтах</label>
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className={inputClasses}
-                />
-              </div>
             </div>
           </div>
 

@@ -78,7 +78,7 @@ exports.updateFirm = asyncHandler(async (req, res, next) => {
 
   for (let attr in req.body) firm[attr] = req.body[attr];
 
-  firm.save();
+  await firm.save();
 
   res.status(200).json({
     success: true,

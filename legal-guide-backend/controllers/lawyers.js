@@ -60,7 +60,7 @@ exports.updateLawyer = asyncHandler(async (req, res, next) => {
 
   for (let attr in req.body) lawyer[attr] = req.body[attr];
 
-  lawyer.save();
+  await lawyer.save();
 
   res.status(200).json({
     success: true,
