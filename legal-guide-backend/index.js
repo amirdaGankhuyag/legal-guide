@@ -1,5 +1,8 @@
 const express = require("express");
 const dotenv = require("dotenv");
+// security
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 // morgan logger-ийг файл руу гаргах
 const rfs = require("rotating-file-stream");
 const path = require("path");
@@ -23,6 +26,17 @@ const infosRoutes = require("./routes/infos");
 const connectDB = require("./config/db");
 
 const app = express();
+
+app.use(helmet()); // HTTP header-үүдийг хамгаалалттай болгоно
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 минут
+  max: 20, // нэг IP хаягнаас 15 минутанд 20 удаа л нэвтрэх оролдлого хийх боломжтой
+  message: { success: false, error: "Хэт олон оролдлого. Түр хүлээнэ үү." },
+});
+app.use("/api/v1/users/login", authLimiter);
+app.use("/api/v1/users/register", authLimiter);
+app.use("/api/v1/users/forgot-password", authLimiter);
 
 dotenv.config({ path: "./config/config.env" }); // Апп-ын тохиргоог process.env руу оруулах
 connectDB();
@@ -73,7 +87,7 @@ app.use(
     secret: process.env.EXPRESS_SESSION,
     resave: true,
     saveUninitialized: true,
-  })
+  }),
 );
 app.use(passportAuth.initialize());
 app.use(passportAuth.session());
@@ -93,7 +107,7 @@ app.use(errorHandler);
 
 const server = app.listen(
   process.env.PORT,
-  console.log(`Сервер ${process.env.PORT} порт дээр аслаа`.inverse)
+  console.log(`Сервер ${process.env.PORT} порт дээр аслаа`.inverse),
 );
 
 // Баригдалгүй цацагдсан бүх алдаануудыг энд барьж авна
