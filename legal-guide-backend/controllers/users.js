@@ -194,8 +194,13 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
     throw new MyError(req.params.id + " ID-тай хэрэглэгч олдсонгүй", 404);
   }
 
-  for (let attr in req.body) user[attr] = req.body[attr];
+  if (req.user._id.toString() !== req.params.id && req.user.role !== "admin") {
+    throw new MyError("Та зөвхөн өөрийн мэдээллийг засах эрхтэй", 403);
+  }
 
+  const { name, email } = req.body;
+  if (name) user.name = name;
+  if (email) user.email = email;
   await user.save();
 
   res.status(200).json({

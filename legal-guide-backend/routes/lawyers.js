@@ -1,4 +1,5 @@
 const express = require("express");
+const { protect, authorize } = require("../middlewares/protect");
 
 const {
   getLawyers,
@@ -13,11 +14,20 @@ const {
 const router = express.Router();
 
 // api/v1/lawyers
-router.route("/").get(getLawyers).post(createLawyer);
+router
+  .route("/")
+  .get(getLawyers)
+  .post(protect, authorize("admin"), createLawyer);
 // api/v1/lawyers/:id
-router.route("/:id").get(getLawyer).put(updateLawyer).delete(deleteLawyer);
+router
+  .route("/:id")
+  .get(getLawyer)
+  .put(protect, authorize("admin"), updateLawyer)
+  .delete(protect, authorize("admin"), deleteLawyer);
 // api/v1/lawyers/:id/upload-photo
-router.route("/:id/upload-photo").put(uploadLawyerPhoto);
+router
+  .route("/:id/upload-photo")
+  .put(protect, authorize("admin"), uploadLawyerPhoto);
 // api/v1/lawyers/:id/photo
 router.route("/:id/photo").get(getLawyerPhoto);
 

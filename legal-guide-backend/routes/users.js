@@ -1,4 +1,5 @@
 const express = require("express");
+const { protect, authorize } = require("../middlewares/protect");
 
 const {
   getUsers,
@@ -19,7 +20,7 @@ const {
 const router = express.Router();
 
 // api/v1/users
-router.route("/").get(getUsers);
+router.route("/").get(protect, authorize("admin"), getUsers);
 router.route("/register").post(register);
 router.route("/login").post(login);
 router.route("/logout").get(logout);
@@ -30,6 +31,10 @@ router.route("/google/callback").get(googleAuthCallback);
 router.route("/google/success").get(googleAuthSuccess);
 router.route("/google/failure").get(googleAuthFailure);
 // api/v1/users/:id
-router.route("/:id").get(getUser).put(updateUser).delete(deleteUser);
+router
+  .route("/:id")
+  .get(protect, getUser)
+  .put(protect, updateUser)
+  .delete(protect, authorize("admin"), deleteUser);
 
 module.exports = router;
