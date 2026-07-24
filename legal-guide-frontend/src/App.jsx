@@ -1,24 +1,26 @@
+import { lazy, Suspense } from "react";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import AdminPanel from "./pages/AdminPanel";
+import { useAuth } from "./context/AuthContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import Home from "./pages/Home";
-import Firms from "./pages/Firms";
-import FirmDetails from "./pages/FirmDetails";
-import Lawyers from "./pages/Lawyers";
-import LawyerDetails from "./pages/LawyerDetails";
-import Infos from "./pages/Infos";
-import InfoDetails from "./pages/InfoDetails";
-import Success from "./components/Success";
+import Spinner from "./components/Spinner";
 import ProtectedRoute from "./components/ProtectedRoute";
-import ForgotPassword from "./components/ForgotPassword";
-import ResetPassword from "./components/ResetPassword";
-import { useAuth } from "./context/AuthContext";
-import { toast } from "react-toastify";
+// Route-based lazy loading for better performance and code splitting
+const AdminPanel = lazy(() => import("./pages/AdminPanel"));
+const Login = lazy(() => import("./pages/Login"));
+const Signup = lazy(() => import("./pages/Signup"));
+const Home = lazy(() => import("./pages/Home"));
+const Firms = lazy(() => import("./pages/Firms"));
+const FirmDetails = lazy(() => import("./pages/FirmDetails"));
+const Lawyers = lazy(() => import("./pages/Lawyers"));
+const LawyerDetails = lazy(() => import("./pages/LawyerDetails"));
+const Infos = lazy(() => import("./pages/Infos"));
+const InfoDetails = lazy(() => import("./pages/InfoDetails"));
+const Success = lazy(() => import("./components/Success"));
+const ForgotPassword = lazy(() => import("./components/ForgotPassword"));
+const ResetPassword = lazy(() => import("./components/ResetPassword"));
 
 const queryClient = new QueryClient();
 
@@ -53,27 +55,32 @@ const App = () => {
       <div className="flex min-h-screen flex-col overflow-hidden bg-white pt-[4.75rem] dark:bg-slate-950">
         <Header />
         <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route element={<ProtectedRoute admin />}>
-              <Route path="admin" element={<AdminPanel />} />
-            </Route>
-            <Route path="login" element={<Login onLogin={handleLogin} />} />
-            <Route path="forgot-password" element={<ForgotPassword />} />
-            <Route path="reset-password/:token" element={<ResetPassword />} />
-            <Route path="signup" element={<Signup onSignup={handleSignup} />} />
-            <Route path="success" element={<Success />} />
-            <Route element={<ProtectedRoute />}>
-              <Route path="firms" element={<Firms />} />
-              <Route path="firms/:id" element={<FirmDetails />} />
-              <Route path="lawyers" element={<Lawyers />} />
-              <Route path="lawyers/:id" element={<LawyerDetails />} />
-              <Route path="infos" element={<Infos />} />
-              <Route path="infos/:id" element={<InfoDetails />} />
-            </Route>
+          <Suspense fallback={<Spinner />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route element={<ProtectedRoute admin />}>
+                <Route path="admin" element={<AdminPanel />} />
+              </Route>
+              <Route path="login" element={<Login onLogin={handleLogin} />} />
+              <Route path="forgot-password" element={<ForgotPassword />} />
+              <Route path="reset-password/:token" element={<ResetPassword />} />
+              <Route
+                path="signup"
+                element={<Signup onSignup={handleSignup} />}
+              />
+              <Route path="success" element={<Success />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="firms" element={<Firms />} />
+                <Route path="firms/:id" element={<FirmDetails />} />
+                <Route path="lawyers" element={<Lawyers />} />
+                <Route path="lawyers/:id" element={<LawyerDetails />} />
+                <Route path="infos" element={<Infos />} />
+                <Route path="infos/:id" element={<InfoDetails />} />
+              </Route>
 
-            <Route path="*" element={<Navigate to="/login" replace />} />
-          </Routes>
+              <Route path="*" element={<Navigate to="/login" replace />} />
+            </Routes>
+          </Suspense>
         </main>
         <Footer />
       </div>
