@@ -27,7 +27,11 @@ const connectDB = require("./config/db");
 
 const app = express();
 
-app.use(helmet()); // HTTP header-үүдийг хамгаалалттай болгоно
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" }, // зураг ачаалахыг зөвшөөрнө, default нь same-origin
+  }),
+); // HTTP header-үүдийг хамгаалалттай болгоно
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 минут
