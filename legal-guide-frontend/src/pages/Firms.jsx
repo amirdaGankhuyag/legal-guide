@@ -117,7 +117,7 @@ const Firms = () => {
 
   useEffect(() => {
     fetchAllFirms();
-  }, [allFirms.length]);
+  }, []);
 
   const filterByService = (selected) => {
     setSelectedService(selected);
@@ -317,7 +317,7 @@ const Firms = () => {
   };
 
   return (
-    <div className="font-sans min-h-screen bg-slate-50 px-4 py-8 md:px-8 dark:bg-slate-950">
+    <div className="min-h-screen bg-slate-50 px-4 py-8 font-sans md:px-8 dark:bg-slate-950">
       <div className="mx-auto max-w-7xl">
         <h1 className="mb-6 flex items-center gap-2 text-2xl font-bold text-slate-900 dark:text-white">
           <FiMapPin className="text-indigo-600 dark:text-indigo-400" />

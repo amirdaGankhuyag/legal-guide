@@ -4,7 +4,6 @@ const asyncHandler = require("../middlewares/asyncHandler");
 const sendEmail = require("../utils/email");
 const crypto = require("crypto");
 const passportAuth = require("../utils/auth");
-const { count } = require("console");
 
 /** Google асcount ашиглан нэвтрэх */
 exports.googleAuth = passportAuth.authenticate("google", {
@@ -109,7 +108,8 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   // await user.save({ validateBeforeSave: false }); // db-д хадгална, validateBeforeSave: false нь mongoose-ийн validator-уудыг ажлуулахгүй
 
   //Имэйл илгээнэ
-  const link = `http://localhost:5173/reset-password/${resetToken}`;
+  const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+  const link = `${frontendUrl}/reset-password/${resetToken}`;
 
   const message = `Сайн байна уу. 👋 <br><br>Та нууц үг сэргээх хүсэлт илгээлээ. Нууц үгийг доорх линк дээр дарж солино уу: 👇<br><br><a href="${link}">${link}</a><br><br>Өдрийг сайхан өнгөрүүлээрэй. 💪🥰`;
 

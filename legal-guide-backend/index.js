@@ -62,7 +62,7 @@ if (process.env.FRONTEND_URL) whitelist.push(process.env.FRONTEND_URL);
 const corsOptions = {
   // Ямар ямар домэйнээс манай рест апиг дуудаж болохыг заана
   origin: function (origin, callback) {
-    console.log(origin);
+    // console.log(origin);
     if (origin === undefined || whitelist.indexOf(origin) !== -1) {
       // Энэ домэйнээс ирсэн request-ийг зөвшөөрнө
       callback(null, true);
@@ -97,7 +97,7 @@ app.use(express.json());
 app.use(fileupload());
 app.use(cookieParser());
 // router-үүдийг ашиглана
-app.use(logger);
+if (process.env.NODE_ENV !== "production") app.use(logger);
 app.use(morgan("combined", { stream: accessLogStream }));
 app.use("/api/v1/users", usersRoutes);
 app.use("/api/v1/firms", firmsRoutes);
