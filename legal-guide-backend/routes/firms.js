@@ -40,7 +40,7 @@ router.route("/:id/comments").get(getComments).post(protect, createComment);
 // api/v1/firms/:id/comments/:commentId
 router
   .route("/:id/comments/:commentId")
-  .put(protect, authorize("admin"), updateComment)
-  .delete(protect, authorize("admin"), deleteComment);
+  .put(protect, updateComment)
+  .delete(protect, deleteComment);
 
 module.exports = router;

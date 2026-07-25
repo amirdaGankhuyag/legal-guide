@@ -14,7 +14,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
   if (!token) {
     throw new MyError(
       "Энэ үйлдлийг хийхэд таны эрх хүрэхгүй байна. Та эхлээд логин хийнэ үү. Authorization header-ээр эсвэл Cookie ашиглан token-оо дамжуулна уу!",
-      401
+      401,
     );
   }
 
@@ -36,12 +36,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
 exports.authorize = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.userRole))
-      throw new MyError(
-        "Таны эрх [" +
-          req.userRole +
-          "] энэ үйлдлийг гүйцэтгэх боломгүй байна.",
-        403
-      );
+      throw new MyError("Та энэ үйлдлийг гүйцэтгэх боломгүй!", 403);
     next();
   };
 };

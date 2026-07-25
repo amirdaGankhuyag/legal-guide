@@ -80,14 +80,14 @@ const FirmDetails = () => {
 
   if (error) {
     return (
-      <div className="font-sans flex min-h-screen items-center justify-center bg-slate-50 text-center text-slate-500 dark:bg-slate-950 dark:text-slate-400">
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 text-center font-sans text-slate-500 dark:bg-slate-950 dark:text-slate-400">
         Фирм олдсонгүй
       </div>
     );
   }
 
   return (
-    <div className="font-sans min-h-screen bg-slate-50 px-4 py-10 dark:bg-slate-950">
+    <div className="min-h-screen bg-slate-50 px-4 py-10 font-sans dark:bg-slate-950">
       {firm ? (
         <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-2xl border border-slate-200/70 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
           {photoUrl && (
