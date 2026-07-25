@@ -178,9 +178,11 @@ exports.createComment = asyncHandler(async (req, res, next) => {
   firm.comments.push(newComment);
   await firm.save();
 
+  const addedComment = firm.comments[firm.comments.length - 1]; // Шинээр нэмэгдсэн коммент
+
   res.status(201).json({
     success: true,
-    data: newComment,
+    data: addedComment,
   });
 });
 

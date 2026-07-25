@@ -73,8 +73,12 @@ const FirmDetails = () => {
       });
       setComments([...comments, response.data.data]);
       setNewComment("");
+      toast.success("Амжилттай илгээгдлээ.");
     } catch (error) {
-      console.error("Comment submission error:", error);
+      console.error("Сэтгэгдэл илгээхэд алдаа гарлаа:", error);
+      toast.error(
+        error.response?.data?.error || "Сэтгэгдэл илгээхэд алдаа гарлаа",
+      );
     }
   };
 
@@ -167,6 +171,11 @@ const FirmDetails = () => {
                     placeholder="Сэтгэгдэл бичих..."
                     className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                     rows="3"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        handleCommentSubmit(e);
+                      }
+                    }}
                   />
                   <button
                     type="submit"
