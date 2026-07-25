@@ -11,6 +11,7 @@ import { selectClassNames } from "../utils/selectStyles";
 import Spinner from "../components/Spinner";
 import Select from "react-select";
 import { FiMapPin } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 // Хуучин bg-gray-100/font-code загварыг Home/Login-той нэг indigo/slate
 // дизайны системд шилжүүлж, товчнуудыг segmented control болгов.
@@ -83,12 +84,22 @@ const Firms = () => {
       },
       (error) => {
         console.error("Байршлыг авахад алдаа гарлаа", error);
+        if (error.code === 1) {
+          // PERMISSION_DENIED
+          toast.info("Байршлаа хуваалцахаас татгалзсан байна!");
+        } else if (error.code === 3) {
+          // TIMEOUT
+          toast.info("Байршил тодорхойлох хугацаа хэтэрсэн!");
+        } else {
+          // POSITION_UNAVAILABLE болон бусад
+          toast.info("Байршлыг тодорхойлж чадсангүй!");
+        }
         setUserLocation({ latitude: 47.918834, longitude: 106.917601 });
       },
       {
-        enableHighAccuracy: true, // Байршлыг өндөр нарийвлалтай авна.
+        enableHighAccuracy: true, // Байршлыг өндөр нарийвлалтай авна. GPS lock хийхэд ихэвчлэн 10-20 секунд шаардлагатай.
         maximumAge: 1000 * 60 * 1, // Хадгалагдсан байршлыг 1 минутын турш ашиглана.
-        timeout: 1000 * 5, // 5 секундын турш байршлын мэдээллийг авахыг оролдоно.
+        timeout: 1000 * 15, // 15 секундын турш байршлын мэдээллийг авахыг оролдоно.
       },
     );
     return () => navigator.geolocation.clearWatch(watchId);
