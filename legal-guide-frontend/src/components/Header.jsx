@@ -125,7 +125,7 @@ const Header = () => {
         {/* min-h-[4.75rem] — App.jsx-ийн pt offset-той таарч, mobile/desktop хоёуланд ижил өндөртэй байлгана */}
         <div className="container mx-auto flex min-h-[4.75rem] items-center px-5 py-3 font-sans lg:px-8">
           <Link className="block w-[10rem] xl:mr-8" to="/">
-            <Logo width={160} height={34} />
+            <Logo />
           </Link>
 
           {/* Desktop цэс — header мөрөнд шууд, ямар ч fixed positioning хэрэггүй */}

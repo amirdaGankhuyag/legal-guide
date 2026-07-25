@@ -7,7 +7,7 @@ const Footer = () => {
     <footer className="border-t border-slate-200 bg-white font-sans dark:border-slate-800 dark:bg-slate-900">
       <div className="mx-auto flex max-w-4xl flex-col items-center gap-3 px-6 py-6 text-sm md:flex-row md:justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <Logo width={120} height={26} />
+          <Logo size="sm" />
         </Link>
 
         <p className="text-center text-slate-500 md:text-left dark:text-slate-400">
