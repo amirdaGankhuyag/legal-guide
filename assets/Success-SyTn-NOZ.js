@@ -1,0 +1,1 @@
+import{J as r,a as n,u as c,r as u}from"./index-e2ai3QtM.js";const g=()=>{const[e]=r(),s=n(),{login:o}=c();return u.useEffect(()=>{const t=e.get("token"),a=e.get("role");t&&a?(o(t,a),s("/")):s("/login")},[e]),null};export{g as default};

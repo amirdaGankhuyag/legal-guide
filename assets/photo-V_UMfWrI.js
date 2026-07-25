@@ -1,0 +1,1 @@
+const s="https://legal-guide-n8eg.onrender.com/api/v1/",r=(e,i=null)=>{if(!e||e==="no-url"||e.includes("firebasestorage"))return i;const n=e.indexOf("/api/v1/");return n!==-1?s+e.slice(n+8):e};export{r as p};
