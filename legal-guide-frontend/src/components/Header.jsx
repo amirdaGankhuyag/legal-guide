@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { disablePageScroll, enablePageScroll } from "scroll-lock";
 import { jwtDecode } from "jwt-decode";
-import { FiSun, FiMoon } from "react-icons/fi";
+import { FiSun, FiMoon, FiGlobe } from "react-icons/fi";
 
 import { navigation } from "../constants";
 import Logo from "./Logo";
@@ -10,6 +10,7 @@ import MenuSvg from "../assets/svg/MenuSvg";
 import axios from "../utils/axios";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
+import { useLanguage } from "../context/LanguageContext";
 import ProfileModal from "./ProfileModal";
 
 const Header = () => {
@@ -18,6 +19,7 @@ const Header = () => {
   const [openNavigation, setOpenNavigation] = useState(false);
   const { isAuth, isAdmin, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { language, toggleLanguage, t } = useLanguage();
   const [userName, setUserName] = useState("");
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const profileRef = useRef(null);
@@ -115,7 +117,7 @@ const Header = () => {
           : "lg:text-slate-600 dark:lg:text-slate-300"
       } lg:hover:bg-slate-50 dark:lg:hover:bg-slate-800`}
     >
-      {item.title}
+      {t(item.title)}
     </Link>
   ));
 
@@ -135,6 +137,15 @@ const Header = () => {
 
           {/* Баруун талын хэсэг: theme toggle + профайл/нэвтрэх + мобайлын цэсний товч */}
           <div className="ml-auto flex items-center gap-3">
+            {/* Хэл сэлгэх */}
+            <button
+              onClick={toggleLanguage}
+              aria-label="Хэл солих"
+              className="flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+            >
+              <FiGlobe size={16} />
+              {language === "mn" ? "EN" : "MN"}
+            </button>
             {/* Dark/Light mode */}
             <button
               onClick={toggleTheme}
