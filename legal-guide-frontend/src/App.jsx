@@ -34,7 +34,6 @@ const App = () => {
     toast.success("Амжилттай нэвтэрлээ!");
   };
 
-  //Бүртгэл амжилттай нэвтэрч орно уу
   const handleSignup = () => {
     navigate("/login");
     toast.success("Амжилттай бүртгүүллээ. Нэвтэрч орно уу!");

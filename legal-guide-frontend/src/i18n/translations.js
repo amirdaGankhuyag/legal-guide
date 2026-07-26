@@ -8,7 +8,6 @@ export const translations = {
     "nav.signup": "Бүртгүүлэх",
     "nav.login": "Нэвтрэх",
     "nav.logout": "Гарах",
-    "common.loginRequired": "Та эхлээд нэвтэрнэ үү!",
 
     // Home хуудасны hero хэсэг
     "home.badge": "Монголын хуулийн үйлчилгээний платформ",
@@ -55,6 +54,7 @@ export const translations = {
     "login.noAccount": "Бүртгэлгүй юу?",
     "login.signup": "Бүртгүүлэх",
     "login.submit": "Нэвтрэх",
+    "login.or": "эсвэл",
   },
   en: {
     "nav.home": "Home",
@@ -65,7 +65,6 @@ export const translations = {
     "nav.signup": "Sign Up",
     "nav.login": "Log In",
     "nav.logout": "Log Out",
-    "common.loginRequired": "Please log in first!",
 
     "home.badge": "Mongolian legal services platform",
     "home.heading": "Get the legal help you need",
@@ -110,5 +109,6 @@ export const translations = {
     "login.noAccount": "Don't have an account?",
     "login.submit": "Login",
     "login.signup": "Sign Up",
+    "login.or": "or",
   },
 };

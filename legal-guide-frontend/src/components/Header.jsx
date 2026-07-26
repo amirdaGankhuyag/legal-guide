@@ -23,6 +23,7 @@ const Header = () => {
   const [userName, setUserName] = useState("");
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const profileRef = useRef(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchUserName = async () => {
@@ -34,7 +35,10 @@ const Header = () => {
             const response = await axios.get(`users/${decoded.id}`);
             setUserName(response.data.data.name);
           } catch (error) {
-            console.error("Error fetching user name:", error);
+            console.error(
+              "Token decode-лож username авахад алдаа гарлаа:",
+              error,
+            );
           }
         }
       }
@@ -79,7 +83,7 @@ const Header = () => {
       .get("users/logout")
       .then(() => {})
       .catch((error) => {
-        console.log(error);
+        console.error("Хэрэглэгч системээс гарах үед алдаа гарлаа:", error);
       });
     navigate("/login");
   };
@@ -100,7 +104,6 @@ const Header = () => {
 
   const userInitial = userName ? userName.charAt(0).toUpperCase() : "?";
 
-  // Desktop (header мөрөнд шууд орох) болон mobile (бүтэн дэлгэцийн overlay)
   const navLinks = filteredNavigation.map((item) => (
     <Link
       key={item.id}
@@ -130,12 +133,12 @@ const Header = () => {
             <Logo />
           </Link>
 
-          {/* Desktop цэс — header мөрөнд шууд, ямар ч fixed positioning хэрэггүй */}
+          {/* Desktop menu */}
           <nav className="hidden lg:mx-auto lg:flex lg:items-center lg:gap-1">
             {navLinks}
           </nav>
 
-          {/* Баруун талын хэсэг: theme toggle + профайл/нэвтрэх + мобайлын цэсний товч */}
+          {/* Mobile menu */}
           <div className="ml-auto flex items-center gap-3">
             {/* Хэл сэлгэх */}
             <button
@@ -179,13 +182,13 @@ const Header = () => {
                   to="/login"
                   className="hidden text-sm font-medium text-slate-600 transition-colors hover:text-indigo-600 lg:block dark:text-slate-300 dark:hover:text-indigo-400"
                 >
-                  Нэвтрэх
+                  {t("nav.login")}
                 </Link>
                 <Link
                   to="/signup"
                   className="hidden rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700 lg:block"
                 >
-                  Бүртгүүлэх
+                  {t("nav.signup")}
                 </Link>
               </>
             )}
@@ -199,12 +202,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Мобайл цэсний overlay-г backdrop-blur header-ээс ГАДНА (sibling) байрлуулна.
-          Учир нь эцэг элементийн backdrop-filter (backdrop-blur-md) нь дотор орших
-          position:fixed хүүхдийн "containing block"-ыг эвдэж, viewport биш зөвхөн
-          эцэг элементийнхээ (4.75rem өндөр) хэмжээгээр top/bottom тооцоолуулж,
-          дэлгэц бүрэн бус зөвхөн нарийн зурвас мэт хумигддаг CSS-ийн мэдэгдэж
-          буй зан үйл юм. */}
+      {/* Mobile menu overlay */}
       <nav
         className={`${
           openNavigation ? "flex" : "hidden"

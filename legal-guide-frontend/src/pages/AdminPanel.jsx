@@ -3,8 +3,6 @@ import FirmForm from "../components/FirmForm";
 import LawyerForm from "../components/LawyerForm";
 import InfoForm from "../components/InfoForm";
 
-// Firms.jsx-ийн segmented control хэв маягтай нийцүүлэв
-
 const sections = [
   { key: "firm", label: "Фирм" },
   { key: "lawyer", label: "Хуульч" },
@@ -15,7 +13,7 @@ const AdminPanel = () => {
   const [section, setSection] = useState("firm");
 
   return (
-    <div className="font-sans min-h-screen bg-slate-50 px-4 py-8 dark:bg-slate-950">
+    <div className="min-h-screen bg-slate-50 px-4 py-8 font-sans dark:bg-slate-950">
       <h1 className="mb-6 text-center text-2xl font-bold text-slate-900 dark:text-white">
         Админ хуудас
       </h1>

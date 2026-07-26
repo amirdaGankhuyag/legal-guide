@@ -43,7 +43,7 @@ const Home = () => {
     if (isAuth) {
       navigate(href);
     } else {
-      toast.error(t("common.loginRequired"));
+      toast.error("Та эхлээд нэвтэрнэ үү!");
     }
   };
 
@@ -98,7 +98,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ─── Боломжуудын карт ─── */}
+      {/* ─── 3 карт ─── */}
       <section className="bg-white py-24 dark:bg-slate-900">
         <div className="container mx-auto px-6">
           <div className="mx-auto mb-16 max-w-2xl text-center">
