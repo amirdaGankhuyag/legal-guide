@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import leaflet from "leaflet";
 import { myLocation, firmLocation } from "../assets";
+import { useLanguage } from "../context/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 import axios from "../utils/axios";
 import { photoSrc } from "../utils/photo";
@@ -12,9 +13,6 @@ import Spinner from "../components/Spinner";
 import Select from "react-select";
 import { FiMapPin } from "react-icons/fi";
 import { toast } from "react-toastify";
-
-// Хуучин bg-gray-100/font-code загварыг Home/Login-той нэг indigo/slate
-// дизайны системд шилжүүлж, товчнуудыг segmented control болгов.
 
 const Firms = () => {
   const [userLocation, setUserLocation] = useState(null);
@@ -25,6 +23,7 @@ const Firms = () => {
   const [serviceOptions, setServiceOptions] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
   const [isAllFirmsLoading, setIsAllFirmsLoading] = useState(false);
+  const { t } = useLanguage();
 
   const { data: firmsData = [], isLoading } = useQuery({
     queryKey: ["firms", userLocation],
@@ -226,7 +225,7 @@ const Firms = () => {
     if (!allFirms || allFirms.length === 0) {
       return (
         <div className="text-center text-slate-500 dark:text-slate-400">
-          Фирм олдсонгүй
+          {t("firms.noFirmsFound")}
         </div>
       );
     }
@@ -253,7 +252,7 @@ const Firms = () => {
           ))}
           {filteredFirms.length === 0 && (
             <li className="col-span-full text-center text-slate-500 dark:text-slate-400">
-              Сонгосон үйлчилгээнд тохирох фирм олдсонгүй
+              {t("firms.noFirmsForSelectedService")}
             </li>
           )}
         </ul>
@@ -281,7 +280,7 @@ const Firms = () => {
                 position={[userLocation.latitude, userLocation.longitude]}
                 icon={locationIcon}
               >
-                <Popup>Таны байршил</Popup>
+                <Popup>{t("firms.yourLocation")}</Popup>
               </Marker>
               {sortedFirms.map((firm) => (
                 <Marker
@@ -296,7 +295,7 @@ const Firms = () => {
                         to={`/firms/${firm._id}`}
                         className="text-indigo-600"
                       >
-                        Дэлгэрэнгүй
+                        {t("firms.details")}
                       </Link>
                     </div>
                   </Popup>
@@ -320,7 +319,7 @@ const Firms = () => {
         ))}
         {sortedFirms.length === 0 && (
           <li className="col-span-full text-center text-slate-500 dark:text-slate-400">
-            Хуулийн фирмүүд олдсонгүй
+            {t("firms.noFirmsFound")}
           </li>
         )}
       </ul>
@@ -332,7 +331,7 @@ const Firms = () => {
       <div className="mx-auto max-w-7xl">
         <h1 className="mb-6 flex items-center gap-2 text-2xl font-bold text-slate-900 dark:text-white">
           <FiMapPin className="text-indigo-600 dark:text-indigo-400" />
-          Тантай ойрхон хуулийн фирмүүд
+          {t("firms.nearbyFirms")}
         </h1>
         {userLocation ? (
           <>
@@ -364,7 +363,7 @@ const Firms = () => {
                     : "border border-slate-200 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
                 }`}
               >
-                Бүх фирмүүд
+                {t("firms.allFirms")}
               </button>
             </div>
             {renderContent()}

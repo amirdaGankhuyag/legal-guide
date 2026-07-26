@@ -37,6 +37,24 @@ export const translations = {
     "home.feature.infos.description":
       "Хууль зүйн чиглэлээр бэлтгэсэн нийтлэл, мэдээ мэдээллийг цаг алдалгүй аваарай.",
     "home.feature.infos.cta": "Мэдээлэл харах",
+
+    "firms.yourLocation": "Таны байршил",
+    "firms.details": "Дэлгэрэнгүй",
+    "firms.noFirmsFound": "Хуулийн фирмүүд олдсонгүй",
+    "firms.nearbyFirms": "Тантай ойрхон хуулийн фирмүүд",
+    "firms.allFirms": "Бүх фирмүүд",
+    "firms.noFirmsForSelectedService":
+      "Сонгосон үйлчилгээнд тохирох фирм олдсонгүй",
+
+    "login.title": "Нэвтрэх",
+    "login.subtitle": "Дахин тавтай морил!",
+    "login.email": "И-мэйл",
+    "login.password": "Нууц үг",
+    "login.forgotPassword": "Мартсан уу?",
+    "login.google": "Google-ээр нэвтрэх",
+    "login.noAccount": "Бүртгэлгүй юу?",
+    "login.signup": "Бүртгүүлэх",
+    "login.submit": "Нэвтрэх",
   },
   en: {
     "nav.home": "Home",
@@ -74,5 +92,23 @@ export const translations = {
     "home.feature.infos.description":
       "Stay up to date with legal news and articles curated for you.",
     "home.feature.infos.cta": "View Articles",
+
+    "firms.yourLocation": "Your Location",
+    "firms.details": "Details",
+    "firms.noFirmsFound": "No law firms found",
+    "firms.nearbyFirms": "Law firms near you",
+    "firms.allFirms": "All Law Firms",
+    "firms.noFirmsForSelectedService":
+      "No firms found for the selected service",
+
+    "login.title": "Log In",
+    "login.subtitle": "Welcome back!",
+    "login.email": "Email",
+    "login.password": "Password",
+    "login.forgotPassword": "Forgot Password?",
+    "login.google": "Log in with Google",
+    "login.noAccount": "Don't have an account?",
+    "login.submit": "Login",
+    "login.signup": "Sign Up",
   },
 };

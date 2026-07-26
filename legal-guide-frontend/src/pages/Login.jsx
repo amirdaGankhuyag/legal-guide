@@ -3,16 +3,14 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "../utils/axios";
 import { googleicon } from "../assets";
-
-// Хуучин Login.jsx нь placeholder-аар л input ялгадаг, бараан Google товчтой,
-// bg-gray-200 энгийн загвартай байсныг Home/Header-ийн indigo/slate дизайны
-// системд нийцүүлж label-тэй input, гадна хүрээтэй Google товч, dark mode-той болгов.
+import { useLanguage } from "../context/LanguageContext";
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const { t } = useLanguage();
 
   const handleType = (e) => {
     const { name, value } = e.target;
@@ -65,16 +63,16 @@ const Login = ({ onLogin }) => {
 
       <div className="relative w-full max-w-sm rounded-2xl border border-slate-200/70 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <h1 className="text-center text-xl font-bold text-slate-900 dark:text-white">
-          Нэвтрэх
+          {t("login.title")}
         </h1>
         <p className="mt-1 text-center text-sm text-slate-500 dark:text-slate-400">
-          Дахин тавтай морил!
+          {t("login.subtitle")}
         </p>
 
         <div className="mt-6 space-y-4">
           <div>
             <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">
-              Имэйл
+              {t("login.email")}
             </label>
             <input
               name="email"
@@ -88,13 +86,13 @@ const Login = ({ onLogin }) => {
           <div>
             <div className="mb-1 flex items-center justify-between">
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                Нууц үг
+                {t("login.password")}
               </label>
               <Link
                 to="/forgot-password"
                 className="text-xs font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400"
               >
-                Мартсан уу?
+                {t("login.forgotPassword")}
               </Link>
             </div>
             <input
@@ -136,18 +134,18 @@ const Login = ({ onLogin }) => {
           ) : (
             <>
               <img src={googleicon} alt="Google Icon" className="h-5 w-5" />
-              Google хаягаар нэвтрэх
+              {t("login.google")}
             </>
           )}
         </button>
 
         <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
-          Бүртгэлгүй юу?{" "}
+          {t("login.noAccount")}{" "}
           <Link
             to="/signup"
             className="font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400"
           >
-            Бүртгүүлэх
+            {t("login.signup")}
           </Link>
         </p>
       </div>
