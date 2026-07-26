@@ -23,7 +23,6 @@ const Header = () => {
   const [userName, setUserName] = useState("");
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const profileRef = useRef(null);
-  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchUserName = async () => {
