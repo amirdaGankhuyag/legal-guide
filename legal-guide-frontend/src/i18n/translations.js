@@ -49,7 +49,7 @@ export const translations = {
     "nav.logout": "Log Out",
     "common.loginRequired": "Please log in first!",
 
-    "home.badge": "Mongolia's legal services platform",
+    "home.badge": "Mongolian legal services platform",
     "home.heading": "Get the legal help you need",
     "home.headingHighlight": "right here",
     "home.subtitle":
