@@ -18,8 +18,9 @@ exports.protect = asyncHandler(async (req, res, next) => {
     );
   }
 
+  let tokenObj;
   try {
-    const tokenObj = jwt.verify(token, process.env.JWT_SECRET); // Token шалгах
+    tokenObj = jwt.verify(token, process.env.JWT_SECRET); // Token шалгах
   } catch (err) {
     throw new MyError(
       err.name === "TokenExpiredError"
