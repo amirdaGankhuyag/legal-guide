@@ -6,7 +6,7 @@
 
 **🌐 Live demo:** https://legalguide-mn.vercel.app
 
-> _EN: A full-stack web app for finding legal service providers (law firms and lawyers) near you on an interactive map — with reviews, role-based admin panel, Google OAuth, and legal info articles. Built with React 19, Express, and MongoDB._
+> _EN: A full-stack web app for finding legal service providers (law firms and lawyers) near you on an interactive map — with reviews, an AI legal assistant powered by Google Gemini, role-based admin panel, Google OAuth, Mongolian/English i18n, and legal info articles. Built with React 19, Express, and MongoDB._
 
 ---
 
@@ -16,21 +16,24 @@
 - 🏢 **Фирм ба хуульчдын каталог** — үйлчилгээний төрлөөр шүүх, дэлгэрэнгүй мэдээлэл
 - 💬 **Сэтгэгдлийн систем** — нэвтэрсэн хэрэглэгч фирм дээр сэтгэгдэл үлдээх, өөрийн сэтгэгдлээ засах/устгах, admin бүх сэтгэгдлийг удирдах
 - 📰 **Хууль зүйн мэдээлэл** — Markdown editor-той нийтлэлийн хэсэг
+- 🤖 **AI хуулийн туслах** — Google Gemini дээр суурилсан чат. Хэрэглэгчийн асуултыг ойлгож, **өгөгдлийн санд бодитоор бүртгэлтэй** үйлчилгээний ангиллаас тохирохыг нь санал болгоно
 - 🔐 **Нэвтрэлт** — JWT + httpOnly cookie, Google OAuth 2.0 (Passport), нууц үг сэргээх имэйл (Nodemailer)
 - 👨‍💼 **Admin panel** — role-based хандалт, фирм/хуульч/мэдээллийн бүрэн CRUD
 - 🖼 **Зургийн хадгалалт** — зургуудыг MongoDB-д Buffer хэлбэрээр хадгалж, өөрийн API endpoint-оор үзүүлдэг (гадны storage үйлчилгээнээс хараат бус)
+- 🌐 **Монгол / Англи хэл сэлгэх** — React Context дээр суурилсан i18n (сонголт localStorage-д хадгалагдана)
 - 🎨 **Custom дизайны систем** — Indigo/Slate өнгөний схем дээр суурилсан минимал SaaS дизайн (Tailwind CSS 4), бүх хуудсанд **dark mode** (localStorage-д хадгалагдана, системийн тохиргоог автоматаар дагана)
 
 ## 🛠 Технологи
 
-| Хэсэг         | Стек                                                                             |
-| ------------- | -------------------------------------------------------------------------------- |
-| Frontend      | React 19, Vite 6, React Router 7, TanStack Query, Tailwind CSS 4, Leaflet, Axios |
-| Backend       | Node.js, Express 4, Mongoose 8, Passport (Google OAuth 2.0), JWT, Nodemailer     |
-| Өгөгдлийн сан | MongoDB Atlas                                                                    |
-| Тест          | Vitest (frontend) · Node.js built-in test runner (backend) · ESLint              |
-| CI/CD         | GitHub Actions — тест давсан үед л автомат deploy                                |
-| Deployment    | Vercel (frontend) · Render (backend) · GitHub Pages (нөөц)                       |
+| Хэсэг         | Стек                                                                                 |
+| ------------- | ------------------------------------------------------------------------------------ |
+| Frontend      | React 19, Vite 6, React Router 7, TanStack Query, Tailwind CSS 4, Leaflet, Axios     |
+| Backend       | Node.js, Express 4, Mongoose 8, Passport (Google OAuth 2.0), JWT, Nodemailer         |
+| AI            | Google Gemini API (`gemini-3.1-flash-lite`) — SDK-гүй, `fetch`-ээр шууд REST дуудалт |
+| Өгөгдлийн сан | MongoDB Atlas                                                                        |
+| Тест          | Vitest (frontend) · Node.js built-in test runner (backend) · ESLint                  |
+| CI/CD         | GitHub Actions — тест давсан үед л автомат deploy                                    |
+| Deployment    | Vercel (frontend) · Render (backend) · GitHub Pages (нөөц)                           |
 
 ## 🏗 Архитектур
 
@@ -40,11 +43,14 @@ graph LR
     B -- Mongoose --> C[(MongoDB Atlas<br/>өгөгдөл + зургууд)]
     B -- OAuth 2.0 --> D[Google]
     B -- SMTP --> E[Имэйл<br/>нууц үг сэргээх]
+    B -- REST<br/>API key backend дээр --> F[Gemini API<br/>AI туслах]
 ```
 
-- Route → Controller → Model давхаргатай REST API (`/api/v1/{users,firms,lawyers,infos}`)
+- Route → Controller → Model давхаргатай REST API (`/api/v1/{users,firms,lawyers,infos,chat}`)
 - Төвлөрсөн алдааны middleware + custom `MyError` класс, async handler wrapper
 - CORS whitelist, `trust proxy`, cross-site cookie (`SameSite=None; Secure`) production тохиргоо
+- **AI дуудалт бүр backend-ээр дамжина** — Gemini API key нь Vite bundle руу ордоггүй. Endpoint нь `protect` middleware болон цагт 20 хүсэлтийн rate limit-ээр хамгаалагдсан, орж ирэх мессежийн тоо/урт нь API дуудахаас **өмнө** шалгагдана
+- Prompt injection-ээс хамгаалахын тулд AI-н заавар нь `system_instruction` талбарт тусад нь дамждаг (хэрэглэгчийн мессежтэй хольдоггүй)
 
 ## ⚙️ CI/CD Pipeline
 
@@ -52,7 +58,7 @@ graph LR
 
 ```mermaid
 graph LR
-    P[git push] --> BT[Backend тестүүд<br/>node --test]
+    P[git push] --> BT[Backend<br/>node --check + node --test]
     P --> FT[Frontend<br/>ESLint + Vitest + build]
     BT --> G{Бүгд ✓ ?}
     FT --> G
@@ -62,6 +68,7 @@ graph LR
 ```
 
 - **Тестүүд зэрэгцээ ажиллана** — backend (unit тестүүд: error handling, async wrapper), frontend (ESLint, `photoSrc` utility тестүүд, production build шалгалт)
+- **Синтаксийн бүрэн шалгалт** — unit тест нь import хийдэггүй файлын (route, middleware, controller) алдааг барьж чаддаггүй тул тэдгээр нь зөвхөн Render дээр boot хийх үед л илэрдэг байв. Одоо backend-ийн файл бүр `node --check`-ээр шалгагдана
 - **Deploy нь тестээр "хаалгалагдсан"** — аль нэг шалгалт унавал аль ч орчин шинэчлэгдэхгүй тул эвдэрсэн код production руу гарах боломжгүй
 - Pull request дээр зөвхөн тестүүд ажиллаж, deploy хийгдэхгүй
 - Тохиргоо: [`.github/workflows/ci-cd.yml`](.github/workflows/ci-cd.yml)
@@ -75,11 +82,12 @@ cd legal-guide-frontend && npm test   # Vitest
 
 ## 🧩 Шийдсэн сонирхолтой асуудлууд
 
-1. **Firebase Storage → MongoDB шилжилт.** Firebase-ийн subscription дууссанаас зургууд ажиллахгүй болсныг зургийг MongoDB document дотор Buffer-ээр хадгалж (`select: false`-аар жагсаалтын query-г хөнгөн байлгаж), `GET /:id/photo` endpoint-оор Content-Type-тэй нь үзүүлдэг болгож шийдсэн.
+1. **Firebase Storage → MongoDB шилжилт.** Firebase-ийн subscription дууссанаас зургууд ажиллахгүй болсныг зургийг MongoDB document дотор Buffer-ээр хадгалж `GET /:id/photo` endpoint-оор Content-Type-тэй нь үзүүлдэг болгож шийдсэн.
 2. **Domain солигдоход зураг эвдрэхгүй байх.** Хадгалагдсан зургийн URL-ын `/api/v1/`-ээс хойшхи замыг runtime дээр одоогийн API хаягтай залгадаг тул backend ямар ч domain руу нүүсэн зурагнууд хэвээр ажиллана.
 3. **Windows/Linux build зөрүү.** Фолдерын нэрийн том жижиг үсгийн зөрүү (`spinner` vs `Spinner`) Vercel-ийн Linux build дээр л илэрдэг байсныг git-ийн түвшинд зассан.
 4. **Cross-site нэвтрэлт.** Frontend (Vercel) ба backend (Render) өөр domain дээр байх үед cookie ажиллуулахын тулд `trust proxy` + `SameSite=None; Secure` тохиргоог нөхцөлтэйгөөр (зөвхөн production) хэрэглэсэн.
-5. **`backdrop-filter` нь `position: fixed`-ийг эвддэг.** Mobile цэсний overlay толгой хэсгийн frosted-glass эффект (`backdrop-blur`) бүхий эцэг элементийн дотор байрлаж байсан тул `fixed` хүүхэд элемент viewport биш эцгийнхээ хэмжээгээр байрлалаа тооцоолж, дэлгэц дүүргэхийн оронд нарийн зурвас болж хумигдаж байсныг олж, mobile overlay-г тусдаа (sibling) элемент болгон гаргаж шийдсэн.
+5. **LLM-ийн "thinking" токен нь хариултын квотыг иддэг.** AI туслах эхэндээ хариултаа дунд өгүүлбэртээ тасалдаг байв. Хэмжилт хийхэд Gemini-ийн `flash` загварууд `maxOutputTokens: 800`-аас **764-ийг нь дотоод "бодолт"-д** зарцуулж, харагдах хариултад ердөө 32 токен үлдээж байсан нь тогтоогдсон. `thinkingBudget: 0` параметр тухайн загвар дээр `400` алдаа буцаадаг тул бодох токен огт зарцуулдаггүй `gemini-3.1-flash-lite` рүү шилжсэн — хариултын хугацаа мөн **4.4с → 1.5с** болж богиноссон.
+6. **`backdrop-filter` нь `position: fixed`-ийг эвддэг.** Mobile цэсний overlay толгой хэсгийн frosted-glass эффект (`backdrop-blur`) бүхий эцэг элементийн дотор байрлаж байсан тул `fixed` хүүхэд элемент viewport биш эцгийнхээ хэмжээгээр байрлалаа тооцоолж, дэлгэц дүүргэхийн оронд нарийн зурвас болж хумигдаж байсныг олж, mobile overlay-г тусдаа (sibling) элемент болгон гаргаж шийдсэн.
 
 ## 🚀 Локал орчинд ажиллуулах
 
@@ -87,7 +95,8 @@ cd legal-guide-frontend && npm test   # Vitest
 # Backend (http://localhost:5000)
 cd legal-guide-backend
 npm install
-# config/config.env файлд MONGODB_URI, JWT_SECRET зэрэг тохиргоог бөглөнө
+# config/config.env файлд MONGODB_URI, JWT_SECRET, GEMINI_API_KEY зэрэг тохиргоог бөглөнө
+# Gemini түлхүүрийг https://aistudio.google.com/apikey хаягаас үнэгүй авна
 npm run dev
 
 # Frontend (http://localhost:5173)
@@ -106,15 +115,15 @@ npm run dev
 
 ## 📸 Дэлгэцийн зургууд
 
-|                                           |                                                  |
-| ----------------------------------------- | ------------------------------------------------ |
+|                                                  |                                                  |
+| ------------------------------------------------ | ------------------------------------------------ |
 | ![Нүүр хуудас](docs/screenshots/desktopSite.png) | ![Газрын зурагт хайлт](docs/screenshots/map.png) |
-| _Нүүр хуудас_                             | _Газрын зурагт фирм хайх_                        |
+| _Нүүр хуудас_                                    | _Газрын зурагт фирм хайх_                        |
 
-|                                           |                                                  |
-| ----------------------------------------- | ------------------------------------------------ |
+|                                            |                                                         |
+| ------------------------------------------ | ------------------------------------------------------- |
 | ![Admin panel](docs/screenshots/admin.png) | ![Газрын зурагт хайлт](docs/screenshots/mobileSite.png) |
-| _Admin panel — системийн удирдлага_       | _Гар утсны дизайн_                        |
+| _Admin panel — системийн удирдлага_        | _Гар утсны дизайн_                                      |
 
 ---
 

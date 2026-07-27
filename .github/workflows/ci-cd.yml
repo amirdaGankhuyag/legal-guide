@@ -29,6 +29,13 @@ jobs:
       # npm ci = package-lock.json-д яг заасан хувилбаруудыг суулгана (npm install-оос найдвартай)
       - run: npm ci
 
+      # Синтаксийн шалгалт — unit тест нь import хийдэггүй файлын (route,
+      # middleware, controller) алдааг барихгүй тул тэдгээр нь зөвхөн Render
+      # дээр boot хийх үед унаж, deploy амжилтгүй болдог байсан.
+      # find -exec биш xargs: find нь дотоод командын алдааг залгидаг тул
+      # алдаатай кодыг ногоон өнгөөр өнгөрөөнө.
+      - run: find . -name "*.js" -not -path "./node_modules/*" -print0 | xargs -0 -n1 node --check
+
       # node --test — MyError, asyncHandler, errorHandler тестүүд
       - run: npm test
 
