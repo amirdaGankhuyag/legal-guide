@@ -18,7 +18,17 @@ exports.protect = asyncHandler(async (req, res, next) => {
     );
   }
 
-  const tokenObj = jwt.verify(token, process.env.JWT_SECRET); // Token шалгах
+  const tokenObj;
+  try {
+    tokenObj = jwt.verify(token, process.env.JWT_SECRET); // Token шалгах
+  } catch (err) {
+    throw new MyError(
+      err.name === "TokenExpiredError"
+        ? "Таны нэвтрэх хугацаа дууссан байна. Дахин нэвтэрнэ үү."
+        : "Нэвтрэх мэдээлэл буруу байна. Дахин нэвтэрнэ үү.",
+      401,
+    );
+  }
 
   // Хэрэглэгчийг олоод ID, role-г зааж өгнө
   const user = await User.findById(tokenObj.id);

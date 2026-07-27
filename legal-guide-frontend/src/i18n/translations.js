@@ -5,6 +5,7 @@ export const translations = {
     "nav.lawyers": "Хуульчид",
     "nav.info": "Мэдээлэл",
     "nav.admin": "Админ",
+    "nav.chat": "AI туслах",
     "nav.signup": "Бүртгүүлэх",
     "nav.login": "Нэвтрэх",
     "nav.logout": "Гарах",
@@ -55,6 +56,25 @@ export const translations = {
     "login.signup": "Бүртгүүлэх",
     "login.submit": "Нэвтрэх",
     "login.or": "эсвэл",
+
+    "chat.badge": "AI туслах",
+    "chat.title": "Хууль зүйн AI туслах",
+    "chat.subtitle":
+      "Асуултаа бичээрэй — тохирох үйлчилгээний чиглэлийг санал болгоно.",
+    "chat.disclaimer":
+      "AI туслах нь зөвхөн ерөнхий мэдээлэл өгнө. Энэ нь хуулийн албан ёсны зөвлөгөө биш тул мэргэжлийн хуульчид хандахыг зөвлөж байна.",
+    "chat.emptyTitle": "Юугаар туслах вэ?",
+    "chat.emptyHint": "Доорх жишээнээс сонгох эсвэл өөрийн асуултаа бичнэ үү.",
+    "chat.suggestion1": "Ажил олгогч цалин өгөхгүй байна",
+    "chat.suggestion2": "Гэрээ цуцлахад юу анхаарах вэ?",
+    "chat.suggestion3": "Өв залгамжлалын журам ямар вэ?",
+    "chat.placeholder": "Асуултаа бичнэ үү...",
+    "chat.send": "Илгээх",
+    "chat.clear": "Яриаг цэвэрлэх",
+    "chat.limitReached":
+      "Энэ яриа дээд хэмжээндээ хүрлээ. Шинэ яриа эхлүүлнэ үү.",
+    "chat.truncated": "Хариулт бүрэн биш байж магадгүй.",
+    "chat.error": "Алдаа гарлаа. Дахин оролдоно уу.",
   },
   en: {
     "nav.home": "Home",
@@ -62,6 +82,7 @@ export const translations = {
     "nav.lawyers": "Lawyers",
     "nav.info": "Information",
     "nav.admin": "Admin",
+    "nav.chat": "AI Assistant",
     "nav.signup": "Sign Up",
     "nav.login": "Log In",
     "nav.logout": "Log Out",
@@ -110,5 +131,24 @@ export const translations = {
     "login.submit": "Login",
     "login.signup": "Sign Up",
     "login.or": "or",
+
+    "chat.badge": "AI Assistant",
+    "chat.title": "Legal AI Assistant",
+    "chat.subtitle":
+      "Ask a question — we'll point you to the right type of service.",
+    "chat.disclaimer":
+      "This assistant provides general information only. It is not formal legal advice — please consult a qualified lawyer.",
+    "chat.emptyTitle": "How can I help?",
+    "chat.emptyHint": "Pick an example below or type your own question.",
+    "chat.suggestion1": "My employer hasn't paid my salary",
+    "chat.suggestion2": "What should I check before ending a contract?",
+    "chat.suggestion3": "How does inheritance work?",
+    "chat.placeholder": "Type your question...",
+    "chat.send": "Send",
+    "chat.clear": "Clear chat",
+    "chat.limitReached":
+      "This conversation has reached its limit. Please start a new one.",
+    "chat.truncated": "This answer may be incomplete.",
+    "chat.error": "Something went wrong. Please try again.",
   },
 };

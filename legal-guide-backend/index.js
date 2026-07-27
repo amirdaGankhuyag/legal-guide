@@ -22,6 +22,7 @@ const usersRoutes = require("./routes/users");
 const firmsRoutes = require("./routes/firms");
 const lawyersRoutes = require("./routes/lawyers");
 const infosRoutes = require("./routes/infos");
+const chatRoutes = require("./routes/chat");
 // Database
 const connectDB = require("./config/db");
 
@@ -32,15 +33,6 @@ app.use(
     crossOriginResourcePolicy: { policy: "cross-origin" }, // зураг ачаалахыг зөвшөөрнө, default нь same-origin
   }),
 ); // HTTP header-үүдийг хамгаалалттай болгоно
-
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 минут
-  max: 20, // нэг IP хаягнаас 15 минутанд 20 удаа л нэвтрэх оролдлого хийх боломжтой
-  message: { success: false, error: "Хэт олон оролдлого. Түр хүлээнэ үү." },
-});
-app.use("/api/v1/users/login", authLimiter);
-app.use("/api/v1/users/register", authLimiter);
-app.use("/api/v1/users/forgot-password", authLimiter);
 
 dotenv.config({ path: "./config/config.env" }); // Апп-ын тохиргоог process.env руу оруулах
 connectDB();
@@ -96,6 +88,25 @@ app.use(
 app.use(passportAuth.initialize());
 app.use(passportAuth.session());
 
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 минут
+  max: 20, // нэг IP хаягнаас 15 минутанд 20 удаа л нэвтрэх оролдлого хийх боломжтой
+  message: { success: false, error: "Хэт олон оролдлого. Түр хүлээнэ үү." },
+});
+app.use("/api/v1/users/login", authLimiter);
+app.use("/api/v1/users/register", authLimiter);
+app.use("/api/v1/users/forgot-password", authLimiter);
+
+const chatLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 цаг
+  max: 20, // нэг IP хаягнаас 1 цагт 20 удаа л чат хийх боломжтой
+  message: {
+    success: false,
+    error: "Хэт олон асуулт илгээлээ. Түр хүлээнэ үү.",
+  },
+});
+app.use("/api/v1/chat", chatLimiter);
+
 // Body parser
 app.use(express.json());
 app.use(fileupload());
@@ -107,6 +118,7 @@ app.use("/api/v1/users", usersRoutes);
 app.use("/api/v1/firms", firmsRoutes);
 app.use("/api/v1/lawyers", lawyersRoutes);
 app.use("/api/v1/infos", infosRoutes);
+app.use("/api/v1/chat", chatRoutes);
 app.use(errorHandler);
 
 const server = app.listen(

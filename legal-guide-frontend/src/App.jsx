@@ -17,6 +17,7 @@ const FirmDetails = lazy(() => import("./pages/FirmDetails"));
 const Lawyers = lazy(() => import("./pages/Lawyers"));
 const LawyerDetails = lazy(() => import("./pages/LawyerDetails"));
 const Infos = lazy(() => import("./pages/Infos"));
+const Chat = lazy(() => import("./pages/Chat"));
 const InfoDetails = lazy(() => import("./pages/InfoDetails"));
 const Success = lazy(() => import("./components/Success"));
 const ForgotPassword = lazy(() => import("./components/ForgotPassword"));
@@ -75,6 +76,7 @@ const App = () => {
                 <Route path="lawyers/:id" element={<LawyerDetails />} />
                 <Route path="infos" element={<Infos />} />
                 <Route path="infos/:id" element={<InfoDetails />} />
+                <Route path="chat" element={<Chat />} />
               </Route>
 
               <Route path="*" element={<Navigate to="/login" replace />} />

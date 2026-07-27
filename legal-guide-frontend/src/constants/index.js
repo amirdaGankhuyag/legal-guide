@@ -20,6 +20,11 @@ export const navigation = [
     url: "/infos",
   },
   {
+    id: "9",
+    title: "nav.chat",
+    url: "/chat",
+  },
+  {
     id: "4",
     title: "nav.signup",
     url: "/signup",
